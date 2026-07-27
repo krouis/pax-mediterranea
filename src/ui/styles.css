@@ -1,7 +1,39 @@
+@font-face {
+  font-family: 'Pax Noto Sans';
+  src: url('../assets/fonts/NotoSans-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Pax Noto Sans';
+  src: url('../assets/fonts/NotoSans-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Pax Noto Sans Arabic';
+  src: url('../assets/fonts/NotoSansArabic-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Pax Noto Sans Arabic';
+  src: url('../assets/fonts/NotoSansArabic-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+}
+
 :root {
   color: #2c2430;
   background: #17394b;
-  font-family: system-ui, 'Noto Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;
+  font-family: 'Pax Noto Sans', sans-serif;
   font-synthesis: none;
   --purple: #603263;
   --purple-dark: #321e43;
@@ -10,6 +42,10 @@
   --sea: #246d83;
   --stone: #f0d6a5;
   --rome: #a83c39;
+}
+
+html[lang='ar-TN'] {
+  font-family: 'Pax Noto Sans Arabic', 'Pax Noto Sans', sans-serif;
 }
 
 * {
@@ -59,7 +95,7 @@ p {
 }
 h1,
 h2 {
-  font-family: Georgia, serif;
+  font-family: inherit;
 }
 
 .menu-page {
@@ -128,7 +164,7 @@ h2 {
 .tagline {
   margin: 20px 0 0;
   color: #f8e9c9;
-  font-family: Georgia, serif;
+  font-family: inherit;
   font-size: 1.15rem;
   font-style: italic;
 }
@@ -347,7 +383,7 @@ select {
 }
 .topbar span {
   display: block;
-  font-family: Georgia, serif;
+  font-family: inherit;
   font-size: 1.2rem;
   font-weight: 700;
 }
@@ -524,7 +560,7 @@ select {
   left: 33%;
   top: 59%;
   color: #d6f0e666;
-  font-family: Georgia, serif;
+  font-family: inherit;
   font-size: 1.5rem;
   letter-spacing: 0.15em;
   transform: rotate(-8deg);

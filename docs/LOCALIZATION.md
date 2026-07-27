@@ -41,10 +41,11 @@ logical behavior. The geographic map has `dir="ltr"` and a tested `transform: no
 and east/west relationships never mirror. Room codes remain explicitly LTR. Arabic avoids uppercase
 and letter spacing. Focus follows DOM order and is checked in Chromium desktop/mobile.
 
-No fonts are downloaded remotely. The UI uses the local system stack with `Noto Sans Arabic`,
-Segoe UI, Tahoma, and Arial fallbacks. These names do not bundle font files or licenses; browsers
-select an installed shaping-capable font. A future bundled font must be small, offline, compatible
-with Arabic shaping, and recorded in `THIRD-PARTY-ASSETS.md`.
+No fonts are downloaded remotely. Noto Sans and Noto Sans Arabic are bundled under the SIL Open
+Font License 1.1 for predictable offline glyph coverage, Arabic joining, and consistent browser
+screenshots in local development and CI. Arabic selects the dedicated shaping-capable face rather
+than simulating Arabic with a pixel font. Attribution and file locations are recorded in
+`THIRD-PARTY-ASSETS.md`.
 
 ## Adding a locale
 

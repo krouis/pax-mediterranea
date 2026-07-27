@@ -83,7 +83,11 @@ export function App() {
           <p className="tagline">{t('brand.tagline')}</p>
         </header>
         <nav className="menu-actions" aria-label={t('accessibility:gameModes')}>
-          <button className="primary large" onClick={() => startMode('solo')}>
+          <button
+            data-testid="mode-quick"
+            className="primary large"
+            onClick={() => startMode('solo')}
+          >
             <span>⚔</span>
             <strong>{t('game:modes.quick')}</strong>
             <small>
@@ -112,21 +116,21 @@ export function App() {
             <strong>{t('game:modes.campaign')}</strong>
             <small>{t('campaigns:sicilian-question.title')}</small>
           </button>
-          <button onClick={() => startMode('hotseat')}>
+          <button data-testid="mode-hotseat" onClick={() => startMode('hotseat')}>
             <span>♟</span>
             <strong>{t('game:modes.hotseat')}</strong>
             <small>
               {t('numbers.players', { count: 2 })} · {t('game:modes.oneDevice')}
             </small>
           </button>
-          <button onClick={() => startMode('tutorial')}>
+          <button data-testid="mode-tutorial" onClick={() => startMode('tutorial')}>
             <span>?</span>
             <strong>{t('game:modes.tutorial')}</strong>
             <small>
               {t('numbers.minutes', { min: 3, max: 5 })} · {t('content:factions.carthage.name')}
             </small>
           </button>
-          <button onClick={() => setScreen('online')}>
+          <button data-testid="mode-online" onClick={() => setScreen('online')}>
             <span>⌁</span>
             <strong>{t('game:modes.online')}</strong>
             <small>{t('game:modes.transportPreview')}</small>
@@ -240,7 +244,7 @@ export function App() {
         <h1>{t('game:selection.faction')}</h1>
         <div className="faction-grid">
           {(Object.keys(factions) as FactionId[]).map((id) => (
-            <section key={id} className={`faction-card ${id}`}>
+            <section key={id} data-testid={`faction-${id}`} className={`faction-card ${id}`}>
               <div className="faction-emblem" aria-hidden="true">
                 {factions[id].icon}
               </div>
@@ -248,7 +252,12 @@ export function App() {
               <p>{t(factions[id].passiveKey)}</p>
               <h3>{t('game:selection.patron')}</h3>
               {factions[id].patrons.map((patron) => (
-                <button key={patron} className="patron" onClick={() => begin(id, patron)}>
+                <button
+                  key={patron}
+                  data-testid={`patron-${patron}`}
+                  className="patron"
+                  onClick={() => begin(id, patron)}
+                >
                   <strong>{t(patrons[patron].nameKey)}</strong>
                   <small>{t(patrons[patron].descriptionKey)}</small>
                 </button>

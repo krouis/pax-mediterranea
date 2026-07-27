@@ -91,6 +91,20 @@ for (const requiredKey of ['numbers.players_one', 'numbers.players_other']) {
   }
 }
 
+for (const path of [
+  'src/app/App.tsx',
+  'src/ui/MapBoard.tsx',
+  'src/ui/SettingsDialog.tsx',
+  'src/ui/LanguageSelector.tsx',
+]) {
+  const source = readFileSync(path, 'utf8');
+  const hardCodedAttribute = source.match(/\b(?:aria-label|placeholder|title)="[A-Za-z][^"]+"/g);
+  if (hardCodedAttribute)
+    errors.push(
+      `${path} contains hard-coded user-visible attributes: ${hardCodedAttribute.join(', ')}`,
+    );
+}
+
 if (errors.length) {
   console.error(errors.join('\n'));
   process.exitCode = 1;

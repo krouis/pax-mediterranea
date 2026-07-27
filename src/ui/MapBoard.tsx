@@ -27,7 +27,12 @@ export function MapBoard({ state, selectedUnitId, selectUnit, chooseTerritory }:
   const playerName = (name: string) =>
     name === 'carthage' || name === 'rome' ? t(`content:factions.${name}.name`) : name;
   return (
-    <section className="map-shell" dir="ltr" aria-label={t('accessibility:map')}>
+    <section
+      className="map-shell"
+      data-testid="game-map"
+      dir="ltr"
+      aria-label={t('accessibility:map')}
+    >
       <svg className="connections" viewBox="0 0 100 100" aria-hidden="true">
         {state.territories.flatMap((territory) =>
           territory.connections

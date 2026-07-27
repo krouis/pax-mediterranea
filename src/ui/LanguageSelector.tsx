@@ -17,6 +17,7 @@ export function LanguageSelector({ value, onChange, compact = false }: Props) {
     <label className={`language-selector ${compact ? 'compact' : ''}`}>
       <span>{t('language.label')}</span>
       <select
+        data-testid="language-selector"
         value={value}
         aria-label={t('accessibility:languageSelector')}
         onChange={(event) => change(event.target.value as SupportedLocale)}

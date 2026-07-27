@@ -2,17 +2,17 @@
   "modes": {
     "quick": "مباراة سريعة",
     "campaign": "الحملة",
-    "hotseat": "لعب محلّي بالتناوب",
+    "hotseat": "لعب محلي بالتناوب",
     "online": "غرفة على الإنترنت",
     "tutorial": "التدريب",
-    "solo": "وحدك ضدّ الحاسوب",
+    "solo": "فردي ضد الحاسوب",
     "oneDevice": "على جهاز واحد",
-    "guided": "رحلة تدريبية",
-    "transportPreview": "معاينة الربط الاختياري"
+    "guided": "جولة تدريبية",
+    "transportPreview": "معاينة الاتصال الاختياري"
   },
   "selection": {
-    "faction": "اختار حضارتك",
-    "patron": "اختار الإله الراعي"
+    "faction": "اختر حضارتك",
+    "patron": "اختر الإله الراعي"
   },
   "hud": {
     "turn": "الدور",
@@ -24,7 +24,7 @@
     "objective": "الهدف"
   },
   "phase": {
-    "income": "المداخيل",
+    "income": "الدخل",
     "draw": "سحب بطاقة",
     "recruit": "التجنيد",
     "act": "الحركة والفعل",
@@ -32,29 +32,29 @@
     "ended": "انتهت"
   },
   "actions": {
-    "recruit": "جنّد",
-    "invokeFavor": "اطلب الحظوة",
-    "endTurn": "كمّل الدور",
-    "move": "تحرّك",
-    "attack": "اهجم",
-    "capture": "سيطر"
+    "recruit": "تجنيد",
+    "invokeFavor": "طلب الحظوة",
+    "endTurn": "إنهاء الدور",
+    "move": "تحريك",
+    "attack": "هجوم",
+    "capture": "احتلال"
   },
   "objective": {
-    "pax": "وصّل إلى {{target, number}} نقاط سلام بالسيطرة على المناطق الاستراتيجية."
+    "pax": "حقّق {{target, number}} من نقاط السلام بالسيطرة على المناطق الاستراتيجية."
   },
   "instructions": {
-    "selectUnit": "اختار وحدة، وبعد اختار منطقة مربوطة بيها.",
-    "roomUnavailable": "اللعب على الإنترنت يستحقّ وسيلة ربط اختيارية. اللعب بلا إنترنت يبقى متاح.",
-    "roomHelp": "اكتب رمز الغرفة اللي بعثهولك المضيف.",
-    "tutorialMove": "تحرّك للمنطقة المعلّمة وسيطر عليها.",
-    "tutorialRecruit": "جنّد مشاة في قرطاج.",
-    "tutorialFlavor": "العب بطاقة، اطلب الحظوة، وبعد كمّل دورك."
+    "selectUnit": "اختر وحدة، ثم اختر منطقة متصلة بها.",
+    "roomUnavailable": "يتطلب اللعب عبر الإنترنت وسيلة اتصال اختيارية. يظل اللعب دون اتصال بالإنترنت متاحًا.",
+    "roomHelp": "أدخل رمز الغرفة الذي أرسله المضيف.",
+    "tutorialMove": "حرّك الوحدة إلى المنطقة المحددة وسيطر عليها.",
+    "tutorialRecruit": "جنّد وحدة مشاة في قرطاج.",
+    "tutorialFlavor": "العب بطاقة، واطلب الحظوة، ثم أنهِ دورك."
   },
   "combat": {
-    "confirm": "تهاجم {{territory}}؟",
-    "attackStrength": "الهجوم {{value, number}}",
-    "defenseStrength": "الدفاع {{value, number}}",
-    "outcome": "المتوقّع: {{outcome}}",
+    "confirm": "هل تريد مهاجمة {{territory}}؟",
+    "attackStrength": "قوة الهجوم: {{value, number}}",
+    "defenseStrength": "قوة الدفاع: {{value, number}}",
+    "outcome": "النتيجة المتوقعة: {{outcome}}",
     "victory": "انتصار",
     "defeat": "هزيمة",
     "stalemate": "تعادل"
@@ -62,43 +62,43 @@
   "room": {
     "code": "رمز الغرفة",
     "placeholder": "PAX-270",
-    "adapter": "وسيلة ربط اللاعبين"
+    "adapter": "وسيلة اتصال اللاعبين"
   },
   "victory": {
-    "title": "{{player}} حقّق السلام!"
+    "title": "حقّق {{player}} السلام!"
   },
   "errors": {
-    "matchEnded": "المباراة وفات.",
-    "notTurn": "موش دورك.",
-    "endWhenReady": "كمّل الدور كي تكون حاضر.",
-    "recruitUnavailable": "التجنيد موش متاح توّة.",
-    "controlledTerritory": "اختار منطقة تحت سيطرتك.",
-    "recruitLocation": "تجنّد الوحدات في المدن والموانئ.",
-    "fleetPort": "الأسطول يستحقّ ميناء.",
-    "coins": "ما عندكش قطع كافية.",
-    "actionPhase": "الوحدات تتحرّك في مرحلة الفعل.",
-    "ownUnit": "اختار وحدة من وحداتك.",
-    "illegalDestination": "ما تنجّمش تمشي للمنطقة هاذي.",
-    "unknownDestination": "المنطقة موش معروفة.",
-    "occupied": "لازم تهاجم باش تدخل لمنطقة محتلّة.",
-    "noTarget": "ما فمّاش هدف معادي.",
-    "cardsUnavailable": "ما تنجّمش تلعب بطاقة توّة.",
-    "cardMissing": "البطاقة موش في يدك.",
-    "unknownCard": "البطاقة موش معروفة.",
-    "favorUnavailable": "ما تنجّمش تطلب الحظوة توّة.",
-    "favorNotReady": "الحظوة موش جاهزة.",
-    "unsupported": "الفعل هذا موش مدعوم."
+    "matchEnded": "انتهت المباراة.",
+    "notTurn": "ليس هذا دورك.",
+    "endWhenReady": "أنهِ دورك عندما تصبح مستعدًا.",
+    "recruitUnavailable": "لا يتوفر التجنيد الآن.",
+    "controlledTerritory": "اختر منطقة تحت سيطرتك.",
+    "recruitLocation": "يتم تجنيد الوحدات في المدن والموانئ.",
+    "fleetPort": "يتطلب الأسطول ميناء.",
+    "coins": "ليست لديك قطع كافية.",
+    "actionPhase": "تتحرك الوحدات في مرحلة الفعل.",
+    "ownUnit": "اختر وحدة من وحداتك.",
+    "illegalDestination": "لا يمكنك الانتقال إلى هذه المنطقة.",
+    "unknownDestination": "المنطقة غير معروفة.",
+    "occupied": "يجب أن تهاجم لدخول منطقة محتلة.",
+    "noTarget": "لا يوجد هدف معاد.",
+    "cardsUnavailable": "لا يمكنك لعب بطاقة الآن.",
+    "cardMissing": "البطاقة ليست في يدك.",
+    "unknownCard": "البطاقة غير معروفة.",
+    "favorUnavailable": "لا يمكنك طلب الحظوة الآن.",
+    "favorNotReady": "الحظوة غير جاهزة.",
+    "unsupported": "هذا الفعل غير مدعوم."
   },
   "events": {
-    "begins": "بدأ التنافس على البحر المتوسّط.",
-    "income": "{{player}} خذا {{count, number}} قطع.",
-    "recruit": "{{player}} جنّد {{unit}}.",
-    "capture": "{{player}} سيطر على {{territory}}.",
-    "repelled": "هجوم {{player}} على {{territory}} تردّ.",
-    "stalemate": "معركة {{territory}} وفات بالتعادل.",
-    "move": "{{player}} تحرّك إلى {{territory}}.",
-    "card": "{{player}} لعب بطاقة {{card}}.",
-    "favor": "{{player}} طلب حظوة {{patron}}.",
+    "begins": "بدأ التنافس على البحر الأبيض المتوسط.",
+    "income": "حصل {{player}} على {{count, number}} من القطع.",
+    "recruit": "جنّد {{player}} وحدة {{unit}}.",
+    "capture": "سيطر {{player}} على {{territory}}.",
+    "repelled": "تم صد هجوم {{player}} على {{territory}}.",
+    "stalemate": "انتهت معركة {{territory}} بالتعادل.",
+    "move": "تحرك {{player}} إلى {{territory}}.",
+    "card": "لعب {{player}} بطاقة {{card}}.",
+    "favor": "طلب {{player}} حظوة {{patron}}.",
     "turnBegins": "بدأ دور {{player}}."
   }
 }

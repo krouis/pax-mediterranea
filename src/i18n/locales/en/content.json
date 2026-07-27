@@ -3,6 +3,12 @@
     "carthage": { "name": "Carthage", "passive": "Merchant Republic" },
     "rome": { "name": "Roman Republic", "passive": "Citizen Levy" }
   },
+  "leaders": {
+    "dido": { "name": "Dido / Elissa" },
+    "hannibal-barca": { "name": "Hannibal Barca" },
+    "hamilcar-barca": { "name": "Hamilcar Barca" },
+    "hasdrubal-barca": { "name": "Hasdrubal Barca" }
+  },
   "patrons": {
     "baal-hammon": {
       "name": "Baal Hammon",

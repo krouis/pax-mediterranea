@@ -7,40 +7,40 @@
   },
   "brand": {
     "name": "باكس ميديتيرانيا",
-    "tagline": "كلّ قوّة توعد بالسلام. قوّة واحدة باش تحقّقو.",
-    "genre": "لعبة استراتيجية في البحر المتوسّط"
+    "tagline": "كل قوة تعد بالسلام. قوة واحدة فقط ستحققه.",
+    "genre": "لعبة استراتيجية في البحر الأبيض المتوسط"
   },
   "language": {
     "label": "اللغة",
-    "changed": "تبدّلت اللغة إلى {{language}}."
+    "changed": "تغيّرت اللغة إلى {{language}}."
   },
   "actions": {
-    "play": "ابدأ اللعب",
-    "continue": "كمّل",
-    "back": "ارجع",
-    "close": "سكّر",
-    "save": "سجّل",
-    "load": "حمّل",
-    "skip": "تعدّى",
-    "later": "بعد",
-    "returnMenu": "ارجع للقائمة",
-    "reloadUpdate": "حمّل النسخة الجديدة",
-    "revealBoard": "أظهر الرقعة",
-    "joinRoom": "ادخل للغرفة"
+    "play": "ابدأ",
+    "continue": "متابعة",
+    "back": "رجوع",
+    "close": "إغلاق",
+    "save": "حفظ",
+    "load": "تحميل",
+    "skip": "تخطي",
+    "later": "لاحقًا",
+    "returnMenu": "العودة إلى القائمة",
+    "reloadUpdate": "إعادة تحميل النسخة المحدّثة",
+    "revealBoard": "إظهار الرقعة",
+    "joinRoom": "الانضمام إلى الغرفة"
   },
   "settings": {
     "title": "الإعدادات",
-    "motion": "نقّص الحركة",
-    "sound": "المؤثّرات الصوتية",
+    "motion": "تقليل الحركة",
+    "sound": "المؤثرات الصوتية",
     "music": "الموسيقى"
   },
   "status": {
-    "offlineReady": "يخدم بلا إنترنت",
-    "noTracking": "من غير تتبّع",
+    "offlineReady": "متاح دون اتصال بالإنترنت",
+    "noTracking": "دون تتبع",
     "openSource": "مفتوح المصدر",
-    "saved": "تسجّلت اللعبة على الجهاز.",
-    "updateReady": "فمّا نسخة جديدة جاهزة.",
-    "passDevice": "عدّي الجهاز للاعب الآخر"
+    "saved": "تم حفظ اللعبة على هذا الجهاز.",
+    "updateReady": "تتوفر نسخة محدثة.",
+    "passDevice": "مرر الجهاز إلى اللاعب الآخر"
   },
   "numbers": {
     "turn": "الدور {{value, number}}",
@@ -49,7 +49,7 @@
     "players_one": "{{count, number}} لاعب",
     "players_two": "{{count, number}} لاعبين",
     "players_few": "{{count, number}} لاعبين",
-    "players_many": "{{count, number}} لاعب",
+    "players_many": "{{count, number}} لاعبًا",
     "players_other": "{{count, number}} لاعب"
   }
 }

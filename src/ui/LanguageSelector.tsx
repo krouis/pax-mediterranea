@@ -28,6 +28,9 @@ export function LanguageSelector({ value, onChange, compact = false }: Props) {
           </option>
         ))}
       </select>
+      <span className="sr-only" role="status" aria-live="polite">
+        {t('language.changed', { language: localeMetadata[value].nativeName })}
+      </span>
     </label>
   );
 }

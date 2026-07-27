@@ -8,4 +8,11 @@ issues. Content and localization validators run independently.
 `npm run test:ai` executes bounded seeded matches and reports completion, average turns, stalemate
 rate, and illegal states. CI uploads coverage and browser reports. Before release, also manually
 verify installability, offline reload after one online visit, update prompting, save continuity,
-keyboard-only play, reduced motion, and both languages.
+keyboard-only play, reduced motion, and all required languages.
+
+`npm run validate:i18n` checks 100% namespace/key parity, non-empty values, placeholders, plural
+forms, locale metadata, exposed-locale completeness, syntax, and common hard-coded attributes.
+`npm run test:i18n` covers detection, fallback, persistence, interpolation, formatting, document
+language/direction, and locale-independent game state. `npm run test:e2e:i18n` covers all required
+languages, RTL, offline reload, mixed-direction room codes, Arabic tutorial entry, localized axe,
+French expansion, and reviewed screenshots.

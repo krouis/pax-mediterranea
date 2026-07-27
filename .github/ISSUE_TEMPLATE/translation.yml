@@ -1,0 +1,37 @@
+name: Translation or localization
+description: Propose a translation correction or help review a locale.
+body:
+  - type: dropdown
+    id: locale
+    attributes:
+      label: Locale
+      options:
+        - English (en)
+        - Français (fr)
+        - العربية — تونس (ar-TN)
+    validations:
+      required: true
+  - type: input
+    id: key
+    attributes:
+      label: Translation key
+      description: Include the namespace and stable key when known.
+  - type: textarea
+    id: current
+    attributes:
+      label: Current wording and context
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed wording and reasoning
+    validations:
+      required: true
+  - type: checkboxes
+    id: review
+    attributes:
+      label: Review
+      options:
+        - label: I am a fluent or native speaker of this locale.
+        - label: I checked recurring terminology against the locale glossary.

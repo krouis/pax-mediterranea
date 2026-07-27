@@ -20,6 +20,12 @@ menus and accessible controls; SVG/HTML renders the small graph map without maki
 the renderer. Persistence uses versioned JSON and device-local storage; IndexedDB is the planned
 multi-slot adapter. AI evaluates public state only and is bounded to prevent loops.
 
+i18next supplies five JSON namespaces for each complete locale, with English fallback, browser and
+saved-language detection, interpolation, plural rules, and `Intl` formatting. Content data and
+engine events reference stable translation keys. React translates only at the display boundary.
+Locale switching updates document language/direction without altering deterministic state. Save
+format 2 removes legacy translated territory/event values.
+
 The PWA precaches the static shell with explicit update prompting and outdated-cache cleanup. Vite's
 base is `/pax-mediterranea/`. Multiplayer is transport-independent: the optional server/peer layer
 carries signed, sequenced commands, while the same authoritative rules validate them. Vitest covers

@@ -1,0 +1,12 @@
+{
+  "map": "Carte stratégique de la Méditerranée",
+  "territory": "{{territory}}, {{terrain}}, {{ownership}}",
+  "controlledBy": "contrôlé par {{player}}",
+  "neutral": "neutre",
+  "selectUnit": "Sélectionner {{unit}}",
+  "acted": "a déjà agi",
+  "returnMenu": "Retour au menu",
+  "gameModes": "Modes de jeu",
+  "settings": "Ouvrir les paramètres",
+  "languageSelector": "Choisir la langue de l’interface"
+}

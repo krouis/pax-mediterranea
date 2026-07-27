@@ -9,3 +9,8 @@ Reduced motion follows the OS and an explicit setting. Audio never carries essen
 and can be disabled. Test with Tab, Enter/Space, Escape where applicable, zoomed text, screen-reader
 landmarks, axe, and Playwright mobile viewports. Planned map navigation adds arrow/WASD/HJKL spatial
 focus and stronger dialog focus trapping.
+
+English, French, and Tunisian Arabic accessibility labels share translation parity. Arabic changes
+the semantic direction and mirrors directional arrows while the map stays explicitly LTR. Focus
+continues in DOM order, Latin room codes use a local LTR override, and Arabic disables uppercase and
+letter spacing. Axe runs in all three required languages on desktop and mobile.

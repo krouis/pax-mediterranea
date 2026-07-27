@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "name": "English",
+    "flag": "🇬🇧",
+    "direction": "ltr",
+    "complete": true
+  },
+  "brand": {
+    "name": "Pax Mediterranea",
+    "tagline": "Every power promises peace. Only one will achieve it.",
+    "genre": "A Mediterranean strategy game"
+  },
+  "language": {
+    "label": "Language",
+    "changed": "Language changed to {{language}}."
+  },
+  "actions": {
+    "play": "Begin match",
+    "continue": "Continue",
+    "back": "Back",
+    "close": "Close",
+    "save": "Save",
+    "load": "Load",
+    "skip": "Skip",
+    "later": "Later",
+    "returnMenu": "Return to menu",
+    "reloadUpdate": "Reload updated version",
+    "revealBoard": "Reveal board",
+    "joinRoom": "Join room"
+  },
+  "settings": {
+    "title": "Settings",
+    "motion": "Reduce motion",
+    "sound": "Sound effects",
+    "music": "Music"
+  },
+  "status": {
+    "offlineReady": "Offline ready",
+    "noTracking": "No tracking",
+    "openSource": "Open source",
+    "saved": "Game saved locally.",
+    "updateReady": "A new version is ready.",
+    "passDevice": "Pass the device"
+  },
+  "numbers": {
+    "turn": "Turn {{value, number}}",
+    "minutes": "{{min, number}}–{{max, number}} min",
+    "players_one": "{{count, number}} player",
+    "players_zero": "{{count, number}} players",
+    "players_two": "{{count, number}} players",
+    "players_few": "{{count, number}} players",
+    "players_many": "{{count, number}} players",
+    "players_other": "{{count, number}} players"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "map": "Mediterranean strategy map",
+  "territory": "{{territory}}, {{terrain}}, {{ownership}}",
+  "controlledBy": "controlled by {{player}}",
+  "neutral": "neutral",
+  "selectUnit": "Select {{unit}}",
+  "acted": "already acted",
+  "returnMenu": "Return to menu",
+  "gameModes": "Game modes",
+  "settings": "Open settings",
+  "languageSelector": "Choose interface language"
+}

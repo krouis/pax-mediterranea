@@ -1,0 +1,104 @@
+{
+  "modes": {
+    "quick": "Quick Skirmish",
+    "campaign": "Campaign",
+    "hotseat": "Local Hot Seat",
+    "online": "Online Room",
+    "tutorial": "Tutorial",
+    "solo": "Solo vs AI",
+    "oneDevice": "one device",
+    "guided": "Guided voyage",
+    "transportPreview": "Optional transport preview"
+  },
+  "selection": {
+    "faction": "Choose your civilization",
+    "patron": "Choose a patron"
+  },
+  "hud": {
+    "turn": "Turn",
+    "coins": "Coins",
+    "favor": "Favor",
+    "pax": "Pax",
+    "cards": "Cards",
+    "phase": "Phase",
+    "objective": "Objective"
+  },
+  "phase": {
+    "income": "Income",
+    "draw": "Draw",
+    "recruit": "Recruit",
+    "act": "Move and act",
+    "favor": "Favor or card",
+    "ended": "Ended"
+  },
+  "actions": {
+    "recruit": "Recruit",
+    "invokeFavor": "Invoke favor",
+    "endTurn": "End turn",
+    "move": "Move",
+    "attack": "Attack",
+    "capture": "Capture"
+  },
+  "objective": {
+    "pax": "Reach {{target, number}} Pax Points by holding and capturing strategic territories."
+  },
+  "instructions": {
+    "selectUnit": "Select a unit, then choose a connected territory.",
+    "roomUnavailable": "Online play needs an optional transport. Offline modes remain available.",
+    "roomHelp": "Enter the room code shared by the host.",
+    "tutorialMove": "Move to a highlighted territory and capture it.",
+    "tutorialRecruit": "Recruit infantry in Carthage.",
+    "tutorialFlavor": "Play a card, invoke favor, then end your turn."
+  },
+  "combat": {
+    "confirm": "Attack {{territory}}?",
+    "attackStrength": "Attack {{value, number}}",
+    "defenseStrength": "Defense {{value, number}}",
+    "outcome": "Expected: {{outcome}}",
+    "victory": "victory",
+    "defeat": "defeat",
+    "stalemate": "stalemate"
+  },
+  "room": {
+    "code": "Room code",
+    "placeholder": "PAX-270",
+    "adapter": "Multiplayer adapter"
+  },
+  "victory": {
+    "title": "{{player}} establishes peace!"
+  },
+  "errors": {
+    "matchEnded": "The match has ended.",
+    "notTurn": "It is not your turn.",
+    "endWhenReady": "End the turn when ready.",
+    "recruitUnavailable": "Recruitment is not available.",
+    "controlledTerritory": "Choose a controlled territory.",
+    "recruitLocation": "Units recruit in cities or ports.",
+    "fleetPort": "Fleets require a port.",
+    "coins": "Not enough coins.",
+    "actionPhase": "Units act during the action phase.",
+    "ownUnit": "Choose one of your units.",
+    "illegalDestination": "That destination is not legal.",
+    "unknownDestination": "Unknown destination.",
+    "occupied": "Attack to enter an occupied territory.",
+    "noTarget": "There is no hostile target.",
+    "cardsUnavailable": "Cards cannot be played now.",
+    "cardMissing": "That card is not in your hand.",
+    "unknownCard": "Unknown card.",
+    "favorUnavailable": "Favor cannot be invoked now.",
+    "favorNotReady": "Favor is not ready.",
+    "unsupported": "Unsupported action."
+  },
+  "events": {
+    "begins": "The contest for the Mediterranean begins.",
+    "income": "{{player}} receives {{count, number}} coins.",
+    "recruit": "{{player}} recruits {{unit}}.",
+    "capture": "{{player}} captures {{territory}}.",
+    "repelled": "{{player}}’s attack on {{territory}} is repelled.",
+    "stalemate": "The battle for {{territory}} ends in a stalemate.",
+    "move": "{{player}} moves to {{territory}}.",
+    "card": "{{player}} plays {{card}}.",
+    "favor": "{{player}} invokes {{patron}}.",
+    "turnBegins": "{{player}}’s turn begins."
+  }
+}

@@ -1,14 +1,14 @@
 import { z } from 'zod';
 import type { FactionId, Terrain, Territory, UnitType } from '../game/engine/types';
 
-export const terrainRules: Record<Terrain, { defense: number; label: string }> = {
-  plains: { defense: 0, label: 'Plains' },
-  hills: { defense: 1, label: 'Hills' },
-  mountains: { defense: 2, label: 'Mountains' },
-  city: { defense: 1, label: 'City' },
-  port: { defense: 1, label: 'Port' },
-  sea: { defense: 0, label: 'Sea' },
-  sacred: { defense: 1, label: 'Sacred site' },
+export const terrainRules: Record<Terrain, { defense: number; nameKey: string }> = {
+  plains: { defense: 0, nameKey: 'content:terrain.plains' },
+  hills: { defense: 1, nameKey: 'content:terrain.hills' },
+  mountains: { defense: 2, nameKey: 'content:terrain.mountains' },
+  city: { defense: 1, nameKey: 'content:terrain.city' },
+  port: { defense: 1, nameKey: 'content:terrain.port' },
+  sea: { defense: 0, nameKey: 'content:terrain.sea' },
+  sacred: { defense: 1, nameKey: 'content:terrain.sacred' },
 };
 
 export const unitRules: Record<UnitType, { cost: number; attack: number; defense: number }> = {
@@ -19,82 +19,85 @@ export const unitRules: Record<UnitType, { cost: number; attack: number; defense
 
 export const factions: Record<
   FactionId,
-  { name: string; icon: string; passive: string; cards: string[]; patrons: string[] }
+  { nameKey: string; icon: string; passiveKey: string; cards: string[]; patrons: string[] }
 > = {
   carthage: {
-    name: 'Carthage',
+    nameKey: 'content:factions.carthage.name',
     icon: '◇',
-    passive: 'Merchant Republic',
+    passiveKey: 'content:factions.carthage.passive',
     cards: ['hannibal-barca', 'war-elephants', 'merchant-fleet'],
     patrons: ['baal-hammon', 'tanit'],
   },
   rome: {
-    name: 'Roman Republic',
+    nameKey: 'content:factions.rome.name',
     icon: '⬡',
-    passive: 'Citizen Levy',
+    passiveKey: 'content:factions.rome.passive',
     cards: ['scipio-africanus', 'roman-veterans', 'roman-roads'],
     patrons: ['jupiter', 'juno'],
   },
 };
 
-export const cards: Record<string, { name: string; description: string }> = {
+export const cards: Record<string, { nameKey: string; descriptionKey: string }> = {
   'hannibal-barca': {
-    name: 'Hannibal Barca',
-    description: 'One land army gains +1 attack in its next battle this turn.',
+    nameKey: 'content:cards.hannibal-barca.name',
+    descriptionKey: 'content:cards.hannibal-barca.description',
   },
   'war-elephants': {
-    name: 'War Elephants',
-    description: 'One army gains +2 attack on plains for its next battle.',
+    nameKey: 'content:cards.war-elephants.name',
+    descriptionKey: 'content:cards.war-elephants.description',
   },
   'merchant-fleet': {
-    name: 'Merchant Fleet',
-    description: 'Gain 2 coins.',
+    nameKey: 'content:cards.merchant-fleet.name',
+    descriptionKey: 'content:cards.merchant-fleet.description',
   },
   'scipio-africanus': {
-    name: 'Scipio Africanus',
-    description: 'One Roman army gains +1 attack in its next battle.',
+    nameKey: 'content:cards.scipio-africanus.name',
+    descriptionKey: 'content:cards.scipio-africanus.description',
   },
   'roman-veterans': {
-    name: 'Roman Veterans',
-    description: 'One infantry may act again.',
+    nameKey: 'content:cards.roman-veterans.name',
+    descriptionKey: 'content:cards.roman-veterans.description',
   },
-  'roman-roads': { name: 'Roman Roads', description: 'One land unit may act again.' },
+  'roman-roads': {
+    nameKey: 'content:cards.roman-roads.name',
+    descriptionKey: 'content:cards.roman-roads.description',
+  },
 };
 
 export const patrons: Record<
   string,
-  { name: string; faction: FactionId; description: string; favor: string }
+  { nameKey: string; faction: FactionId; descriptionKey: string; favorKey: string }
 > = {
   'baal-hammon': {
-    name: 'Baal Hammon',
+    nameKey: 'content:patrons.baal-hammon.name',
     faction: 'carthage',
-    description: 'Prosperity and civic endurance.',
-    favor: 'Abundant Stores: selected city produces 2 coins now.',
+    descriptionKey: 'content:patrons.baal-hammon.description',
+    favorKey: 'content:patrons.baal-hammon.favor',
   },
   tanit: {
-    name: 'Tanit',
+    nameKey: 'content:patrons.tanit.name',
     faction: 'carthage',
-    description: 'Protection and resilience.',
-    favor: "Tanit's Protection: selected territory gains defensive resolve.",
+    descriptionKey: 'content:patrons.tanit.description',
+    favorKey: 'content:patrons.tanit.favor',
   },
   jupiter: {
-    name: 'Jupiter',
+    nameKey: 'content:patrons.jupiter.name',
     faction: 'rome',
-    description: 'Authority and confidence.',
-    favor: 'Oath of Victory: gain 1 Pax Point.',
+    descriptionKey: 'content:patrons.jupiter.description',
+    favorKey: 'content:patrons.jupiter.favor',
   },
   juno: {
-    name: 'Juno',
+    nameKey: 'content:patrons.juno.name',
     faction: 'rome',
-    description: 'Protection of the community.',
-    favor: 'Guardian of the People: gain 2 coins toward recruitment.',
+    descriptionKey: 'content:patrons.juno.description',
+    favorKey: 'content:patrons.juno.favor',
   },
 };
 
 const rawTerritories: Territory[] = [
   {
     id: 'iberia',
-    name: 'Iberia',
+    nameKey: 'content:territories.iberia',
     terrain: 'hills',
     position: { x: 9, y: 43 },
     connections: ['balearics'],
@@ -102,14 +105,14 @@ const rawTerritories: Territory[] = [
   },
   {
     id: 'balearics',
-    name: 'Balearic Isles',
+    nameKey: 'content:territories.balearics',
     terrain: 'sea',
     position: { x: 24, y: 48 },
     connections: ['iberia', 'carthage', 'sardinia'],
   },
   {
     id: 'carthage',
-    name: 'Carthage',
+    nameKey: 'content:territories.carthage',
     terrain: 'port',
     position: { x: 39, y: 73 },
     connections: ['balearics', 'sardinia', 'sicily', 'numidia'],
@@ -119,7 +122,7 @@ const rawTerritories: Territory[] = [
   },
   {
     id: 'numidia',
-    name: 'Numidia',
+    nameKey: 'content:territories.numidia',
     terrain: 'plains',
     position: { x: 26, y: 78 },
     connections: ['carthage'],
@@ -127,21 +130,21 @@ const rawTerritories: Territory[] = [
   },
   {
     id: 'sardinia',
-    name: 'Sardinia',
+    nameKey: 'content:territories.sardinia',
     terrain: 'hills',
     position: { x: 43, y: 43 },
     connections: ['balearics', 'carthage', 'corsica', 'sicily'],
   },
   {
     id: 'corsica',
-    name: 'Corsica',
+    nameKey: 'content:territories.corsica',
     terrain: 'mountains',
     position: { x: 46, y: 29 },
     connections: ['sardinia', 'latium'],
   },
   {
     id: 'sicily',
-    name: 'Sicily',
+    nameKey: 'content:territories.sicily',
     terrain: 'city',
     position: { x: 55, y: 61 },
     connections: ['carthage', 'sardinia', 'magna-graecia'],
@@ -149,7 +152,7 @@ const rawTerritories: Territory[] = [
   },
   {
     id: 'latium',
-    name: 'Rome',
+    nameKey: 'content:territories.latium',
     terrain: 'city',
     position: { x: 59, y: 29 },
     connections: ['corsica', 'campania'],
@@ -159,7 +162,7 @@ const rawTerritories: Territory[] = [
   },
   {
     id: 'campania',
-    name: 'Campania',
+    nameKey: 'content:territories.campania',
     terrain: 'plains',
     position: { x: 63, y: 42 },
     connections: ['latium', 'magna-graecia'],
@@ -167,7 +170,7 @@ const rawTerritories: Territory[] = [
   },
   {
     id: 'magna-graecia',
-    name: 'Magna Graecia',
+    nameKey: 'content:territories.magna-graecia',
     terrain: 'port',
     position: { x: 67, y: 55 },
     connections: ['campania', 'sicily', 'epirus'],
@@ -175,14 +178,14 @@ const rawTerritories: Territory[] = [
   },
   {
     id: 'epirus',
-    name: 'Epirus',
+    nameKey: 'content:territories.epirus',
     terrain: 'mountains',
     position: { x: 76, y: 48 },
     connections: ['magna-graecia', 'hellas'],
   },
   {
     id: 'hellas',
-    name: 'Hellas',
+    nameKey: 'content:territories.hellas',
     terrain: 'sacred',
     position: { x: 84, y: 57 },
     connections: ['epirus'],
@@ -191,7 +194,7 @@ const rawTerritories: Territory[] = [
 
 const territorySchema: z.ZodType<Territory> = z.object({
   id: z.string().min(1),
-  name: z.string().min(1),
+  nameKey: z.string().min(1),
   terrain: z.enum(['plains', 'hills', 'mountains', 'city', 'port', 'sea', 'sacred']),
   position: z.object({ x: z.number().min(0).max(100), y: z.number().min(0).max(100) }),
   connections: z.array(z.string()),
@@ -205,11 +208,9 @@ export const quickMap = z.array(territorySchema).parse(rawTerritories);
 export const scenarios = [
   {
     id: 'sicilian-question',
-    title: 'The Sicilian Question',
-    intro:
-      'In the third century BCE, Carthage and Rome competed for influence in Sicily. This scenario simplifies a long and contested struggle.',
-    objective: 'Control Sicily at the end of turn 6.',
-    historicalNote:
-      'Ancient accounts were written from differing perspectives; the motives and sequence of events remain debated.',
+    titleKey: 'campaigns:sicilian-question.title',
+    introKey: 'campaigns:sicilian-question.intro',
+    objectiveKey: 'campaigns:sicilian-question.objective',
+    historicalNoteKey: 'campaigns:sicilian-question.historicalNote',
   },
 ];

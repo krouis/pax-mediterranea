@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "name": "Français",
+    "flag": "🇫🇷",
+    "direction": "ltr",
+    "complete": true
+  },
+  "brand": {
+    "name": "Pax Mediterranea",
+    "tagline": "Chaque puissance promet la paix. Une seule la réalisera.",
+    "genre": "Un jeu de stratégie méditerranéen"
+  },
+  "language": {
+    "label": "Langue",
+    "changed": "Langue changée en {{language}}."
+  },
+  "actions": {
+    "play": "Commencer la partie",
+    "continue": "Continuer",
+    "back": "Retour",
+    "close": "Fermer",
+    "save": "Sauvegarder",
+    "load": "Charger",
+    "skip": "Passer",
+    "later": "Plus tard",
+    "returnMenu": "Retour au menu",
+    "reloadUpdate": "Recharger la nouvelle version",
+    "revealBoard": "Afficher le plateau",
+    "joinRoom": "Rejoindre la salle"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "motion": "Réduire les animations",
+    "sound": "Effets sonores",
+    "music": "Musique"
+  },
+  "status": {
+    "offlineReady": "Disponible hors ligne",
+    "noTracking": "Aucun pistage",
+    "openSource": "Code source ouvert",
+    "saved": "Partie sauvegardée sur cet appareil.",
+    "updateReady": "Une nouvelle version est disponible.",
+    "passDevice": "Passez l’appareil"
+  },
+  "numbers": {
+    "turn": "Tour {{value, number}}",
+    "minutes": "{{min, number}} à {{max, number}} min",
+    "players_one": "{{count, number}} joueur",
+    "players_zero": "{{count, number}} joueur",
+    "players_two": "{{count, number}} joueurs",
+    "players_few": "{{count, number}} joueurs",
+    "players_many": "{{count, number}} joueurs",
+    "players_other": "{{count, number}} joueurs"
+  }
+}

@@ -18,7 +18,8 @@ if (!target || target === 'maps') {
 
 if (!target || target === 'scenarios') {
   for (const scenario of scenarios) {
-    if (!scenario.id || !scenario.title || !scenario.objective) errors.push('Invalid scenario.');
+    if (!scenario.id || !scenario.titleKey || !scenario.objectiveKey)
+      errors.push('Invalid scenario.');
   }
 }
 

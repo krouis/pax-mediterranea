@@ -11,3 +11,8 @@ responsible for the final repository contents.
 
 Contributors should disclose substantial AI assistance when relevant. No claim is made that
 AI-assisted historical text is authoritative, nor that the entire project is AI-generated.
+
+Arabic localization uses Modern Standard Arabic, with Tunisian conventions preferred for certain
+historical names and transcriptions, particularly those relating to Carthage and ancient North
+Africa. AI-assisted Arabic text requires native-speaker review for grammar, naturalness, and
+historical transcription.

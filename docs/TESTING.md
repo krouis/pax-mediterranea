@@ -16,3 +16,8 @@ forms, locale metadata, exposed-locale completeness, syntax, and common hard-cod
 language/direction, and locale-independent game state. `npm run test:e2e:i18n` covers all required
 languages, RTL, offline reload, mixed-direction room codes, Arabic tutorial entry, localized axe,
 French expansion, and reviewed screenshots.
+
+The Arabic validation stage also rejects a reviewed list of unambiguously dialectal interface terms
+and pins formal critical-path wording plus Tunisian historical-name conventions. This lint is a
+regression guard, not a replacement for native review. Quoted incorrect examples belong only in
+linguistic documentation or rejection tests, outside production locale resources.

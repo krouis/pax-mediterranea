@@ -1,86 +1,144 @@
-# Tunisian Arabic localization (`ar-TN`)
+# Arabic localization for Tunisia (`ar-TN`)
 
-## Audience and tone
+## Language standard and audience
 
-This interface is for a broad modern Tunisian audience. It balances familiar Tunisian phrasing with
-clear Modern Standard Arabic. Short actions, tutorial prompts, confirmations, and casual status
-messages may use approachable Tunisian forms such as “كمّل”, “اختار”, “توّة”, and “فمّا”.
-Historical explanations, technical descriptions, terrain, institutions, and ambiguous concepts use
-more standard vocabulary. Clarity matters more than dialect density.
+The `ar-TN` locale uses Modern Standard Arabic for all prose and interface text. The Tunisian
+locale designation is used to prefer historical names, transcriptions, terminology, and
+conventions familiar in Tunisia, especially for Carthaginian and North African history.
 
-`ar-TN` is solely a modern interface locale. It is not presented as the historical language of
-ancient Carthage. Historical summaries are translations of the same source text, not independent
-rewrites.
+The interface is intended for a broad Arabic-reading Tunisian audience. It uses concise,
+contemporary formal Arabic rather than Tunisian dialect, ornate literary prose, or bureaucratic
+phrasing. `ar-TN` is a modern interface locale and is not represented as the historical language
+of ancient Carthage. Historical summaries translate the same source text as the other locales.
 
-## Preferred glossary
+## Interface glossary
 
-| English     | Preferred Arabic         | Notes                                         |
-| ----------- | ------------------------ | --------------------------------------------- |
-| Play        | ابدأ اللعب               | Clear launch action                           |
-| Continue    | كمّل                     | Familiar short UI action                      |
-| Campaign    | الحملة                   | Standard historical/game term                 |
-| Quick match | مباراة سريعة             | Broadly understood                            |
-| Multiplayer | لعب جماعي / ربط اللاعبين | Use contextually                              |
-| Turn        | الدور                    | Consistent throughout                         |
-| End turn    | كمّل الدور               | Approachable action wording                   |
-| Move        | تحرّك                    | Verb; “الحركة” as noun                        |
-| Attack      | اهجم / الهجوم            | Verb/noun distinction                         |
-| Recruit     | جنّد / التجنيد           | Verb/noun distinction                         |
-| Capture     | سيطر / السيطرة           | Avoid overly literal wording                  |
-| City        | مدينة                    | Standard Arabic                               |
-| Port        | ميناء                    | Standard Arabic                               |
-| Fleet       | الأسطول                  | Standard Arabic                               |
-| Infantry    | المشاة                   | Standard military term                        |
-| Cavalry     | الفرسان                  | Readable alternative to سلاح الفرسان          |
-| Coins       | القطع                    | Abstract game currency                        |
-| Favor       | الحظوة                   | Divine/public favor, not a spell              |
-| Pantheon    | مجمع الآلهة              | Use in longer explanatory text                |
-| Victory     | انتصار                   | Standard Arabic                               |
-| Defeat      | هزيمة                    | Standard Arabic                               |
-| Settings    | الإعدادات                | Standard technical term                       |
-| Save        | سجّل                     | Game action; “حفظ” in technical documentation |
-| Load        | حمّل                     | Game action                                   |
-| Offline     | بلا إنترنت               | Prefer clarity over borrowed terms            |
-| Room code   | رمز الغرفة               | Code value remains LTR                        |
+| English     | Preferred Arabic    | Notes                              |
+| ----------- | ------------------- | ---------------------------------- |
+| Play        | ابدأ                | Short primary action               |
+| Continue    | متابعة              | Not the dialectal `كمّل`           |
+| Campaign    | الحملة              |                                    |
+| Quick match | مباراة سريعة        |                                    |
+| Multiplayer | لعب جماعي           | `اتصال اللاعبين` for transport UI  |
+| Turn        | الدور               |                                    |
+| End turn    | إنهاء الدور         |                                    |
+| Move        | تحريك / الحركة      | Action/noun                        |
+| Attack      | هجوم / الهجوم       | Action/noun                        |
+| Recruit     | تجنيد / التجنيد     | Action/noun                        |
+| Capture     | احتلال / السيطرة    | Action/result according to context |
+| City        | مدينة               |                                    |
+| Port        | ميناء               |                                    |
+| Fleet       | الأسطول             |                                    |
+| Infantry    | المشاة              |                                    |
+| Cavalry     | سلاح الفرسان        |                                    |
+| Coins       | القطع               | Abstract game currency             |
+| Favor       | الحظوة              | A favor, not destructive magic     |
+| Pantheon    | مجمع الآلهة         | Used in explanatory prose          |
+| Victory     | انتصار              |                                    |
+| Defeat      | هزيمة               |                                    |
+| Settings    | الإعدادات           |                                    |
+| Save        | حفظ                 |                                    |
+| Load        | تحميل               |                                    |
+| Offline     | دون اتصال بالإنترنت |                                    |
+| Room code   | رمز الغرفة          | Value remains LTR                  |
 
-## Historical names
+## Reviewed historical-name glossary
 
-Use recognizable, consistent forms:
+Stable IDs never change with display language.
 
-- Carthage — قرطاج
-- Hannibal Barca — حنبعل برقا
-- Hamilcar Barca — حملقار برقا
-- Hasdrubal Barca — صدربعل برقا
-- Baal Hammon — بعل حمّون
-- Tanit — تانيت
-- Melqart — ملقرت
-- Rome — روما
-- Jupiter — جوبيتر
-- Juno — جونو
-- Apollo — أبولو
-- Zeus — زيوس
+| Internal ID       | English         | Preferred Arabic |
+| ----------------- | --------------- | ---------------- |
+| `dido`            | Dido / Elissa   | عليسة            |
+| `hannibal-barca`  | Hannibal Barca  | حنبعل برقة       |
+| `hamilcar-barca`  | Hamilcar Barca  | أميلكار برقة     |
+| `hasdrubal-barca` | Hasdrubal Barca | صدربعل برقة      |
+| `carthage`        | Carthage        | قرطاج            |
+| `carthaginian`    | Carthaginian    | قرطاجي           |
+| `punic`           | Punic           | بوني             |
+| `baal-hammon`     | Baal Hammon     | بعل حمون         |
+| `tanit`           | Tanit           | تانيت            |
+| `melqart`         | Melqart         | ملقرت            |
+| `numidia`         | Numidia         | نوميديا          |
+| `masinissa`       | Masinissa       | ماسينيسا         |
 
-Where Arabic references vary, this project uses one stable display form while retaining Latin
-stable IDs. Do not transliterate French vocabulary when a clear Arabic term exists.
+`أميلكار` is preferred in the Tunisian locale; `حملقار` is recorded as a known Arabic variant.
+The Barca family name is consistently `برقة`, never the phonetic English-derived `باركا`.
+Tunisian sources also vary between `بعل حمون`, `بعل حمّون`, and `بعل حامون`; the project uses
+`بعل حمون` consistently.
 
-## Typography and accessibility
+## Evidence and naming review
 
-Arabic joining and shaping must come from a real system Arabic font; fake pixel fonts are
-prohibited. Diacritics are sparse and used only for clarity. The document is RTL, navigation arrows
-mirror, map geography and emblems do not, and room codes remain LTR. Avoid uppercase transforms and
-letter spacing. Test Arabic punctuation, Arabic/Latin mixtures, localized numerals, wrapping,
-keyboard focus, screen-reader labels, portrait/landscape layouts, and 200% zoom.
+- Tunisia's National Heritage Institute uses `حنبعل` and describes Punic history in its
+  [illustrated history of Tunisia](https://www.inp2020.tn/ar/inp_tunisie/les-traces-de-lhomme-en-tunisie/).
+- The National Heritage Institute uses `تانيت` and both `بعل حمون`/`بعل حمّون` in its
+  [Bardo Museum catalog](https://www.inp2020.tn/ar/2019/12/26/musee-national-du-bardo/) and
+  [2025 excavation report](https://www.inp2020.tn/ar/2025/07/31/travaux_scientifiques_temple_tanit_et_baal_hammon/).
+- Tunisia's National Library catalogs the founder as
+  [عليسة](https://www.bibliotheque.nat.tn/BNTK/doc/SYRACUSE/6245472/%D8%B9%D9%84%D9%8A%D8%B3%D8%A9?_lg=ar-TN).
+- Tunisia's educational network uses `عليسة`, `حنبعل`, `ماسينيسا`, and `ملقرت` in its
+  [Carthage overview](https://www.edunet.tn/ressources/site_etab/regional/primaire/el-ahd-el-jedid-ezzarat/_private/journ/_private/biladi/adhar/a.htm).
+- The Tunisian heritage portal Turathy uses `حملقار` and `صدر بعل` as variants in its
+  [Hannibal profile](https://turathy.tn/article/%D8%AD%D9%86%D8%A8%D8%B9%D9%84).
 
-## Examples
+Sources were reviewed on 2026-07-27. They establish Tunisian usage but do not eliminate every
+scholarly transcription dispute.
 
-- “اختار حضارتك” — choose your civilization.
-- “ما عندكش قطع كافية.” — not enough Coins.
-- “فمّا نسخة جديدة جاهزة.” — an update is ready.
-- “تقدّم المصادر القديمة وجهات نظر مختلفة…” — standard register for historical caveats.
+## Numerals, typography, and bidirectionality
+
+Ordinary quantities use `Intl.NumberFormat` with `ar-TN`; the runtime therefore applies the
+locale's numeral conventions consistently. Room codes, versions, URLs, file names, and technical
+identifiers retain Latin characters and explicit LTR direction.
+
+Noto Sans Arabic provides real Arabic shaping. The locale avoids decorative tatweel, unnecessary
+diacritics, uppercase transformation, and harmful letter spacing. Diacritics appear only to resolve
+genuine ambiguity, as in the imperative `أنهِ`. Navigation may mirror, but map geography and
+faction emblems do not.
+
+## Formal-Arabic review report
+
+Files reviewed:
+
+- `common.json`: brand, language, actions, settings, status, and plurals;
+- `game.json`: modes, selection, HUD, phases, actions, instructions, combat, rooms, errors, events;
+- `content.json`: factions, leaders, patrons, cards, units, terrain, territories;
+- `campaigns.json`: scenario title, narration, objective, historical note;
+- `accessibility.json`: every screen-reader and navigation label.
+
+Dialectal wording was replaced project-wide:
+
+| Replaced dialectal wording | Formal project wording   |
+| -------------------------- | ------------------------ |
+| اختار                      | اختر                     |
+| كمّل / كمّل الدور          | متابعة / إنهاء الدور     |
+| ارجع                       | رجوع / العودة            |
+| سكّر                       | إغلاق                    |
+| سجّل                       | حفظ                      |
+| تعدّى                      | تخطي                     |
+| نقّص                       | تقليل                    |
+| يخدم بلا إنترنت            | متاح دون اتصال بالإنترنت |
+| فمّا                       | تتوفر                    |
+| عدّي                       | مرر                      |
+| توّة                       | الآن                     |
+| ياخذ / اربح                | يحصل على / احصل على      |
+| تنجّم                      | يمكن                     |
+| وحدك                       | فردي                     |
+| اللي بعثهولك               | الذي أرسله               |
+| موش                        | ليس / غير                |
+| ما عندكش                   | ليست لديك                |
+| ما تنجّمش                  | لا يمكنك                 |
+| ما فمّاش                   | لا يوجد                  |
+| هاذي                       | هذه                      |
+| خذا                        | حصل على                  |
+| وفات                       | انتهت                    |
+| تردّ                       | صُدّ                     |
+
+Proper names normalized in resources are `عليسة`, `حنبعل برقة`, `أميلكار برقة`,
+`صدربعل برقة`, `قرطاج`, `بعل حمون`, and `تانيت`.
 
 ## Review status
 
-The locale has complete automated key coverage and browser/RTL review. It still requires final
-native-speaker editorial review, especially military terminology, naturalness across different
-Tunisian regions, historical transliterations, and screen-reader pronunciation. Reviewers should
-avoid adding dialect merely for appearance and should record glossary changes here.
+Automated parity, forbidden-dialect, historical-name, RTL, browser, and screenshot checks pass.
+Native-speaker and Tunisian historian review is still requested for the project convention `برقة`,
+the preferred transcription `أميلكار`, the spacing in `صدربعل`, and future uses of `ملقرت`,
+`بوني`, and `ماسينيسا`. Any change must be applied consistently to resources, glossary, tests,
+and historical notes.

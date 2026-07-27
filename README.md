@@ -22,7 +22,7 @@ Play the latest default-branch build at
 - Carthage and Rome; infantry, cavalry, fleets; cards; Baal Hammon, Tanit, Jupiter, and Juno
 - Compact Mediterranean graph map with cities, ports, plains, hills, mountains, sea, and sacred sites
 - Solo AI, local hot seat, tutorial, quick skirmish, and _The Sicilian Question_ campaign scenario
-- Complete English, French, and 🇹🇳 Tunisian Arabic interfaces with persisted switching and RTL
+- Complete English, French, and 🇹🇳 Arabic interfaces with persisted switching and RTL
 - Responsive keyboard/touch UI, reduced motion, color-plus-symbol faction cues, and audio controls
 - Prompt-updating service worker, GitHub Pages subpath support, no tracking, and no required account
 
@@ -61,8 +61,10 @@ game data. `src/app` and `src/ui` contain React screens and semantic controls. `
 simulations; `e2e` holds browser tests; `docs` contains design and engineering references.
 
 Translation resources live in `src/i18n/locales`. Production-ready locales are English (`en`),
-French (`fr`), and Arabic for Tunisia (`ar-TN`). See [Localization](docs/LOCALIZATION.md) and the
-[Tunisian Arabic glossary](docs/LOCALIZATION-AR-TN.md).
+French (`fr`), and Arabic for Tunisia (`ar-TN`). Arabic uses Modern Standard Arabic, with Tunisian
+conventions for selected historical names and transcriptions. See
+[Localization](docs/LOCALIZATION.md) and the
+[Arabic historical-name glossary](docs/LOCALIZATION-AR-TN.md).
 
 ## Historical, privacy, and AI notes
 

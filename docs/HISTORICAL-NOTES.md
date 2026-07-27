@@ -1,5 +1,12 @@
 # Historical notes
 
+## Arabic historical names
+
+Arabic localization uses Modern Standard Arabic, with Tunisian conventions preferred for certain
+historical names and transcriptions, particularly those relating to Carthage and ancient North
+Africa. The reviewed project glossary and source notes are maintained in
+[`LOCALIZATION-AR-TN.md`](LOCALIZATION-AR-TN.md). Internal content IDs remain language-independent.
+
 Pax Mediterranea simplifies history for clarity and balance. Factions are abstractions; borders and
 dates vary by scenario; leaders and forces may be combined outside exact chronology. Divine favors
 represent belief, morale, ritual, and political legitimacy, not proven supernatural events.

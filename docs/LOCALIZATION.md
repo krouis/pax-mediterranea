@@ -15,6 +15,11 @@ then the browser language. Generic Arabic resolves to `ar-TN`; unsupported langu
 English. Changing the selector updates React, `html[lang]`, and `html[dir]` immediately and persists
 locally.
 
+Arabic localization uses Modern Standard Arabic, with Tunisian conventions preferred for certain
+historical names and transcriptions, particularly those relating to Carthage and ancient North
+Africa. The locale does not use Tunisian dialect. The Tunisian flag supplements the written
+language name and is never the selector's only label.
+
 ## Resource organization
 
 Each locale under `src/i18n/locales/<locale>/` has matching JSON namespaces:

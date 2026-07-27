@@ -21,10 +21,10 @@
     "test:integration": "vitest run src/test/integration",
     "test:e2e": "playwright test",
     "test:e2e:update": "playwright test --update-snapshots",
-    "test:ai": "tsx scripts/run-ai-simulations.ts",
-    "validate:maps": "tsx scripts/validate-content.ts maps",
-    "validate:scenarios": "tsx scripts/validate-content.ts scenarios",
-    "validate:i18n": "tsx scripts/validate-i18n.ts",
+    "test:ai": "node --import tsx scripts/run-ai-simulations.ts",
+    "validate:maps": "node --import tsx scripts/validate-content.ts maps",
+    "validate:scenarios": "node --import tsx scripts/validate-content.ts scenarios",
+    "validate:i18n": "node --import tsx scripts/validate-i18n.ts",
     "check": "npm run format && npm run lint && npm run typecheck && npm run test:coverage && npm run validate:maps && npm run validate:scenarios && npm run validate:i18n && npm run build",
     "ci": "npm run check && npm run test:integration && npm run test:e2e"
   },
@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.57.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",

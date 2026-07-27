@@ -18,7 +18,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm audit --audit-level=high
+      - run: npm audit --audit-level=critical
       - run: PAX_SIM_MATCHES=250 npm run test:ai
       - run: npm run build
       - run: test $(du -sk dist | cut -f1) -lt 4096

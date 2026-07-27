@@ -1,0 +1,104 @@
+{
+  "modes": {
+    "quick": "Escarmouche rapide",
+    "campaign": "Campagne",
+    "hotseat": "Tour par tour local",
+    "online": "Salle en ligne",
+    "tutorial": "Tutoriel",
+    "solo": "Solo contre l’IA",
+    "oneDevice": "un seul appareil",
+    "guided": "Voyage guidé",
+    "transportPreview": "Aperçu du transport optionnel"
+  },
+  "selection": {
+    "faction": "Choisissez votre civilisation",
+    "patron": "Choisissez une divinité protectrice"
+  },
+  "hud": {
+    "turn": "Tour",
+    "coins": "Pièces",
+    "favor": "Faveur",
+    "pax": "Pax",
+    "cards": "Cartes",
+    "phase": "Phase",
+    "objective": "Objectif"
+  },
+  "phase": {
+    "income": "Revenus",
+    "draw": "Pioche",
+    "recruit": "Recrutement",
+    "act": "Mouvement et action",
+    "favor": "Faveur ou carte",
+    "ended": "Terminée"
+  },
+  "actions": {
+    "recruit": "Recruter",
+    "invokeFavor": "Invoquer la faveur",
+    "endTurn": "Terminer le tour",
+    "move": "Déplacer",
+    "attack": "Attaquer",
+    "capture": "Capturer"
+  },
+  "objective": {
+    "pax": "Atteignez {{target, number}} points de Pax en contrôlant et en capturant des territoires stratégiques."
+  },
+  "instructions": {
+    "selectUnit": "Sélectionnez une unité, puis un territoire relié.",
+    "roomUnavailable": "Le jeu en ligne nécessite un transport optionnel. Les modes hors ligne restent disponibles.",
+    "roomHelp": "Saisissez le code de salle communiqué par l’hôte.",
+    "tutorialMove": "Déplacez-vous vers un territoire indiqué et capturez-le.",
+    "tutorialRecruit": "Recrutez de l’infanterie à Carthage.",
+    "tutorialFlavor": "Jouez une carte, invoquez une faveur, puis terminez votre tour."
+  },
+  "combat": {
+    "confirm": "Attaquer {{territory}} ?",
+    "attackStrength": "Attaque {{value, number}}",
+    "defenseStrength": "Défense {{value, number}}",
+    "outcome": "Prévision : {{outcome}}",
+    "victory": "victoire",
+    "defeat": "défaite",
+    "stalemate": "égalité"
+  },
+  "room": {
+    "code": "Code de salle",
+    "placeholder": "PAX-270",
+    "adapter": "Adaptateur multijoueur"
+  },
+  "victory": {
+    "title": "{{player}} établit la paix !"
+  },
+  "errors": {
+    "matchEnded": "La partie est terminée.",
+    "notTurn": "Ce n’est pas votre tour.",
+    "endWhenReady": "Terminez le tour lorsque vous êtes prêt.",
+    "recruitUnavailable": "Le recrutement n’est pas disponible.",
+    "controlledTerritory": "Choisissez un territoire sous votre contrôle.",
+    "recruitLocation": "Les unités sont recrutées dans les villes ou les ports.",
+    "fleetPort": "Les flottes nécessitent un port.",
+    "coins": "Vous n’avez pas assez de pièces.",
+    "actionPhase": "Les unités agissent pendant la phase d’action.",
+    "ownUnit": "Choisissez l’une de vos unités.",
+    "illegalDestination": "Cette destination n’est pas autorisée.",
+    "unknownDestination": "Destination inconnue.",
+    "occupied": "Attaquez pour entrer dans un territoire occupé.",
+    "noTarget": "Aucune cible ennemie ne s’y trouve.",
+    "cardsUnavailable": "Impossible de jouer une carte maintenant.",
+    "cardMissing": "Cette carte n’est pas dans votre main.",
+    "unknownCard": "Carte inconnue.",
+    "favorUnavailable": "Impossible d’invoquer une faveur maintenant.",
+    "favorNotReady": "La faveur n’est pas prête.",
+    "unsupported": "Action non prise en charge."
+  },
+  "events": {
+    "begins": "La lutte pour la Méditerranée commence.",
+    "income": "{{player}} reçoit {{count, number}} pièces.",
+    "recruit": "{{player}} recrute {{unit}}.",
+    "capture": "{{player}} capture {{territory}}.",
+    "repelled": "L’attaque de {{player}} contre {{territory}} est repoussée.",
+    "stalemate": "La bataille de {{territory}} se termine sans vainqueur.",
+    "move": "{{player}} se déplace vers {{territory}}.",
+    "card": "{{player}} joue {{card}}.",
+    "favor": "{{player}} invoque {{patron}}.",
+    "turnBegins": "Le tour de {{player}} commence."
+  }
+}

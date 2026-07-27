@@ -1,7 +1,7 @@
 :root {
   color: #2c2430;
   background: #17394b;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, 'Noto Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;
   font-synthesis: none;
   --purple: #603263;
   --purple-dark: #321e43;
@@ -165,8 +165,8 @@ h2 {
 }
 .settings-button {
   position: fixed;
-  top: 18px;
-  right: 18px;
+  inset-block-start: 18px;
+  inset-inline-end: 18px;
 }
 .icon-button {
   width: 44px;
@@ -197,8 +197,8 @@ h2 {
 }
 .back {
   position: absolute;
-  left: 20px;
-  top: 18px;
+  inset-inline-start: 20px;
+  inset-block-start: 18px;
   border: 0;
   background: transparent;
   font-weight: 700;
@@ -677,13 +677,62 @@ select {
 .update-toast {
   position: fixed;
   z-index: 30;
-  bottom: 15px;
-  right: 15px;
+  inset-block-end: 15px;
+  inset-inline-end: 15px;
   padding: 14px;
   border-radius: 7px;
   background: #fff2cd;
   color: #32243b;
   box-shadow: 0 5px 18px #0008;
+}
+
+.language-selector {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+.language-selector select {
+  min-width: 190px;
+}
+.menu-page > .language-selector {
+  position: fixed;
+  z-index: 3;
+  inset-block-start: 18px;
+  inset-inline-start: 18px;
+  color: #f8e9c9;
+  text-align: start;
+}
+.menu-page > .language-selector span {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.directional-arrow {
+  display: inline-block;
+}
+
+[dir='rtl'] .directional-arrow {
+  transform: scaleX(-1);
+}
+[dir='rtl'] .map-shell {
+  direction: ltr;
+  transform: none;
+}
+[dir='rtl'] .action-panel,
+[dir='rtl'] .dialog,
+[dir='rtl'] .prose,
+[dir='rtl'] .faction-card {
+  text-align: start;
+}
+[dir='rtl'] .eyebrow,
+[dir='rtl'] .phase-label,
+[dir='rtl'] .topbar dd small,
+[dir='rtl'] .menu-page > .language-selector span {
+  letter-spacing: normal;
+  text-transform: none;
+}
+[dir='rtl'] .card-hand button {
+  text-align: start;
 }
 .update-toast button {
   margin-left: 8px;
@@ -758,6 +807,14 @@ select {
   .menu-page {
     justify-content: start;
     overflow: auto;
+  }
+  .menu-page > .language-selector {
+    position: static;
+    order: -1;
+    width: min(460px, 100%);
+  }
+  .menu-page > .language-selector select {
+    width: 100%;
   }
   .hero h1 {
     margin-top: 8px;

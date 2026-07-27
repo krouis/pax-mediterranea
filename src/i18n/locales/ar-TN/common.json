@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "name": "العربية — تونس",
+    "flag": "🇹🇳",
+    "direction": "rtl",
+    "complete": true
+  },
+  "brand": {
+    "name": "باكس ميديتيرانيا",
+    "tagline": "كلّ قوّة توعد بالسلام. قوّة واحدة باش تحقّقو.",
+    "genre": "لعبة استراتيجية في البحر المتوسّط"
+  },
+  "language": {
+    "label": "اللغة",
+    "changed": "تبدّلت اللغة إلى {{language}}."
+  },
+  "actions": {
+    "play": "ابدأ اللعب",
+    "continue": "كمّل",
+    "back": "ارجع",
+    "close": "سكّر",
+    "save": "سجّل",
+    "load": "حمّل",
+    "skip": "تعدّى",
+    "later": "بعد",
+    "returnMenu": "ارجع للقائمة",
+    "reloadUpdate": "حمّل النسخة الجديدة",
+    "revealBoard": "أظهر الرقعة",
+    "joinRoom": "ادخل للغرفة"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "motion": "نقّص الحركة",
+    "sound": "المؤثّرات الصوتية",
+    "music": "الموسيقى"
+  },
+  "status": {
+    "offlineReady": "يخدم بلا إنترنت",
+    "noTracking": "من غير تتبّع",
+    "openSource": "مفتوح المصدر",
+    "saved": "تسجّلت اللعبة على الجهاز.",
+    "updateReady": "فمّا نسخة جديدة جاهزة.",
+    "passDevice": "عدّي الجهاز للاعب الآخر"
+  },
+  "numbers": {
+    "turn": "الدور {{value, number}}",
+    "minutes": "من {{min, number}} إلى {{max, number}} دقيقة",
+    "players_zero": "{{count, number}} لاعبين",
+    "players_one": "{{count, number}} لاعب",
+    "players_two": "{{count, number}} لاعبين",
+    "players_few": "{{count, number}} لاعبين",
+    "players_many": "{{count, number}} لاعب",
+    "players_other": "{{count, number}} لاعب"
+  }
+}

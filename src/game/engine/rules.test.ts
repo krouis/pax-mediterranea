@@ -156,7 +156,7 @@ describe('deterministic game rules', () => {
         unitId: 'u1',
         to: 'sardinia',
       }).error,
-    ).toMatch(/action phase/i);
+    ).toBe('game:errors.actionPhase');
     state = startActionPhase(state);
     expect(
       applyAction(state, {
@@ -209,7 +209,7 @@ describe('deterministic game rules', () => {
         unitType: 'cavalry',
         territoryId: 'carthage',
       }).error,
-    ).toMatch(/coins/i);
+    ).toBe('game:errors.coins');
     expect(
       applyAction(state, {
         type: 'RECRUIT',

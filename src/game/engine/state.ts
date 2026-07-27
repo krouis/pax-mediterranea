@@ -16,7 +16,7 @@ export function createGame(options: GameOptions = {}): GameState {
   const opponent: FactionId = faction === 'carthage' ? 'rome' : 'carthage';
   const p1: Player = {
     id: 'p1',
-    name: options.playerName?.slice(0, 24) || factions[faction].name,
+    name: options.playerName?.slice(0, 24) || faction,
     faction,
     patron: options.patron ?? factions[faction].patrons[0],
     coins: 5,
@@ -29,7 +29,7 @@ export function createGame(options: GameOptions = {}): GameState {
   };
   const p2: Player = {
     id: 'p2',
-    name: options.secondPlayerName?.slice(0, 24) || factions[opponent].name,
+    name: options.secondPlayerName?.slice(0, 24) || opponent,
     faction: opponent,
     patron: factions[opponent].patrons[0],
     coins: 5,
@@ -47,7 +47,7 @@ export function createGame(options: GameOptions = {}): GameState {
     { id: 'u4', ownerId: 'p2', type: 'cavalry', territoryId: 'campania', acted: false },
   ];
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     id: `game-${options.seed ?? 270}`,
     seed: options.seed ?? 270,
     rngState: options.seed ?? 270,
@@ -59,7 +59,7 @@ export function createGame(options: GameOptions = {}): GameState {
     players: [p1, p2],
     territories: structuredClone(quickMap),
     units,
-    eventLog: [{ turn: 1, message: 'The contest for the Mediterranean begins.' }],
+    eventLog: [{ turn: 1, key: 'game:events.begins' }],
     nextUnitId: 5,
   };
 }

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { terrainRules } from '../content/gameContent';
 import { legalDestinations } from '../game/engine/rules';
 import type { GameState } from '../game/engine/types';
@@ -21,9 +22,12 @@ const terrainIcons = {
 };
 
 export function MapBoard({ state, selectedUnitId, selectUnit, chooseTerritory }: Props) {
+  const { t } = useTranslation();
   const legal = selectedUnitId ? legalDestinations(state, selectedUnitId) : [];
+  const playerName = (name: string) =>
+    name === 'carthage' || name === 'rome' ? t(`content:factions.${name}.name`) : name;
   return (
-    <section className="map-shell" aria-label="Mediterranean strategy map">
+    <section className="map-shell" dir="ltr" aria-label={t('accessibility:map')}>
       <svg className="connections" viewBox="0 0 100 100" aria-hidden="true">
         {state.territories.flatMap((territory) =>
           territory.connections
@@ -51,16 +55,24 @@ export function MapBoard({ state, selectedUnitId, selectUnit, chooseTerritory }:
             className={`territory terrain-${territory.terrain} owner-${territory.ownerId ?? 'neutral'} ${active ? 'legal' : ''}`}
             style={{ left: `${territory.position.x}%`, top: `${territory.position.y}%` }}
             onClick={() => chooseTerritory(territory.id)}
-            aria-label={`${territory.name}, ${terrainRules[territory.terrain].label}, ${
-              territory.ownerId
-                ? `controlled by ${state.players.find(({ id }) => id === territory.ownerId)?.name}`
-                : 'neutral'
-            }`}
+            aria-label={t('accessibility:territory', {
+              territory: t(territory.nameKey),
+              terrain: t(terrainRules[territory.terrain].nameKey),
+              ownership: territory.ownerId
+                ? t('accessibility:controlledBy', {
+                    player: playerName(
+                      state.players.find(({ id }) => id === territory.ownerId)?.name ?? '',
+                    ),
+                  })
+                : t('accessibility:neutral'),
+            })}
           >
             <span className="terrain-icon" aria-hidden="true">
               {terrainIcons[territory.terrain]}
             </span>
-            <span className="territory-name">{territory.name}</span>
+            <span className="territory-name" dir="auto">
+              {t(territory.nameKey)}
+            </span>
             <span className="units">
               {units.map((unit) => (
                 <span
@@ -68,8 +80,12 @@ export function MapBoard({ state, selectedUnitId, selectUnit, chooseTerritory }:
                   role="button"
                   tabIndex={0}
                   className={`unit unit-${unit.ownerId} ${selectedUnitId === unit.id ? 'selected' : ''}`}
-                  title={`${unit.type}${unit.acted ? ' (acted)' : ''}`}
-                  aria-label={`Select ${unit.type}`}
+                  title={`${t(`content:units.${unit.type}`)}${
+                    unit.acted ? ` (${t('accessibility:acted')})` : ''
+                  }`}
+                  aria-label={t('accessibility:selectUnit', {
+                    unit: t(`content:units.${unit.type}`),
+                  })}
                   onClick={(event) => {
                     event.stopPropagation();
                     selectUnit(unit.id);

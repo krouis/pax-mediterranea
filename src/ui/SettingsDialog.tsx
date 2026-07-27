@@ -1,14 +1,15 @@
-import type { Locale, MessageKey } from '../app/i18n';
+import { useTranslation } from 'react-i18next';
 import type { Preferences } from '../persistence/preferences';
+import { LanguageSelector } from './LanguageSelector';
 
 interface Props {
   preferences: Preferences;
   setPreferences: (value: Preferences) => void;
   close: () => void;
-  t: (key: MessageKey) => string;
 }
 
-export function SettingsDialog({ preferences, setPreferences, close, t }: Props) {
+export function SettingsDialog({ preferences, setPreferences, close }: Props) {
+  const { t } = useTranslation();
   const update = (patch: Partial<Preferences>) => setPreferences({ ...preferences, ...patch });
   return (
     <div className="scrim" role="presentation">
@@ -18,24 +19,15 @@ export function SettingsDialog({ preferences, setPreferences, close, t }: Props)
         aria-modal="true"
         aria-labelledby="settings-title"
       >
-        <h2 id="settings-title">{t('settings')}</h2>
-        <label>
-          {t('language')}
-          <select
-            value={preferences.locale}
-            onChange={(event) => update({ locale: event.target.value as Locale })}
-          >
-            <option value="en">English</option>
-            <option value="fr">Français</option>
-          </select>
-        </label>
+        <h2 id="settings-title">{t('settings.title')}</h2>
+        <LanguageSelector value={preferences.locale} onChange={(locale) => update({ locale })} />
         <label className="toggle">
           <input
             type="checkbox"
             checked={preferences.reducedMotion}
             onChange={(event) => update({ reducedMotion: event.target.checked })}
           />
-          {t('motion')}
+          {t('settings.motion')}
         </label>
         <label className="toggle">
           <input
@@ -43,7 +35,7 @@ export function SettingsDialog({ preferences, setPreferences, close, t }: Props)
             checked={preferences.sound}
             onChange={(event) => update({ sound: event.target.checked })}
           />
-          {t('sound')}
+          {t('settings.sound')}
         </label>
         <label className="toggle">
           <input
@@ -51,10 +43,10 @@ export function SettingsDialog({ preferences, setPreferences, close, t }: Props)
             checked={preferences.music}
             onChange={(event) => update({ music: event.target.checked })}
           />
-          {t('music')}
+          {t('settings.music')}
         </label>
         <button className="primary" onClick={close}>
-          {t('close')}
+          {t('actions.close')}
         </button>
       </section>
     </div>

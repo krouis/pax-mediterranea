@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { cards, factions, patrons, scenarios, unitRules } from '../content/gameContent';
 import { runAITurn } from '../game/ai/ai';
@@ -9,11 +10,12 @@ import { loadGame, loadPreferences, saveGame, savePreferences } from '../persist
 import { playTone } from '../audio/sound';
 import { MapBoard } from '../ui/MapBoard';
 import { SettingsDialog } from '../ui/SettingsDialog';
-import { translate, type MessageKey } from './i18n';
+import { LanguageSelector } from '../ui/LanguageSelector';
 
 type Screen = 'menu' | 'select' | 'game' | 'campaign' | 'online';
 
 export function App() {
+  const { t } = useTranslation();
   const [screen, setScreen] = useState<Screen>('menu');
   const [preferences, setPreferences] = useState(loadPreferences);
   const [settings, setSettings] = useState(false);
@@ -24,15 +26,28 @@ export function App() {
   const [concealed, setConcealed] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
   const savedGame = loadGame();
-  const t = (key: MessageKey) => translate(preferences.locale, key);
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW();
+  const displayPlayer = (name: string) =>
+    name === 'carthage' || name === 'rome' ? t(`content:factions.${name}.name`) : name;
+  const displayEvent = (state: GameState) => {
+    const event = state.eventLog.at(-1);
+    if (!event) return '';
+    const values = { ...event.values };
+    if (typeof values.player === 'string') values.player = displayPlayer(values.player);
+    if (typeof values.territory === 'string')
+      values.territory = t(`content:territories.${values.territory}`);
+    if (typeof values.unit === 'string') values.unit = t(`content:units.${values.unit}`);
+    if (typeof values.card === 'string') values.card = t(`content:cards.${values.card}.name`);
+    if (typeof values.patron === 'string')
+      values.patron = t(`content:patrons.${values.patron}.name`);
+    return t(event.key, values);
+  };
 
   useEffect(() => {
     savePreferences(preferences);
-    document.documentElement.lang = preferences.locale;
     document.documentElement.dataset.motion = preferences.reducedMotion ? 'reduced' : 'full';
   }, [preferences]);
 
@@ -63,19 +78,17 @@ export function App() {
           <span className="sun-mark" aria-hidden="true">
             ✦
           </span>
-          <p className="eyebrow">A MEDITERRANEAN STRATEGY GAME</p>
-          <h1>
-            Pax
-            <br />
-            <span>Mediterranea</span>
-          </h1>
-          <p className="tagline">{t('tagline')}</p>
+          <p className="eyebrow">{t('brand.genre')}</p>
+          <h1>{t('brand.name')}</h1>
+          <p className="tagline">{t('brand.tagline')}</p>
         </header>
-        <nav className="menu-actions" aria-label="Game modes">
+        <nav className="menu-actions" aria-label={t('accessibility:gameModes')}>
           <button className="primary large" onClick={() => startMode('solo')}>
             <span>⚔</span>
-            <strong>{t('quick')}</strong>
-            <small>10–25 min · {t('solo')}</small>
+            <strong>{t('game:modes.quick')}</strong>
+            <small>
+              {t('numbers.minutes', { min: 10, max: 25 })} · {t('game:modes.solo')}
+            </small>
           </button>
           {savedGame && (
             <button
@@ -85,8 +98,8 @@ export function App() {
               }}
             >
               <span>▶</span>
-              <strong>{t('continue')}</strong>
-              <small>Turn {savedGame.turn}</small>
+              <strong>{t('actions.continue')}</strong>
+              <small>{t('numbers.turn', { value: savedGame.turn })}</small>
             </button>
           )}
           <button
@@ -96,46 +109,58 @@ export function App() {
             }}
           >
             <span>♜</span>
-            <strong>{t('campaign')}</strong>
-            <small>The Sicilian Question</small>
+            <strong>{t('game:modes.campaign')}</strong>
+            <small>{t('campaigns:sicilian-question.title')}</small>
           </button>
           <button onClick={() => startMode('hotseat')}>
             <span>♟</span>
-            <strong>{t('hotseat')}</strong>
-            <small>2 players · one device</small>
+            <strong>{t('game:modes.hotseat')}</strong>
+            <small>
+              {t('numbers.players', { count: 2 })} · {t('game:modes.oneDevice')}
+            </small>
           </button>
           <button onClick={() => startMode('tutorial')}>
             <span>?</span>
-            <strong>{t('tutorial')}</strong>
-            <small>3–5 min · Carthage</small>
+            <strong>{t('game:modes.tutorial')}</strong>
+            <small>
+              {t('numbers.minutes', { min: 3, max: 5 })} · {t('content:factions.carthage.name')}
+            </small>
           </button>
           <button onClick={() => setScreen('online')}>
             <span>⌁</span>
-            <strong>{t('online')}</strong>
-            <small>Optional transport preview</small>
+            <strong>{t('game:modes.online')}</strong>
+            <small>{t('game:modes.transportPreview')}</small>
           </button>
         </nav>
         <button
           className="icon-button settings-button"
           onClick={() => setSettings(true)}
-          aria-label={t('settings')}
+          aria-label={t('accessibility:settings')}
         >
           ⚙
         </button>
-        <footer>Offline ready · No tracking · Open source</footer>
+        <LanguageSelector
+          compact
+          value={preferences.locale}
+          onChange={(locale) => setPreferences((current) => ({ ...current, locale }))}
+        />
+        <footer>
+          {t('status.offlineReady')} · {t('status.noTracking')} · {t('status.openSource')}
+        </footer>
         {settings && (
           <SettingsDialog
             preferences={preferences}
             setPreferences={setPreferences}
             close={() => setSettings(false)}
-            t={t}
           />
         )}
         {needRefresh && (
           <div className="update-toast" role="status">
-            A new version is ready.
-            <button onClick={() => void updateServiceWorker(true)}>Reload updated version</button>
-            <button onClick={() => setNeedRefresh(false)}>Later</button>
+            {t('status.updateReady')}
+            <button onClick={() => void updateServiceWorker(true)}>
+              {t('actions.reloadUpdate')}
+            </button>
+            <button onClick={() => setNeedRefresh(false)}>{t('actions.later')}</button>
           </div>
         )}
       </main>
@@ -147,23 +172,26 @@ export function App() {
     return (
       <main className="sub-page parchment">
         <button className="back" onClick={() => setScreen('menu')}>
-          ← {t('back')}
+          <span className="directional-arrow" aria-hidden="true">
+            ←
+          </span>{' '}
+          {t('actions.back')}
         </button>
-        <p className="eyebrow">CARTHAGINIAN CAMPAIGN · I</p>
-        <h1>{scenario.title}</h1>
+        <p className="eyebrow">{t('campaigns:sicilian-question.chapter')}</p>
+        <h1>{t(scenario.titleKey)}</h1>
         <div className="campaign-illustration" aria-hidden="true">
           <span>⛵</span>
           <span>♜</span>
           <span>▲</span>
         </div>
         <section className="stone-panel prose">
-          <p>{scenario.intro}</p>
-          <h2>Objective</h2>
-          <p>{scenario.objective}</p>
-          <p className="historical-note">{scenario.historicalNote}</p>
+          <p>{t(scenario.introKey)}</p>
+          <h2>{t('campaigns:sicilian-question.objectiveTitle')}</h2>
+          <p>{t(scenario.objectiveKey)}</p>
+          <p className="historical-note">{t(scenario.historicalNoteKey)}</p>
         </section>
         <button className="primary large" onClick={() => begin('carthage', 'baal-hammon')}>
-          {t('play')}
+          {t('actions.play')}
         </button>
       </main>
     );
@@ -173,17 +201,25 @@ export function App() {
     return (
       <main className="sub-page parchment">
         <button className="back" onClick={() => setScreen('menu')}>
-          ← {t('back')}
+          <span className="directional-arrow" aria-hidden="true">
+            ←
+          </span>{' '}
+          {t('actions.back')}
         </button>
-        <p className="eyebrow">MULTIPLAYER ADAPTER</p>
-        <h1>{t('online')}</h1>
+        <p className="eyebrow">{t('game:room.adapter')}</p>
+        <h1>{t('game:modes.online')}</h1>
         <section className="stone-panel prose">
           <label>
-            Room code
-            <input maxLength={8} placeholder="PAX-270" aria-describedby="room-help" />
+            {t('game:room.code')}
+            <input
+              dir="ltr"
+              maxLength={8}
+              placeholder={t('game:room.placeholder')}
+              aria-describedby="room-help"
+            />
           </label>
-          <p id="room-help">{t('roomUnavailable')}</p>
-          <button disabled>Join room</button>
+          <p id="room-help">{t('game:instructions.roomUnavailable')}</p>
+          <button disabled>{t('actions.joinRoom')}</button>
         </section>
       </main>
     );
@@ -193,23 +229,28 @@ export function App() {
     return (
       <main className="sub-page parchment">
         <button className="back" onClick={() => setScreen('menu')}>
-          ← {t('back')}
+          <span className="directional-arrow" aria-hidden="true">
+            ←
+          </span>{' '}
+          {t('actions.back')}
         </button>
-        <p className="eyebrow">{mode === 'tutorial' ? 'GUIDED VOYAGE' : 'QUICK SKIRMISH'}</p>
-        <h1>{t('selectFaction')}</h1>
+        <p className="eyebrow">
+          {mode === 'tutorial' ? t('game:modes.guided') : t('game:modes.quick')}
+        </p>
+        <h1>{t('game:selection.faction')}</h1>
         <div className="faction-grid">
           {(Object.keys(factions) as FactionId[]).map((id) => (
             <section key={id} className={`faction-card ${id}`}>
               <div className="faction-emblem" aria-hidden="true">
                 {factions[id].icon}
               </div>
-              <h2>{factions[id].name}</h2>
-              <p>{factions[id].passive}</p>
-              <h3>{t('selectPatron')}</h3>
+              <h2>{t(factions[id].nameKey)}</h2>
+              <p>{t(factions[id].passiveKey)}</p>
+              <h3>{t('game:selection.patron')}</h3>
               {factions[id].patrons.map((patron) => (
                 <button key={patron} className="patron" onClick={() => begin(id, patron)}>
-                  <strong>{patrons[patron].name}</strong>
-                  <small>{patrons[patron].description}</small>
+                  <strong>{t(patrons[patron].nameKey)}</strong>
+                  <small>{t(patrons[patron].descriptionKey)}</small>
                 </button>
               ))}
             </section>
@@ -227,7 +268,7 @@ export function App() {
     setGame(next);
     saveGame(next);
     playTone(sound, preferences.sound);
-    setMessage(next.eventLog.at(-1)?.message ?? '');
+    setMessage(displayEvent(next));
   };
 
   const chooseTerritory = (territoryId: string) => {
@@ -242,7 +283,12 @@ export function App() {
       const preview = combatPreview(game, selected, territoryId);
       if (
         !confirm(
-          `Attack ${destination.name}? Attack ${preview.attack} · Defense ${preview.defense} · ${preview.outcome}`,
+          [
+            t('game:combat.confirm', { territory: t(destination.nameKey) }),
+            t('game:combat.attackStrength', { value: preview.attack }),
+            t('game:combat.defenseStrength', { value: preview.defense }),
+            t('game:combat.outcome', { outcome: t(`game:combat.${preview.outcome}`) }),
+          ].join(' · '),
         )
       )
         return;
@@ -253,7 +299,7 @@ export function App() {
       unitId: selected.id,
       to: territoryId,
     });
-    if (!result.ok) setMessage(result.error ?? '');
+    if (!result.ok) setMessage(t(result.error ?? 'game:errors.unsupported'));
     else {
       act(result.state);
       setSelectedUnit(undefined);
@@ -278,46 +324,54 @@ export function App() {
   return (
     <main className="game-page">
       <header className="topbar">
-        <button className="crest" onClick={() => setScreen('menu')} aria-label="Return to menu">
+        <button
+          className="crest"
+          onClick={() => setScreen('menu')}
+          aria-label={t('accessibility:returnMenu')}
+        >
           {factions[player.faction].icon}
         </button>
         <div>
-          <span>{player.name}</span>
+          <span>{displayPlayer(player.name)}</span>
           <small>
-            {t('turn')} {game.turn} · {game.phase}
+            {t('numbers.turn', { value: game.turn })} · {t(`game:phase.${game.phase}`)}
           </small>
         </div>
         <dl>
           <div>
             <dt>●</dt>
             <dd>
-              {player.coins}
-              <small>{t('coins')}</small>
+              {new Intl.NumberFormat(preferences.locale).format(player.coins)}
+              <small>{t('game:hud.coins')}</small>
             </dd>
           </div>
           <div>
             <dt>✦</dt>
             <dd>
-              {player.favor}/3<small>{t('favor')}</small>
+              {new Intl.NumberFormat(preferences.locale).format(player.favor)}/
+              {new Intl.NumberFormat(preferences.locale).format(3)}
+              <small>{t('game:hud.favor')}</small>
             </dd>
           </div>
           <div>
             <dt>♜</dt>
             <dd>
-              {player.pax}/8<small>{t('pax')}</small>
+              {new Intl.NumberFormat(preferences.locale).format(player.pax)}/
+              {new Intl.NumberFormat(preferences.locale).format(8)}
+              <small>{t('game:hud.pax')}</small>
             </dd>
           </div>
         </dl>
         <button
           className="icon-button"
           onClick={() => setSettings(true)}
-          aria-label={t('settings')}
+          aria-label={t('accessibility:settings')}
         >
           ⚙
         </button>
       </header>
       <div className="objective-banner">
-        <strong>Objective</strong> {t('objective')}
+        <strong>{t('game:hud.objective')}</strong> {t('game:objective.pax', { target: 8 })}
       </div>
       <div className="board-layout">
         <MapBoard
@@ -330,15 +384,19 @@ export function App() {
           chooseTerritory={chooseTerritory}
         />
         <aside className="action-panel stone-panel">
-          <p className="phase-label">PHASE · {game.phase.toUpperCase()}</p>
-          <h2>{selected ? selected.type : t('selectUnit')}</h2>
+          <p className="phase-label">
+            {t('game:hud.phase')} · {t(`game:phase.${game.phase}`)}
+          </p>
+          <h2>
+            {selected ? t(`content:units.${selected.type}`) : t('game:instructions.selectUnit')}
+          </h2>
           {message && (
             <p className="status" role="status">
               {message}
             </p>
           )}
           <section>
-            <h3>{t('recruit')}</h3>
+            <h3>{t('game:actions.recruit')}</h3>
             <div className="recruit-row">
               {(['infantry', 'cavalry', 'fleet'] as UnitType[]).map((type) => (
                 <button
@@ -359,13 +417,13 @@ export function App() {
                       territoryId: home.id,
                     });
                     if (result.ok) act(result.state, 'coin');
-                    else setMessage(result.error ?? '');
+                    else setMessage(t(result.error ?? 'game:errors.unsupported'));
                     setTutorialStep(Math.max(tutorialStep, 3));
                   }}
                 >
                   <span>{type === 'infantry' ? '♟' : type === 'cavalry' ? '♞' : '⛵'}</span>
                   <small>
-                    {type}
+                    {t(`content:units.${type}`)}
                     <br />● {unitRules[type].cost}
                   </small>
                 </button>
@@ -374,7 +432,9 @@ export function App() {
           </section>
           <section>
             <h3>
-              {t('cards')} · {player.hand.length}/3
+              {t('game:hud.cards')} ·{' '}
+              {new Intl.NumberFormat(preferences.locale).format(player.hand.length)}/
+              {new Intl.NumberFormat(preferences.locale).format(3)}
             </h3>
             <div className="card-hand">
               {player.hand.map((card) => (
@@ -388,12 +448,12 @@ export function App() {
                       unitId: selectedUnit,
                     });
                     if (result.ok) act(result.state);
-                    else setMessage(result.error ?? '');
+                    else setMessage(t(result.error ?? 'game:errors.unsupported'));
                     setTutorialStep(Math.max(tutorialStep, 4));
                   }}
                 >
-                  <strong>{cards[card].name}</strong>
-                  <small>{cards[card].description}</small>
+                  <strong>{t(cards[card].nameKey)}</strong>
+                  <small>{t(cards[card].descriptionKey)}</small>
                 </button>
               ))}
             </div>
@@ -407,22 +467,25 @@ export function App() {
                 territoryId: home.id,
               });
               if (result.ok) act(result.state);
-              else setMessage(result.error ?? '');
+              else setMessage(t(result.error ?? 'game:errors.unsupported'));
             }}
           >
-            ✦ {t('invoke')} · {patrons[player.patron].name}
+            ✦ {t('game:actions.invokeFavor')} · {t(patrons[player.patron].nameKey)}
           </button>
           <div className="panel-footer">
             <button
               onClick={() => {
                 saveGame(game);
-                setMessage(t('saved'));
+                setMessage(t('status.saved'));
               }}
             >
-              {t('save')}
+              {t('actions.save')}
             </button>
             <button className="primary" onClick={endTurn}>
-              {t('endTurn')} →
+              {t('game:actions.endTurn')}{' '}
+              <span className="directional-arrow" aria-hidden="true">
+                →
+              </span>
             </button>
           </div>
         </aside>
@@ -432,20 +495,20 @@ export function App() {
           <strong>{tutorialStep}/4</strong>
           {
             [
-              t('selectUnit'),
-              'Move to a highlighted territory and capture it.',
-              'Recruit infantry in Carthage.',
-              'Play a card, invoke favor, then end your turn.',
+              t('game:instructions.selectUnit'),
+              t('game:instructions.tutorialMove'),
+              t('game:instructions.tutorialRecruit'),
+              t('game:instructions.tutorialFlavor'),
             ][tutorialStep - 1]
           }
-          <button onClick={() => setTutorialStep(0)}>Skip</button>
+          <button onClick={() => setTutorialStep(0)}>{t('actions.skip')}</button>
         </div>
       )}
       {concealed && (
         <div className="scrim">
           <section className="dialog stone-panel">
-            <p className="eyebrow">{t('passDevice')}</p>
-            <h2>{activePlayer(game).name}</h2>
+            <p className="eyebrow">{t('status.passDevice')}</p>
+            <h2>{displayPlayer(activePlayer(game).name)}</h2>
             <button
               className="primary large"
               onClick={() => {
@@ -453,7 +516,7 @@ export function App() {
                 setGame(startActionPhase(game));
               }}
             >
-              {t('reveal')}
+              {t('actions.revealBoard')}
             </button>
           </section>
         </div>
@@ -462,8 +525,14 @@ export function App() {
         <div className="scrim">
           <section className="dialog victory">
             <span>✦</span>
-            <h2>{game.players.find(({ id }) => id === game.winnerId)?.name} establishes peace!</h2>
-            <button onClick={() => setScreen('menu')}>Return to menu</button>
+            <h2>
+              {t('game:victory.title', {
+                player: displayPlayer(
+                  game.players.find(({ id }) => id === game.winnerId)?.name ?? '',
+                ),
+              })}
+            </h2>
+            <button onClick={() => setScreen('menu')}>{t('actions.returnMenu')}</button>
           </section>
         </div>
       )}
@@ -472,7 +541,6 @@ export function App() {
           preferences={preferences}
           setPreferences={setPreferences}
           close={() => setSettings(false)}
-          t={t}
         />
       )}
     </main>

@@ -1,0 +1,12 @@
+{
+  "map": "خريطة استراتيجية للبحر المتوسّط",
+  "territory": "{{territory}}، {{terrain}}، {{ownership}}",
+  "controlledBy": "تحت سيطرة {{player}}",
+  "neutral": "محايدة",
+  "selectUnit": "اختار {{unit}}",
+  "acted": "تحرّكت من قبل",
+  "returnMenu": "ارجع للقائمة",
+  "gameModes": "أنماط اللعب",
+  "settings": "افتح الإعدادات",
+  "languageSelector": "اختار لغة الواجهة"
+}

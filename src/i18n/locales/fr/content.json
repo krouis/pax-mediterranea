@@ -1,0 +1,79 @@
+{
+  "factions": {
+    "carthage": { "name": "Carthage", "passive": "République marchande" },
+    "rome": { "name": "République romaine", "passive": "Levée citoyenne" }
+  },
+  "patrons": {
+    "baal-hammon": {
+      "name": "Baal Hammon",
+      "description": "Prospérité et endurance civique.",
+      "favor": "Réserves abondantes : la ville choisie produit immédiatement 2 pièces."
+    },
+    "tanit": {
+      "name": "Tanit",
+      "description": "Protection et résilience.",
+      "favor": "Protection de Tanit : le territoire choisi reçoit un surcroît de défense."
+    },
+    "jupiter": {
+      "name": "Jupiter",
+      "description": "Autorité et confiance.",
+      "favor": "Serment de victoire : gagnez 1 point de Pax."
+    },
+    "juno": {
+      "name": "Junon",
+      "description": "Protection de la communauté.",
+      "favor": "Gardienne du peuple : gagnez 2 pièces pour le recrutement."
+    }
+  },
+  "cards": {
+    "hannibal-barca": {
+      "name": "Hannibal Barca",
+      "description": "Une armée terrestre gagne +1 en attaque pour sa prochaine bataille ce tour-ci."
+    },
+    "war-elephants": {
+      "name": "Éléphants de guerre",
+      "description": "Une armée gagne +2 en attaque dans une plaine pour sa prochaine bataille."
+    },
+    "merchant-fleet": { "name": "Flotte marchande", "description": "Gagnez 2 pièces." },
+    "scipio-africanus": {
+      "name": "Scipion l’Africain",
+      "description": "Une armée romaine gagne +1 en attaque pour sa prochaine bataille."
+    },
+    "roman-veterans": {
+      "name": "Vétérans romains",
+      "description": "Une unité d’infanterie peut agir de nouveau."
+    },
+    "roman-roads": {
+      "name": "Voies romaines",
+      "description": "Une unité terrestre peut agir de nouveau."
+    }
+  },
+  "units": {
+    "infantry": "Infanterie",
+    "cavalry": "Cavalerie",
+    "fleet": "Flotte"
+  },
+  "terrain": {
+    "plains": "Plaine",
+    "hills": "Collines",
+    "mountains": "Montagnes",
+    "city": "Ville",
+    "port": "Port",
+    "sea": "Mer",
+    "sacred": "Site sacré"
+  },
+  "territories": {
+    "iberia": "Ibérie",
+    "balearics": "Îles Baléares",
+    "carthage": "Carthage",
+    "numidia": "Numidie",
+    "sardinia": "Sardaigne",
+    "corsica": "Corse",
+    "sicily": "Sicile",
+    "latium": "Rome",
+    "campania": "Campanie",
+    "magna-graecia": "Grande-Grèce",
+    "epirus": "Épire",
+    "hellas": "Hellade"
+  }
+}

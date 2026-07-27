@@ -11,7 +11,7 @@ export interface Position {
 
 export interface Territory {
   id: string;
-  name: string;
+  nameKey: string;
   terrain: Terrain;
   position: Position;
   connections: string[];
@@ -44,11 +44,12 @@ export interface Player {
 
 export interface GameEvent {
   turn: number;
-  message: string;
+  key: string;
+  values?: Record<string, string | number>;
 }
 
 export interface GameState {
-  schemaVersion: 1;
+  schemaVersion: 2;
   id: string;
   seed: number;
   rngState: number;

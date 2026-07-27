@@ -62,8 +62,8 @@ function fail(state: GameState, error: string): ActionResult {
   return { ok: false, state, error };
 }
 
-function addEvent(state: GameState, message: string): void {
-  state.eventLog.push({ turn: state.turn, message });
+function addEvent(state: GameState, key: string, values?: Record<string, string | number>): void {
+  state.eventLog.push({ turn: state.turn, key, values });
   state.eventLog = state.eventLog.slice(-30);
 }
 
@@ -74,7 +74,7 @@ function advancePhase(state: GameState): void {
   if (state.phase === 'income') {
     const income = territoryIncome(state, player.id);
     player.coins += income;
-    addEvent(state, `${player.name} receives ${income} coins.`);
+    addEvent(state, 'game:events.income', { player: player.name, count: income });
   }
   if (state.phase === 'draw' && player.deck.length > 0 && player.hand.length < 3) {
     const card = player.deck.shift();
@@ -84,30 +84,30 @@ function advancePhase(state: GameState): void {
 }
 
 export function applyAction(original: GameState, action: GameAction): ActionResult {
-  if (original.winnerId) return fail(original, 'The match has ended.');
-  if (activePlayer(original).id !== action.playerId) return fail(original, 'It is not your turn.');
+  if (original.winnerId) return fail(original, 'game:errors.matchEnded');
+  if (activePlayer(original).id !== action.playerId) return fail(original, 'game:errors.notTurn');
   const state = structuredClone(original);
   const player = activePlayer(state);
 
   if (action.type === 'ADVANCE_PHASE') {
-    if (state.phase === 'favor') return fail(original, 'End the turn when ready.');
+    if (state.phase === 'favor') return fail(original, 'game:errors.endWhenReady');
     advancePhase(state);
     return { ok: true, state };
   }
 
   if (action.type === 'RECRUIT') {
     if (!['recruit', 'act'].includes(state.phase))
-      return fail(original, 'Recruitment is not available.');
+      return fail(original, 'game:errors.recruitUnavailable');
     const territory = state.territories.find((candidate) => candidate.id === action.territoryId);
     if (!territory || territory.ownerId !== player.id)
-      return fail(original, 'Choose a controlled territory.');
+      return fail(original, 'game:errors.controlledTerritory');
     if (!['city', 'port'].includes(territory.terrain))
-      return fail(original, 'Units recruit in cities or ports.');
+      return fail(original, 'game:errors.recruitLocation');
     if (action.unitType === 'fleet' && territory.terrain !== 'port')
-      return fail(original, 'Fleets require a port.');
+      return fail(original, 'game:errors.fleetPort');
     let cost = unitRules[action.unitType].cost;
     if (player.faction === 'rome' && action.unitType === 'infantry') cost = Math.max(1, cost - 1);
-    if (player.coins < cost) return fail(original, 'Not enough coins.');
+    if (player.coins < cost) return fail(original, 'game:errors.coins');
     player.coins -= cost;
     state.units.push({
       id: `u${state.nextUnitId++}`,
@@ -116,27 +116,26 @@ export function applyAction(original: GameState, action: GameAction): ActionResu
       territoryId: territory.id,
       acted: true,
     });
-    addEvent(state, `${player.name} recruits ${action.unitType}.`);
+    addEvent(state, 'game:events.recruit', { player: player.name, unit: action.unitType });
     return { ok: true, state };
   }
 
   if (action.type === 'MOVE' || action.type === 'ATTACK') {
-    if (!['act', 'favor'].includes(state.phase))
-      return fail(original, 'Units act during the action phase.');
+    if (!['act', 'favor'].includes(state.phase)) return fail(original, 'game:errors.actionPhase');
     const unit = state.units.find((candidate) => candidate.id === action.unitId);
-    if (!unit || unit.ownerId !== player.id) return fail(original, 'Choose one of your units.');
+    if (!unit || unit.ownerId !== player.id) return fail(original, 'game:errors.ownUnit');
     if (!legalDestinations(state, unit.id).includes(action.to))
-      return fail(original, 'That destination is not legal.');
+      return fail(original, 'game:errors.illegalDestination');
     const destination = state.territories.find((territory) => territory.id === action.to);
-    if (!destination) return fail(original, 'Unknown destination.');
+    if (!destination) return fail(original, 'game:errors.unknownDestination');
     const enemyUnits = state.units.filter(
       (candidate) => candidate.territoryId === action.to && candidate.ownerId !== player.id,
     );
     const hostile =
       enemyUnits.length > 0 || (destination.ownerId && destination.ownerId !== player.id);
     if (action.type === 'MOVE' && enemyUnits.length > 0)
-      return fail(original, 'Attack to enter an occupied territory.');
-    if (action.type === 'ATTACK' && !hostile) return fail(original, 'There is no hostile target.');
+      return fail(original, 'game:errors.occupied');
+    if (action.type === 'ATTACK' && !hostile) return fail(original, 'game:errors.noTarget');
     if (action.type === 'ATTACK') {
       const preview = combatPreview(state, unit, action.to);
       let outcome = preview.outcome;
@@ -151,13 +150,19 @@ export function applyAction(original: GameState, action: GameAction): ActionResu
         unit.territoryId = action.to;
         destination.ownerId = player.id;
         player.pax += destination.major || destination.capital ? 2 : 1;
-        addEvent(state, `${player.name} captures ${destination.name}.`);
+        addEvent(state, 'game:events.capture', {
+          player: player.name,
+          territory: destination.id,
+        });
       } else if (outcome === 'defeat') {
         state.units = state.units.filter((candidate) => candidate.id !== unit.id);
-        addEvent(state, `${player.name}'s attack on ${destination.name} is repelled.`);
+        addEvent(state, 'game:events.repelled', {
+          player: player.name,
+          territory: destination.id,
+        });
       } else {
         unit.acted = true;
-        addEvent(state, `The battle for ${destination.name} ends in a stalemate.`);
+        addEvent(state, 'game:events.stalemate', { territory: destination.id });
       }
     } else {
       unit.territoryId = action.to;
@@ -165,7 +170,7 @@ export function applyAction(original: GameState, action: GameAction): ActionResu
         destination.ownerId = player.id;
         player.pax += destination.major ? 2 : 1;
       }
-      addEvent(state, `${player.name} moves to ${destination.name}.`);
+      addEvent(state, 'game:events.move', { player: player.name, territory: destination.id });
     }
     unit.acted = true;
     if (player.pax >= 8) state.winnerId = player.id;
@@ -174,32 +179,31 @@ export function applyAction(original: GameState, action: GameAction): ActionResu
 
   if (action.type === 'PLAY_CARD') {
     if (!['act', 'favor'].includes(state.phase))
-      return fail(original, 'Cards cannot be played now.');
-    if (!player.hand.includes(action.cardId))
-      return fail(original, 'That card is not in your hand.');
-    if (!cards[action.cardId]) return fail(original, 'Unknown card.');
+      return fail(original, 'game:errors.cardsUnavailable');
+    if (!player.hand.includes(action.cardId)) return fail(original, 'game:errors.cardMissing');
+    if (!cards[action.cardId]) return fail(original, 'game:errors.unknownCard');
     if (['merchant-fleet', 'roman-roads'].includes(action.cardId)) player.coins += 2;
     const target = state.units.find(
       (unit) => unit.id === action.unitId && unit.ownerId === player.id,
     );
     if (target) target.acted = false;
     player.hand = player.hand.filter((card) => card !== action.cardId);
-    addEvent(state, `${player.name} plays ${cards[action.cardId].name}.`);
+    addEvent(state, 'game:events.card', { player: player.name, card: action.cardId });
     return { ok: true, state };
   }
 
   if (action.type === 'INVOKE_FAVOR') {
     if (!['act', 'favor'].includes(state.phase))
-      return fail(original, 'Favor cannot be invoked now.');
-    if (player.favor < 3 || player.usedFavor) return fail(original, 'Favor is not ready.');
+      return fail(original, 'game:errors.favorUnavailable');
+    if (player.favor < 3 || player.usedFavor) return fail(original, 'game:errors.favorNotReady');
     const territory = state.territories.find((candidate) => candidate.id === action.territoryId);
     if (!territory || territory.ownerId !== player.id)
-      return fail(original, 'Choose a controlled territory.');
+      return fail(original, 'game:errors.controlledTerritory');
     player.favor -= 3;
     player.usedFavor = true;
     if (['baal-hammon', 'juno'].includes(player.patron)) player.coins += 2;
     else player.pax += 1;
-    addEvent(state, `${player.name} invokes ${player.patron.replace('-', ' ')}.`);
+    addEvent(state, 'game:events.favor', { player: player.name, patron: player.patron });
     return { ok: true, state };
   }
 
@@ -219,11 +223,11 @@ export function applyAction(original: GameState, action: GameAction): ActionResu
           ? 1
           : 0),
     );
-    addEvent(state, `${activePlayer(state).name}'s turn begins.`);
+    addEvent(state, 'game:events.turnBegins', { player: activePlayer(state).name });
     return { ok: true, state };
   }
 
-  return fail(original, 'Unsupported action.');
+  return fail(original, 'game:errors.unsupported');
 }
 
 export function startActionPhase(state: GameState): GameState {

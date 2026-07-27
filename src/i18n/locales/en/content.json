@@ -1,0 +1,73 @@
+{
+  "factions": {
+    "carthage": { "name": "Carthage", "passive": "Merchant Republic" },
+    "rome": { "name": "Roman Republic", "passive": "Citizen Levy" }
+  },
+  "patrons": {
+    "baal-hammon": {
+      "name": "Baal Hammon",
+      "description": "Prosperity and civic endurance.",
+      "favor": "Abundant Stores: selected city produces 2 coins now."
+    },
+    "tanit": {
+      "name": "Tanit",
+      "description": "Protection and resilience.",
+      "favor": "Tanit’s Protection: selected territory gains defensive resolve."
+    },
+    "jupiter": {
+      "name": "Jupiter",
+      "description": "Authority and confidence.",
+      "favor": "Oath of Victory: gain 1 Pax Point."
+    },
+    "juno": {
+      "name": "Juno",
+      "description": "Protection of the community.",
+      "favor": "Guardian of the People: gain 2 coins toward recruitment."
+    }
+  },
+  "cards": {
+    "hannibal-barca": {
+      "name": "Hannibal Barca",
+      "description": "One land army gains +1 attack in its next battle this turn."
+    },
+    "war-elephants": {
+      "name": "War Elephants",
+      "description": "One army gains +2 attack on plains for its next battle."
+    },
+    "merchant-fleet": { "name": "Merchant Fleet", "description": "Gain 2 coins." },
+    "scipio-africanus": {
+      "name": "Scipio Africanus",
+      "description": "One Roman army gains +1 attack in its next battle."
+    },
+    "roman-veterans": { "name": "Roman Veterans", "description": "One infantry may act again." },
+    "roman-roads": { "name": "Roman Roads", "description": "One land unit may act again." }
+  },
+  "units": {
+    "infantry": "Infantry",
+    "cavalry": "Cavalry",
+    "fleet": "Fleet"
+  },
+  "terrain": {
+    "plains": "Plains",
+    "hills": "Hills",
+    "mountains": "Mountains",
+    "city": "City",
+    "port": "Port",
+    "sea": "Sea",
+    "sacred": "Sacred site"
+  },
+  "territories": {
+    "iberia": "Iberia",
+    "balearics": "Balearic Isles",
+    "carthage": "Carthage",
+    "numidia": "Numidia",
+    "sardinia": "Sardinia",
+    "corsica": "Corsica",
+    "sicily": "Sicily",
+    "latium": "Rome",
+    "campania": "Campania",
+    "magna-graecia": "Magna Graecia",
+    "epirus": "Epirus",
+    "hellas": "Hellas"
+  }
+}

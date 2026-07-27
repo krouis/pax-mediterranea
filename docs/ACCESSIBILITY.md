@@ -1,0 +1,11 @@
+# Accessibility
+
+Accessibility is a release gate. Menus use headings, landmarks, labels, and native controls. The map
+provides named territory buttons and keyboard-selectable unit tokens. Focus is visible, touch
+targets aim for 44×44 pixels, faction ownership combines color and symbols, and status messages use
+live regions. Layout supports 360×640 portrait through large desktop.
+
+Reduced motion follows the OS and an explicit setting. Audio never carries essential information
+and can be disabled. Test with Tab, Enter/Space, Escape where applicable, zoomed text, screen-reader
+landmarks, axe, and Playwright mobile viewports. Planned map navigation adds arrow/WASD/HJKL spatial
+focus and stronger dialog focus trapping.

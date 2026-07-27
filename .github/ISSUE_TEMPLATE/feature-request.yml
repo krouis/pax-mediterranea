@@ -1,0 +1,10 @@
+name: Feature request
+description: Propose a focused improvement.
+body:
+  - type: textarea
+    id: need
+    attributes: { label: Player need, description: What problem would this solve? }
+    validations: { required: true }
+  - type: textarea
+    id: proposal
+    attributes: { label: Proposed approach }

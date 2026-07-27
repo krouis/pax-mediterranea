@@ -215,6 +215,7 @@ h2 {
 }
 .settings-button {
   position: fixed;
+  z-index: 4;
   inset-block-start: 18px;
   inset-inline-end: 18px;
 }

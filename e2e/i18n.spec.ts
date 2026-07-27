@@ -19,10 +19,13 @@ test.describe('required launch locales', () => {
     await expect(page.getByTestId('mode-quick')).toHaveCSS('overflow', 'visible');
   });
 
-  test('switches to Tunisian Arabic, applies RTL, and never mirrors the map', async ({ page }) => {
+  test('switches to formal Arabic for Tunisia, applies RTL, and never mirrors the map', async ({
+    page,
+  }) => {
     await selectLocale(page, 'ar-TN');
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.getByTestId('language-selector')).toContainText('🇹🇳');
+    await expect(page.locator('option[value="ar-TN"]')).toContainText('العربية — تونس');
     await page.getByTestId('mode-quick').click();
     await page.getByTestId('patron-tanit').click();
     const map = page.getByTestId('game-map');
@@ -34,11 +37,41 @@ test.describe('required launch locales', () => {
   test('completes the Arabic tutorial entry path with Carthage and Tanit', async ({ page }) => {
     await selectLocale(page, 'ar-TN');
     await page.getByTestId('mode-tutorial').click();
-    await expect(page.getByRole('heading', { name: 'اختار حضارتك' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'اختر حضارتك' })).toBeVisible();
     await page.getByTestId('patron-tanit').click();
-    await expect(page.getByRole('heading', { name: /اختار وحدة/ })).toBeVisible();
-    await page.getByRole('button', { name: /كمّل الدور/ }).click();
+    await expect(page.getByRole('heading', { name: /اختر وحدة/ })).toBeVisible();
+    await expect(page.getByText('حنبعل برقة', { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: /إنهاء الدور/ }).click();
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  });
+
+  test('uses formal Arabic across campaign, settings, cards, saves, and core actions', async ({
+    page,
+  }) => {
+    const forbiddenDialect =
+      /شنوة|توّا|توا|برشة|متاعك?|تنجّم|تنجم|ماكش|باش|ياسر|يلزمك|موش|فمّا|فما|هاذي|كمّل|سكّر/u;
+
+    await selectLocale(page, 'ar-TN');
+    await page.getByRole('button', { name: 'فتح الإعدادات' }).click();
+    await expect(page.getByRole('heading', { name: 'الإعدادات' })).toBeVisible();
+    await page.getByRole('button', { name: 'إغلاق' }).click();
+    await page.getByRole('button', { name: /الحملة/ }).click();
+    await expect(page.getByText(/تنافست قرطاج وروما/)).toBeVisible();
+    await expect(page.getByText(/ولا تزال الدوافع الدقيقة/)).toBeVisible();
+    await expect(page.locator('body')).not.toContainText(forbiddenDialect);
+
+    await page.getByRole('button', { name: /رجوع/ }).click();
+    await page.getByTestId('mode-quick').click();
+    await expect(page.getByRole('heading', { name: 'اختر حضارتك' })).toBeVisible();
+    await expect(page.getByTestId('patron-baal-hammon')).toContainText('بعل حمون');
+    await page.getByTestId('patron-tanit').click();
+    await expect(page.getByText('حنبعل برقة', { exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'تجنيد' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /إنهاء الدور/ })).toBeVisible();
+
+    await page.getByRole('button', { name: 'حفظ' }).click();
+    await expect(page.getByRole('status')).toContainText('تم حفظ اللعبة');
+    await expect(page.locator('body')).not.toContainText(forbiddenDialect);
   });
 
   test('keeps keyboard focus logical and accessibility clean in every required locale', async ({

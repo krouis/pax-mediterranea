@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { findForbiddenArabicDialectTerms } from '../src/i18n/formalArabic';
 
 const root = resolve('src/i18n/locales');
 const requiredLocales = ['en', 'fr', 'ar-TN'];
@@ -82,6 +83,43 @@ for (const locale of requiredLocales) {
   const expectedDirection = locale === 'ar-TN' ? 'rtl' : 'ltr';
   if (common.meta?.direction !== expectedDirection)
     errors.push(`${locale} must declare direction ${expectedDirection}.`);
+}
+
+const arabicResources = new Map<string, string>();
+for (const namespace of requiredNamespaces) {
+  for (const [key, value] of flatten(readResource('ar-TN', namespace)))
+    arabicResources.set(`${namespace}:${key}`, value);
+}
+for (const [key, value] of arabicResources) {
+  for (const term of findForbiddenArabicDialectTerms(value))
+    errors.push(`ar-TN/${key} contains forbidden dialect term "${term}".`);
+}
+
+const requiredArabicValues: Record<string, string> = {
+  'common:meta.name': 'العربية — تونس',
+  'common:meta.flag': '🇹🇳',
+  'common:actions.play': 'ابدأ',
+  'common:actions.continue': 'متابعة',
+  'common:actions.save': 'حفظ',
+  'common:actions.load': 'تحميل',
+  'common:settings.title': 'الإعدادات',
+  'game:selection.faction': 'اختر حضارتك',
+  'game:actions.endTurn': 'إنهاء الدور',
+  'game:actions.recruit': 'تجنيد',
+  'game:actions.move': 'تحريك',
+  'game:actions.attack': 'هجوم',
+  'content:leaders.dido.name': 'عليسة',
+  'content:leaders.hannibal-barca.name': 'حنبعل برقة',
+  'content:leaders.hamilcar-barca.name': 'أميلكار برقة',
+  'content:leaders.hasdrubal-barca.name': 'صدربعل برقة',
+  'content:factions.carthage.name': 'قرطاج',
+  'content:patrons.baal-hammon.name': 'بعل حمون',
+  'content:patrons.tanit.name': 'تانيت',
+};
+for (const [key, expected] of Object.entries(requiredArabicValues)) {
+  const actual = arabicResources.get(key);
+  if (actual !== expected)
+    errors.push(`ar-TN/${key} must be "${expected}"; found "${actual ?? '(missing)'}".`);
 }
 
 for (const requiredKey of ['numbers.players_one', 'numbers.players_other']) {

@@ -155,7 +155,7 @@ export function App() {
           <button data-testid="mode-online" onClick={() => setScreen('online')}>
             <span>⌁</span>
             <strong>{t('game:modes.online')}</strong>
-            <small>{t('game:modes.transportPreview')}</small>
+            <small>{t('game:modes.comingSoon')}</small>
           </button>
         </nav>
         <button
@@ -233,8 +233,12 @@ export function App() {
           {t('actions.back')}
         </button>
         <p className="eyebrow">{t('game:room.adapter')}</p>
-        <h1>{t('game:modes.online')}</h1>
+        <h1>
+          {t('game:modes.online')}{' '}
+          <span className="badge-unavailable">{t('game:room.unavailableBadge')}</span>
+        </h1>
         <section className="stone-panel prose">
+          <p id="room-help">{t('game:instructions.roomUnavailable')}</p>
           <label>
             {t('game:room.code')}
             <input
@@ -244,8 +248,13 @@ export function App() {
               aria-describedby="room-help"
             />
           </label>
-          <p id="room-help">{t('game:instructions.roomUnavailable')}</p>
           <button disabled>{t('actions.joinRoom')}</button>
+          <div className="panel-footer">
+            <button onClick={() => startMode('solo')}>{t('game:modes.quick')}</button>
+            <button className="primary" onClick={() => startMode('hotseat')}>
+              {t('game:modes.hotseat')}
+            </button>
+          </div>
         </section>
       </main>
     );

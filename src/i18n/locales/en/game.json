@@ -8,7 +8,7 @@
     "solo": "Solo vs AI",
     "oneDevice": "one device",
     "guided": "Guided voyage",
-    "transportPreview": "Optional transport preview"
+    "comingSoon": "Not yet available"
   },
   "selection": {
     "faction": "Choose your civilization",
@@ -46,7 +46,7 @@
   "instructions": {
     "selectUnit": "Select a unit, then choose a connected territory.",
     "recruitPlacement": "Choose a highlighted territory to place the new {{unit}}.",
-    "roomUnavailable": "Online play needs an optional transport. Offline modes remain available.",
+    "roomUnavailable": "Online multiplayer is not available in this build yet. Play Quick Skirmish against the AI or Local Hot Seat with a friend on this device instead.",
     "roomHelp": "Enter the room code shared by the host.",
     "tutorialMove": "Move to a highlighted territory and capture it.",
     "tutorialRecruit": "Recruit infantry in Carthage.",
@@ -68,7 +68,8 @@
   "room": {
     "code": "Room code",
     "placeholder": "PAX-270",
-    "adapter": "Multiplayer adapter"
+    "adapter": "Multiplayer adapter",
+    "unavailableBadge": "Coming soon"
   },
   "victory": {
     "title": "{{player}} establishes peace!",

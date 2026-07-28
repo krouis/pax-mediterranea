@@ -161,6 +161,18 @@ h2 {
   font-weight: 700;
   letter-spacing: 0.2em;
 }
+.badge-unavailable {
+  display: inline-block;
+  padding: 3px 10px;
+  border: 1px solid #d6a94f;
+  border-radius: 999px;
+  vertical-align: middle;
+  color: #d6a94f;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 .tagline {
   margin: 20px 0 0;
   color: #f8e9c9;

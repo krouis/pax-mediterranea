@@ -65,7 +65,9 @@
     "adapter": "وسيلة اتصال اللاعبين"
   },
   "victory": {
-    "title": "حقّق {{player}} السلام!"
+    "title": "حقّق {{player}} السلام!",
+    "campaignComplete": "أنجز {{player}} مهمة الحملة بنجاح!",
+    "campaignFailed": "ينتصر {{player}}؛ فشلت مهمة الحملة."
   },
   "errors": {
     "matchEnded": "انتهت المباراة.",
@@ -99,6 +101,8 @@
     "move": "تحرك {{player}} إلى {{territory}}.",
     "card": "لعب {{player}} بطاقة {{card}}.",
     "favor": "طلب {{player}} حظوة {{patron}}.",
-    "turnBegins": "بدأ دور {{player}}."
+    "turnBegins": "بدأ دور {{player}}.",
+    "scenarioVictory": "يؤمّن {{player}} الهدف وينجز مهمة الحملة.",
+    "scenarioDefeat": "ينتصر {{player}}؛ فشلت مهمة الحملة."
   }
 }

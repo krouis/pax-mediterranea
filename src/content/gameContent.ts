@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { FactionId, Terrain, Territory, UnitType } from '../game/engine/types';
+import type { FactionId, ScenarioObjective, Terrain, Territory, UnitType } from '../game/engine/types';
 
 export const terrainRules: Record<Terrain, { defense: number; nameKey: string }> = {
   plains: { defense: 0, nameKey: 'content:terrain.plains' },
@@ -205,12 +205,20 @@ const territorySchema: z.ZodType<Territory> = z.object({
 
 export const quickMap = z.array(territorySchema).parse(rawTerritories);
 
-export const scenarios = [
+export const scenarios: Array<{
+  id: string;
+  titleKey: string;
+  introKey: string;
+  objectiveKey: string;
+  historicalNoteKey: string;
+  objective: ScenarioObjective;
+}> = [
   {
     id: 'sicilian-question',
     titleKey: 'campaigns:sicilian-question.title',
     introKey: 'campaigns:sicilian-question.intro',
     objectiveKey: 'campaigns:sicilian-question.objective',
     historicalNoteKey: 'campaigns:sicilian-question.historicalNote',
+    objective: { type: 'controlAtTurn', territoryId: 'sicily', turn: 6, factionId: 'carthage' },
   },
 ];

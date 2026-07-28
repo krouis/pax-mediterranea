@@ -65,7 +65,9 @@
     "adapter": "Multiplayer adapter"
   },
   "victory": {
-    "title": "{{player}} establishes peace!"
+    "title": "{{player}} establishes peace!",
+    "campaignComplete": "{{player}} completes the campaign mission!",
+    "campaignFailed": "{{player}} prevails — the campaign mission has failed."
   },
   "errors": {
     "matchEnded": "The match has ended.",
@@ -99,6 +101,8 @@
     "move": "{{player}} moves to {{territory}}.",
     "card": "{{player}} plays {{card}}.",
     "favor": "{{player}} invokes {{patron}}.",
-    "turnBegins": "{{player}}’s turn begins."
+    "turnBegins": "{{player}}’s turn begins.",
+    "scenarioVictory": "{{player}} secures the objective and completes the campaign mission.",
+    "scenarioDefeat": "{{player}} prevails; the campaign mission has failed."
   }
 }

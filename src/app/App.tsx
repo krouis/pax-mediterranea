@@ -7,6 +7,7 @@ import { activePlayer, applyAction, combatPreview, startActionPhase } from '../g
 import { createGame } from '../game/engine/state';
 import type { FactionId, GameState, UnitType } from '../game/engine/types';
 import { loadGame, loadPreferences, saveGame, savePreferences } from '../persistence/preferences';
+import { markScenarioComplete } from '../persistence/campaign';
 import { playTone } from '../audio/sound';
 import { MapBoard } from '../ui/MapBoard';
 import { SettingsDialog } from '../ui/SettingsDialog';
@@ -51,6 +52,14 @@ export function App() {
     document.documentElement.dataset.motion = preferences.reducedMotion ? 'reduced' : 'full';
   }, [preferences]);
 
+  useEffect(() => {
+    if (!game?.winnerId || !game.scenarioId) return;
+    const scenario = scenarios.find(({ id }) => id === game.scenarioId);
+    const winner = game.players.find(({ id }) => id === game.winnerId);
+    if (scenario && winner && winner.faction === scenario.objective.factionId)
+      markScenarioComplete(scenario.id);
+  }, [game?.winnerId, game?.scenarioId, game?.players]);
+
   const begin = (faction: FactionId, patron: string) => {
     const next = startActionPhase(
       createGame({
@@ -59,6 +68,7 @@ export function App() {
         mode,
         secondPlayerAI: mode !== 'hotseat',
         seed: mode === 'campaign' ? 218 : 270,
+        scenarioId: mode === 'campaign' ? scenarios[0].id : undefined,
       }),
     );
     setGame(next);
@@ -272,6 +282,15 @@ export function App() {
   if (!game) return null;
   const player = activePlayer(game);
   const selected = game.units.find((unit) => unit.id === selectedUnit);
+  const activeScenario = game.scenarioId
+    ? scenarios.find(({ id }) => id === game.scenarioId)
+    : undefined;
+  const winner = game.winnerId ? game.players.find(({ id }) => id === game.winnerId) : undefined;
+  const victoryTitleKey = activeScenario
+    ? winner?.faction === activeScenario.objective.factionId
+      ? 'game:victory.campaignComplete'
+      : 'game:victory.campaignFailed'
+    : 'game:victory.title';
 
   const act = (next: GameState, sound: 'move' | 'coin' | 'turn' = 'move') => {
     setGame(next);
@@ -380,7 +399,8 @@ export function App() {
         </button>
       </header>
       <div className="objective-banner">
-        <strong>{t('game:hud.objective')}</strong> {t('game:objective.pax', { target: 8 })}
+        <strong>{t('game:hud.objective')}</strong>{' '}
+        {activeScenario ? t(activeScenario.objectiveKey) : t('game:objective.pax', { target: 8 })}
       </div>
       <div className="board-layout">
         <MapBoard
@@ -535,10 +555,8 @@ export function App() {
           <section className="dialog victory">
             <span>✦</span>
             <h2>
-              {t('game:victory.title', {
-                player: displayPlayer(
-                  game.players.find(({ id }) => id === game.winnerId)?.name ?? '',
-                ),
+              {t(victoryTitleKey, {
+                player: displayPlayer(winner?.name ?? ''),
               })}
             </h2>
             <button onClick={() => setScreen('menu')}>{t('actions.returnMenu')}</button>

@@ -1,9 +1,39 @@
-import { cards, terrainRules, unitRules } from '../../content/gameContent';
+import { cards, scenarios, terrainRules, unitRules } from '../../content/gameContent';
 import { nextRandom } from './random';
 import type { ActionResult, GameAction, GameState, Player, Unit } from './types';
 
 export function activePlayer(state: GameState): Player {
   return state.players[state.activePlayerIndex];
+}
+
+export function unitCost(player: Player, unitType: Unit['type']): number {
+  let cost = unitRules[unitType].cost;
+  if (player.faction === 'rome' && unitType === 'infantry') cost = Math.max(1, cost - 1);
+  return cost;
+}
+
+function evaluateScenarioObjective(state: GameState): void {
+  if (state.winnerId || !state.scenarioId) return;
+  const scenario = scenarios.find((candidate) => candidate.id === state.scenarioId);
+  const objective = scenario?.objective;
+  if (!objective || objective.type !== 'controlAtTurn' || state.turn !== objective.turn) return;
+  const objectivePlayer = state.players.find(
+    (candidate) => candidate.faction === objective.factionId,
+  );
+  if (!objectivePlayer) return;
+  const territory = state.territories.find((candidate) => candidate.id === objective.territoryId);
+  const holdsObjective = territory?.ownerId === objectivePlayer.id;
+  const winner = holdsObjective
+    ? objectivePlayer
+    : state.players.find((candidate) => candidate.id !== objectivePlayer.id);
+  if (!winner) return;
+  state.winnerId = winner.id;
+  state.phase = 'ended';
+  addEvent(
+    state,
+    holdsObjective ? 'game:events.scenarioVictory' : 'game:events.scenarioDefeat',
+    { player: winner.name, territory: objective.territoryId },
+  );
 }
 
 export function territoryIncome(state: GameState, playerId: string): number {
@@ -105,8 +135,7 @@ export function applyAction(original: GameState, action: GameAction): ActionResu
       return fail(original, 'game:errors.recruitLocation');
     if (action.unitType === 'fleet' && territory.terrain !== 'port')
       return fail(original, 'game:errors.fleetPort');
-    let cost = unitRules[action.unitType].cost;
-    if (player.faction === 'rome' && action.unitType === 'infantry') cost = Math.max(1, cost - 1);
+    const cost = unitCost(player, action.unitType);
     if (player.coins < cost) return fail(original, 'game:errors.coins');
     player.coins -= cost;
     state.units.push({
@@ -208,6 +237,9 @@ export function applyAction(original: GameState, action: GameAction): ActionResu
   }
 
   if (action.type === 'END_TURN') {
+    const completingRound = (state.activePlayerIndex + 1) % state.players.length === 0;
+    if (completingRound) evaluateScenarioObjective(state);
+    if (state.winnerId) return { ok: true, state };
     state.activePlayerIndex = (state.activePlayerIndex + 1) % state.players.length;
     if (state.activePlayerIndex === 0) state.turn += 1;
     state.phase = 'income';

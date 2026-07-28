@@ -17,9 +17,21 @@ if (!target || target === 'maps') {
 }
 
 if (!target || target === 'scenarios') {
+  const territoryIds = new Set(quickMap.map(({ id }) => id));
   for (const scenario of scenarios) {
     if (!scenario.id || !scenario.titleKey || !scenario.objectiveKey)
       errors.push('Invalid scenario.');
+    const { objective } = scenario;
+    if (!objective || objective.type !== 'controlAtTurn')
+      errors.push(`${scenario.id} is missing a resolvable objective.`);
+    else {
+      if (!territoryIds.has(objective.territoryId))
+        errors.push(`${scenario.id} objective references unknown territory ${objective.territoryId}.`);
+      if (!Number.isInteger(objective.turn) || objective.turn < 1)
+        errors.push(`${scenario.id} objective turn must be a positive integer.`);
+      if (objective.factionId !== 'carthage' && objective.factionId !== 'rome')
+        errors.push(`${scenario.id} objective references an unknown faction.`);
+    }
   }
 }
 

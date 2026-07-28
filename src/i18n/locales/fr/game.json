@@ -65,7 +65,9 @@
     "adapter": "Adaptateur multijoueur"
   },
   "victory": {
-    "title": "{{player}} établit la paix !"
+    "title": "{{player}} établit la paix !",
+    "campaignComplete": "{{player}} accomplit la mission de la campagne !",
+    "campaignFailed": "{{player}} l’emporte — la mission de la campagne a échoué."
   },
   "errors": {
     "matchEnded": "La partie est terminée.",
@@ -99,6 +101,8 @@
     "move": "{{player}} se déplace vers {{territory}}.",
     "card": "{{player}} joue {{card}}.",
     "favor": "{{player}} invoque {{patron}}.",
-    "turnBegins": "Le tour de {{player}} commence."
+    "turnBegins": "Le tour de {{player}} commence.",
+    "scenarioVictory": "{{player}} sécurise l’objectif et accomplit la mission de la campagne.",
+    "scenarioDefeat": "{{player}} l’emporte ; la mission de la campagne a échoué."
   }
 }

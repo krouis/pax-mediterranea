@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { cards, factions, patrons, scenarios, unitRules } from '../content/gameContent';
+import { cards, factions, patrons, scenarios } from '../content/gameContent';
 import { runAITurn } from '../game/ai/ai';
-import { activePlayer, applyAction, combatPreview, startActionPhase } from '../game/engine/rules';
+import {
+  activePlayer,
+  applyAction,
+  combatPreview,
+  startActionPhase,
+  unitCost,
+} from '../game/engine/rules';
 import { createGame } from '../game/engine/state';
 import type { FactionId, GameState, UnitType } from '../game/engine/types';
 import { loadGame, loadPreferences, saveGame, savePreferences } from '../persistence/preferences';
@@ -27,6 +33,7 @@ export function App() {
   const [concealed, setConcealed] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
   const [pendingAttack, setPendingAttack] = useState<{ unitId: string; territoryId: string }>();
+  const [recruitSelection, setRecruitSelection] = useState<UnitType>();
   const savedGame = loadGame();
   const {
     needRefresh: [needRefresh, setNeedRefresh],
@@ -310,7 +317,35 @@ export function App() {
     }
   };
 
+  const recruitLegal = recruitSelection
+    ? game.territories
+        .filter(
+          (territory) =>
+            territory.ownerId === player.id &&
+            (recruitSelection === 'fleet'
+              ? territory.terrain === 'port'
+              : territory.terrain === 'city' || territory.terrain === 'port'),
+        )
+        .map(({ id }) => id)
+    : [];
+
   const chooseTerritory = (territoryId: string) => {
+    if (recruitSelection) {
+      const result = applyAction(game, {
+        type: 'RECRUIT',
+        playerId: player.id,
+        unitType: recruitSelection,
+        territoryId,
+      });
+      if (!result.ok) {
+        setMessage(t(result.error ?? 'game:errors.unsupported'));
+        return;
+      }
+      act(result.state, 'coin');
+      setTutorialStep((step) => (step === 3 ? 4 : step));
+      setRecruitSelection(undefined);
+      return;
+    }
     if (!selected || selected.ownerId !== player.id) return;
     const destination = game.territories.find(({ id }) => id === territoryId);
     if (!destination) return;
@@ -416,10 +451,12 @@ export function App() {
           state={game}
           selectedUnitId={selectedUnit}
           selectUnit={(id) => {
+            setRecruitSelection(undefined);
             setSelectedUnit(id);
             playTone('select', preferences.sound);
           }}
           chooseTerritory={chooseTerritory}
+          recruitLegal={recruitLegal}
         />
         <aside className="action-panel stone-panel">
           <p className="phase-label">
@@ -435,38 +472,36 @@ export function App() {
           )}
           <section>
             <h3>{t('game:actions.recruit')}</h3>
+            {recruitSelection ? (
+              <p className="status" role="status">
+                {t('game:instructions.recruitPlacement', {
+                  unit: t(`content:units.${recruitSelection}`),
+                })}
+              </p>
+            ) : null}
             <div className="recruit-row">
               {(['infantry', 'cavalry', 'fleet'] as UnitType[]).map((type) => (
                 <button
                   key={type}
+                  aria-pressed={recruitSelection === type}
+                  className={recruitSelection === type ? 'active' : ''}
                   onClick={() => {
-                    const home = game.territories.find(
-                      (territory) =>
-                        territory.ownerId === player.id &&
-                        (type === 'fleet'
-                          ? territory.terrain === 'port'
-                          : ['city', 'port'].includes(territory.terrain)),
-                    );
-                    if (!home) return;
-                    const result = applyAction(game, {
-                      type: 'RECRUIT',
-                      playerId: player.id,
-                      unitType: type,
-                      territoryId: home.id,
-                    });
-                    if (result.ok) act(result.state, 'coin');
-                    else setMessage(t(result.error ?? 'game:errors.unsupported'));
-                    setTutorialStep(Math.max(tutorialStep, 3));
+                    setSelectedUnit(undefined);
+                    setPendingAttack(undefined);
+                    setRecruitSelection((current) => (current === type ? undefined : type));
                   }}
                 >
                   <span>{type === 'infantry' ? '♟' : type === 'cavalry' ? '♞' : '⛵'}</span>
                   <small>
                     {t(`content:units.${type}`)}
-                    <br />● {unitRules[type].cost}
+                    <br />● {unitCost(player, type)}
                   </small>
                 </button>
               ))}
             </div>
+            {recruitSelection && (
+              <button onClick={() => setRecruitSelection(undefined)}>{t('actions.cancel')}</button>
+            )}
           </section>
           <section>
             <h3>

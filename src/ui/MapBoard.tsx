@@ -8,6 +8,7 @@ interface Props {
   selectedUnitId?: string;
   selectUnit: (id: string) => void;
   chooseTerritory: (id: string) => void;
+  recruitLegal?: string[];
 }
 
 const icons = { infantry: '♟', cavalry: '♞', fleet: '⛵' };
@@ -21,7 +22,13 @@ const terrainIcons = {
   sacred: '✦',
 };
 
-export function MapBoard({ state, selectedUnitId, selectUnit, chooseTerritory }: Props) {
+export function MapBoard({
+  state,
+  selectedUnitId,
+  selectUnit,
+  chooseTerritory,
+  recruitLegal = [],
+}: Props) {
   const { t } = useTranslation();
   const legal = selectedUnitId ? legalDestinations(state, selectedUnitId) : [];
   const playerName = (name: string) =>
@@ -53,7 +60,7 @@ export function MapBoard({ state, selectedUnitId, selectUnit, chooseTerritory }:
       </svg>
       {state.territories.map((territory) => {
         const units = state.units.filter((unit) => unit.territoryId === territory.id);
-        const active = legal.includes(territory.id);
+        const active = legal.includes(territory.id) || recruitLegal.includes(territory.id);
         return (
           <button
             key={territory.id}

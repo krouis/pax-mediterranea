@@ -608,6 +608,11 @@ select {
   border: 1px solid #876544;
   background: #fff1ce;
 }
+.recruit-row button.active {
+  border-color: var(--purple);
+  background: #f3d98c;
+  box-shadow: inset 0 0 0 2px var(--purple);
+}
 .recruit-row span,
 .recruit-row small {
   display: block;

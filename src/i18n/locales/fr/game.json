@@ -44,6 +44,7 @@
   },
   "instructions": {
     "selectUnit": "Sélectionnez une unité, puis un territoire relié.",
+    "recruitPlacement": "Choisissez un territoire indiqué pour placer la nouvelle unité : {{unit}}.",
     "roomUnavailable": "Le jeu en ligne nécessite un transport optionnel. Les modes hors ligne restent disponibles.",
     "roomHelp": "Saisissez le code de salle communiqué par l’hôte.",
     "tutorialMove": "Déplacez-vous vers un territoire indiqué et capturez-le.",

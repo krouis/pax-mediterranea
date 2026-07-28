@@ -29,11 +29,10 @@ function evaluateScenarioObjective(state: GameState): void {
   if (!winner) return;
   state.winnerId = winner.id;
   state.phase = 'ended';
-  addEvent(
-    state,
-    holdsObjective ? 'game:events.scenarioVictory' : 'game:events.scenarioDefeat',
-    { player: winner.name, territory: objective.territoryId },
-  );
+  addEvent(state, holdsObjective ? 'game:events.scenarioVictory' : 'game:events.scenarioDefeat', {
+    player: winner.name,
+    territory: objective.territoryId,
+  });
 }
 
 export function territoryIncome(state: GameState, playerId: string): number {

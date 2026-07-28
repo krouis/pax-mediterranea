@@ -7,7 +7,9 @@ export interface CampaignProgress {
 export function loadCampaignProgress(): CampaignProgress {
   try {
     const raw = JSON.parse(localStorage.getItem(campaignKey) ?? '{}');
-    return { completedScenarios: Array.isArray(raw.completedScenarios) ? raw.completedScenarios : [] };
+    return {
+      completedScenarios: Array.isArray(raw.completedScenarios) ? raw.completedScenarios : [],
+    };
   } catch {
     return { completedScenarios: [] };
   }

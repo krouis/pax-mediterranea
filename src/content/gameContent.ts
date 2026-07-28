@@ -1,5 +1,11 @@
 import { z } from 'zod';
-import type { FactionId, ScenarioObjective, Terrain, Territory, UnitType } from '../game/engine/types';
+import type {
+  FactionId,
+  ScenarioObjective,
+  Terrain,
+  Territory,
+  UnitType,
+} from '../game/engine/types';
 
 export const terrainRules: Record<Terrain, { defense: number; nameKey: string }> = {
   plains: { defense: 0, nameKey: 'content:terrain.plains' },

@@ -26,7 +26,9 @@ if (!target || target === 'scenarios') {
       errors.push(`${scenario.id} is missing a resolvable objective.`);
     else {
       if (!territoryIds.has(objective.territoryId))
-        errors.push(`${scenario.id} objective references unknown territory ${objective.territoryId}.`);
+        errors.push(
+          `${scenario.id} objective references unknown territory ${objective.territoryId}.`,
+        );
       if (!Number.isInteger(objective.turn) || objective.turn < 1)
         errors.push(`${scenario.id} objective turn must be a positive integer.`);
       if (objective.factionId !== 'carthage' && objective.factionId !== 'rome')

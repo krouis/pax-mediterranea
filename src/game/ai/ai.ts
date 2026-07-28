@@ -7,7 +7,15 @@ import {
   startActionPhase,
   unitCost,
 } from '../engine/rules';
-import type { Difficulty, GameAction, GameState, Player, Territory, Unit, UnitType } from '../engine/types';
+import type {
+  Difficulty,
+  GameAction,
+  GameState,
+  Player,
+  Territory,
+  Unit,
+  UnitType,
+} from '../engine/types';
 
 function objectiveTerritoryId(state: GameState): string | undefined {
   const scenario = scenarios.find(({ id }) => id === state.scenarioId);
@@ -43,7 +51,9 @@ function scoreDestination(
 function collectMoveCandidates(state: GameState, ai: Player): MoveCandidate[] {
   const objectiveId = objectiveTerritoryId(state);
   const candidates: MoveCandidate[] = [];
-  for (const unit of state.units.filter((candidate) => candidate.ownerId === ai.id && !candidate.acted)) {
+  for (const unit of state.units.filter(
+    (candidate) => candidate.ownerId === ai.id && !candidate.acted,
+  )) {
     for (const to of legalDestinations(state, unit.id)) {
       const territory = state.territories.find((candidate) => candidate.id === to);
       if (!territory) continue;

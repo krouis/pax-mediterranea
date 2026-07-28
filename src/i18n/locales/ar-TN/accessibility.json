@@ -4,6 +4,8 @@
   "controlledBy": "تحت سيطرة {{player}}",
   "neutral": "محايدة",
   "selectUnit": "اختر {{unit}}",
+  "cycleUnits_one": "({{count, number}} وحدة، فعّل مرة أخرى لتبديل التحديد)",
+  "cycleUnits_other": "({{count, number}} وحدة، فعّل مرة أخرى لتبديل التحديد)",
   "acted": "سبق أن تحركت",
   "returnMenu": "العودة إلى القائمة",
   "gameModes": "أنماط اللعب",

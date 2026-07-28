@@ -4,6 +4,8 @@
   "controlledBy": "contrôlé par {{player}}",
   "neutral": "neutre",
   "selectUnit": "Sélectionner {{unit}}",
+  "cycleUnits_one": "({{count, number}} unité, activer à nouveau pour changer la sélection)",
+  "cycleUnits_other": "({{count, number}} unités, activer à nouveau pour changer la sélection)",
   "acted": "a déjà agi",
   "returnMenu": "Retour au menu",
   "gameModes": "Modes de jeu",

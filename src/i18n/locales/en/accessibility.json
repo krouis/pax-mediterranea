@@ -4,6 +4,8 @@
   "controlledBy": "controlled by {{player}}",
   "neutral": "neutral",
   "selectUnit": "Select {{unit}}",
+  "cycleUnits_one": "({{count, number}} unit, activate again to cycle selection)",
+  "cycleUnits_other": "({{count, number}} units, activate again to cycle selection)",
   "acted": "already acted",
   "returnMenu": "Return to menu",
   "gameModes": "Game modes",

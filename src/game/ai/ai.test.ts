@@ -48,7 +48,8 @@ describe('AI', () => {
     // Move every currently ready unit out of the way first so recruitment is exercised directly.
     while (
       state.units.some(
-        (unit) => unit.ownerId === ai.id && !unit.acted && legalDestinations(state, unit.id).length > 0,
+        (unit) =>
+          unit.ownerId === ai.id && !unit.acted && legalDestinations(state, unit.id).length > 0,
       )
     ) {
       const action = chooseAIAction(state, 'strategist');
@@ -133,7 +134,9 @@ describe('AI', () => {
     ai.usedFavor = false;
     ai.hand = [];
     // Exhaust movement and recruitment so favor becomes the best remaining action.
-    state.units = state.units.map((unit) => (unit.ownerId === ai.id ? { ...unit, acted: true } : unit));
+    state.units = state.units.map((unit) =>
+      unit.ownerId === ai.id ? { ...unit, acted: true } : unit,
+    );
     ai.coins = 0;
     const action = chooseAIAction(state, 'strategist');
     expect(action.type).toBe('INVOKE_FAVOR');

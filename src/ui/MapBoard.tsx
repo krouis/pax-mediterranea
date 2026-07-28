@@ -31,6 +31,7 @@ export function MapBoard({
 }: Props) {
   const { t } = useTranslation();
   const legal = selectedUnitId ? legalDestinations(state, selectedUnitId) : [];
+  const currentPlayerId = state.players[state.activePlayerIndex].id;
   const playerName = (name: string) =>
     name === 'carthage' || name === 'rome' ? t(`content:factions.${name}.name`) : name;
   return (
@@ -61,23 +62,38 @@ export function MapBoard({
       {state.territories.map((territory) => {
         const units = state.units.filter((unit) => unit.territoryId === territory.id);
         const active = legal.includes(territory.id) || recruitLegal.includes(territory.id);
+        const friendlyUnits = units.filter((unit) => unit.ownerId === currentPlayerId);
+        const handleTerritoryClick = () => {
+          if (!active && friendlyUnits.length > 0) {
+            const currentIndex = friendlyUnits.findIndex((unit) => unit.id === selectedUnitId);
+            const next = friendlyUnits[(currentIndex + 1) % friendlyUnits.length];
+            selectUnit(next.id);
+            return;
+          }
+          chooseTerritory(territory.id);
+        };
         return (
           <button
             key={territory.id}
             className={`territory terrain-${territory.terrain} owner-${territory.ownerId ?? 'neutral'} ${active ? 'legal' : ''}`}
             style={{ left: `${territory.position.x}%`, top: `${territory.position.y}%` }}
-            onClick={() => chooseTerritory(territory.id)}
-            aria-label={t('accessibility:territory', {
-              territory: t(territory.nameKey),
-              terrain: t(terrainRules[territory.terrain].nameKey),
-              ownership: territory.ownerId
-                ? t('accessibility:controlledBy', {
-                    player: playerName(
-                      state.players.find(({ id }) => id === territory.ownerId)?.name ?? '',
-                    ),
-                  })
-                : t('accessibility:neutral'),
-            })}
+            onClick={handleTerritoryClick}
+            aria-label={
+              t('accessibility:territory', {
+                territory: t(territory.nameKey),
+                terrain: t(terrainRules[territory.terrain].nameKey),
+                ownership: territory.ownerId
+                  ? t('accessibility:controlledBy', {
+                      player: playerName(
+                        state.players.find(({ id }) => id === territory.ownerId)?.name ?? '',
+                      ),
+                    })
+                  : t('accessibility:neutral'),
+              }) +
+              (friendlyUnits.length > 1
+                ? ` ${t('accessibility:cycleUnits', { count: friendlyUnits.length })}`
+                : '')
+            }
           >
             <span className="terrain-icon" aria-hidden="true">
               {terrainIcons[territory.terrain]}

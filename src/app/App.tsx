@@ -307,13 +307,18 @@ export function App() {
     setMessage(displayEvent(next));
   };
 
+  const advanceTutorial = (fromStep: number, toStep: number) => {
+    if (game.mode !== 'tutorial') return;
+    setTutorialStep((step) => (step === fromStep ? toStep : step));
+  };
+
   const commitMove = (unitId: string, territoryId: string, type: 'MOVE' | 'ATTACK') => {
     const result = applyAction(game, { type, playerId: player.id, unitId, to: territoryId });
     if (!result.ok) setMessage(t(result.error ?? 'game:errors.unsupported'));
     else {
       act(result.state);
       setSelectedUnit(undefined);
-      setTutorialStep(Math.max(tutorialStep, 2));
+      advanceTutorial(2, 3);
     }
   };
 
@@ -342,7 +347,7 @@ export function App() {
         return;
       }
       act(result.state, 'coin');
-      setTutorialStep((step) => (step === 3 ? 4 : step));
+      advanceTutorial(3, 4);
       setRecruitSelection(undefined);
       return;
     }
@@ -387,10 +392,18 @@ export function App() {
       act(next, 'turn');
       return;
     }
-    if (activePlayer(next).isAI) next = runAITurn(next, 'strategist');
+    if (activePlayer(next).isAI) {
+      // The guided tutorial script references fixed territories (e.g. "recruit in
+      // Carthage"); a fully competent opponent could capture them mid-tutorial and
+      // invalidate the script, so the tutorial opponent stays passive.
+      next =
+        next.mode === 'tutorial'
+          ? applyAction(next, { type: 'END_TURN', playerId: activePlayer(next).id }).state
+          : runAITurn(next, 'strategist');
+    }
     next = startActionPhase(next);
     act(next, 'turn');
-    setTutorialStep(Math.max(tutorialStep, 5));
+    advanceTutorial(4, 5);
   };
 
   return (
@@ -454,6 +467,7 @@ export function App() {
             setRecruitSelection(undefined);
             setSelectedUnit(id);
             playTone('select', preferences.sound);
+            advanceTutorial(1, 2);
           }}
           chooseTerritory={chooseTerritory}
           recruitLegal={recruitLegal}
@@ -520,9 +534,10 @@ export function App() {
                       cardId: card,
                       unitId: selectedUnit,
                     });
-                    if (result.ok) act(result.state);
-                    else setMessage(t(result.error ?? 'game:errors.unsupported'));
-                    setTutorialStep(Math.max(tutorialStep, 4));
+                    if (result.ok) {
+                      act(result.state);
+                      advanceTutorial(4, 5);
+                    } else setMessage(t(result.error ?? 'game:errors.unsupported'));
                   }}
                 >
                   <strong>{t(cards[card].nameKey)}</strong>
@@ -539,8 +554,10 @@ export function App() {
                 playerId: player.id,
                 territoryId: home.id,
               });
-              if (result.ok) act(result.state);
-              else setMessage(t(result.error ?? 'game:errors.unsupported'));
+              if (result.ok) {
+                act(result.state);
+                advanceTutorial(4, 5);
+              } else setMessage(t(result.error ?? 'game:errors.unsupported'));
             }}
           >
             ✦ {t('game:actions.invokeFavor')} · {t(patrons[player.patron].nameKey)}

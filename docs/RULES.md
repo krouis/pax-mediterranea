@@ -3,7 +3,11 @@
 ## Objective
 
 Reach 8 Pax Points by capturing neutral/enemy territories and holding major cities or capitals.
-Scenario objectives may override this; _The Sicilian Question_ asks Carthage to hold Sicily.
+Scenario objectives override this for campaign matches. _The Sicilian Question_ asks Carthage to
+hold Sicily at the end of Turn 6: the engine evaluates the objective at that exact turn boundary
+(when the last player's turn 6 ends), concludes the match immediately with a win for whichever side
+then controls the territory, and the generic Pax victory is suppressed for the duration of a
+scenario so it cannot pre-empt the objective check.
 
 ## Turn
 

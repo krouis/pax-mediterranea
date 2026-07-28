@@ -91,3 +91,62 @@ describe('MapBoard territory click routing', () => {
     expect(chooseTerritory).not.toHaveBeenCalled();
   });
 });
+
+describe('MapBoard stacked unit display', () => {
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
+  function stateWithStack() {
+    const state = startActionPhase(createGame({ seed: 1 }));
+    state.units.push(
+      { id: 'u5', ownerId: 'p1', type: 'infantry', territoryId: 'carthage', acted: false },
+      { id: 'u6', ownerId: 'p1', type: 'infantry', territoryId: 'carthage', acted: true },
+    );
+    return state;
+  }
+
+  it('collapses same-type units into a single badge showing the count instead of one icon per unit', () => {
+    const state = stateWithStack();
+    render(<MapBoard state={state} selectUnit={() => {}} chooseTerritory={() => {}} />);
+
+    const carthageButton = screen.getByRole('button', { name: /^Carthage,/ });
+    // 3 infantry (u1, u5, u6) collapse into a single badge, not three.
+    expect(within(carthageButton).getAllByRole('button')).toHaveLength(1);
+    expect(within(carthageButton).getByText('3')).toBeInTheDocument();
+  });
+
+  it('keeps a territory-fixed footprint regardless of stack size', () => {
+    const small = startActionPhase(createGame({ seed: 1 }));
+    const { container: smallContainer } = render(
+      <MapBoard state={small} selectUnit={() => {}} chooseTerritory={() => {}} />,
+    );
+    const smallButton = smallContainer.querySelector('button.territory[aria-label^="Carthage"]')!;
+    const smallStyle = smallButton.getAttribute('style');
+    cleanup();
+
+    const stacked = stateWithStack();
+    const { container: stackedContainer } = render(
+      <MapBoard state={stacked} selectUnit={() => {}} chooseTerritory={() => {}} />,
+    );
+    const stackedButton = stackedContainer.querySelector(
+      'button.territory[aria-label^="Carthage"]',
+    )!;
+    expect(stackedButton.getAttribute('style')).toBe(smallStyle);
+  });
+
+  it('cycles between a stack of same-type units and reports acted status in the title', () => {
+    const state = stateWithStack();
+    const selectUnit = vi.fn();
+    render(<MapBoard state={state} selectUnit={selectUnit} chooseTerritory={() => {}} />);
+
+    const carthageButton = screen.getByRole('button', { name: /^Carthage,/ });
+    const badge = within(carthageButton).getByRole('button', { name: /Select Infantry/i });
+    expect(badge.getAttribute('title')).toContain('×3');
+    expect(badge.getAttribute('title')).toContain('acted');
+
+    fireEvent.click(badge);
+    expect(selectUnit).toHaveBeenCalledWith('u1');
+  });
+});

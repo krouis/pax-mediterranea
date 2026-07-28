@@ -26,8 +26,10 @@ test('highlights every eligible destination and places the recruit where chosen'
   await sicilyTerritory.click({ force: true });
 
   // Sicily already held the unit that captured it; the recruit adds a second
-  // one there instead of defaulting to the Carthage capital.
-  await expect(sicilyTerritory.locator('.unit-p1')).toHaveCount(2);
+  // one there instead of defaulting to the Carthage capital. Same-type units
+  // collapse into a single badge showing the stack count.
+  await expect(sicilyTerritory.locator('.unit-p1')).toHaveCount(1);
+  await expect(sicilyTerritory.locator('.unit-count')).toHaveText('2');
   await expect(carthageTerritory.locator('.unit-p1')).toHaveCount(0);
   const coinsAfter = await page.locator('.topbar dl dd').first().innerText();
   expect(coinsAfter).not.toBe(coinsBefore);
@@ -71,5 +73,6 @@ test('supports keyboard operation for recruitment placement', async ({ page }) =
   await expect(sicilyTerritory).toHaveClass(/legal/);
   await sicilyTerritory.focus();
   await page.keyboard.press('Enter');
-  await expect(sicilyTerritory.locator('.unit-p1')).toHaveCount(2);
+  await expect(sicilyTerritory.locator('.unit-p1')).toHaveCount(1);
+  await expect(sicilyTerritory.locator('.unit-count')).toHaveText('2');
 });

@@ -4,6 +4,8 @@
   "controlledBy": "controlled by {{player}}",
   "neutral": "neutral",
   "selectUnit": "Select {{unit}}",
+  "selectUnitStack_one": "Select {{unit}} ({{count, number}})",
+  "selectUnitStack_other": "Select {{unit}} ({{count, number}})",
   "cycleUnits_one": "({{count, number}} unit, activate again to cycle selection)",
   "cycleUnits_other": "({{count, number}} units, activate again to cycle selection)",
   "acted": "already acted",

@@ -533,20 +533,25 @@ select {
 }
 .units {
   position: absolute;
-  right: -12px;
-  bottom: -12px;
+  right: -10px;
+  bottom: -10px;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 3px;
+  width: 66px;
 }
 .unit {
+  position: relative;
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border: 2px solid #f6dfaa;
   border-radius: 50%;
   background: var(--purple);
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   box-shadow: 0 3px #28202c;
 }
 .unit-p2 {
@@ -555,6 +560,20 @@ select {
 .unit.selected {
   transform: translateY(-6px);
   outline: 3px solid #ffe070;
+}
+.unit-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 15px;
+  padding: 0 2px;
+  border: 1px solid #2b2331;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #2b2331;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 15px;
 }
 .sea-label {
   position: absolute;

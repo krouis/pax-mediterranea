@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { terrainRules } from '../content/gameContent';
 import { legalDestinations } from '../game/engine/rules';
-import type { GameState } from '../game/engine/types';
+import type { GameState, Unit } from '../game/engine/types';
 
 interface Props {
   state: GameState;
@@ -21,6 +21,17 @@ const terrainIcons = {
   sea: '≈',
   sacred: '✦',
 };
+
+function groupUnits(units: Unit[]): Unit[][] {
+  const groups = new Map<string, Unit[]>();
+  for (const unit of units) {
+    const key = `${unit.ownerId}-${unit.type}`;
+    const group = groups.get(key);
+    if (group) group.push(unit);
+    else groups.set(key, [unit]);
+  }
+  return [...groups.values()];
+}
 
 export function MapBoard({
   state,
@@ -102,29 +113,49 @@ export function MapBoard({
               {t(territory.nameKey)}
             </span>
             <span className="units">
-              {units.map((unit) => (
-                <span
-                  key={unit.id}
-                  role="button"
-                  tabIndex={0}
-                  className={`unit unit-${unit.ownerId} ${selectedUnitId === unit.id ? 'selected' : ''}`}
-                  title={`${t(`content:units.${unit.type}`)}${
-                    unit.acted ? ` (${t('accessibility:acted')})` : ''
-                  }`}
-                  aria-label={t('accessibility:selectUnit', {
-                    unit: t(`content:units.${unit.type}`),
-                  })}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    selectUnit(unit.id);
-                  }}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter' || event.key === ' ') selectUnit(unit.id);
-                  }}
-                >
-                  {icons[unit.type]}
-                </span>
-              ))}
+              {groupUnits(units).map((group) => {
+                const [sample] = group;
+                const selectedInGroup = group.some((unit) => unit.id === selectedUnitId);
+                const actedCount = group.filter((unit) => unit.acted).length;
+                const label =
+                  group.length > 1
+                    ? t('accessibility:selectUnitStack', {
+                        count: group.length,
+                        unit: t(`content:units.${sample.type}`),
+                      })
+                    : t('accessibility:selectUnit', { unit: t(`content:units.${sample.type}`) });
+                return (
+                  <span
+                    key={`${sample.ownerId}-${sample.type}`}
+                    role="button"
+                    tabIndex={0}
+                    className={`unit unit-${sample.ownerId} ${selectedInGroup ? 'selected' : ''}`}
+                    title={`${t(`content:units.${sample.type}`)}${
+                      group.length > 1 ? ` ×${group.length}` : ''
+                    }${actedCount > 0 ? ` (${t('accessibility:acted')})` : ''}`}
+                    aria-label={label}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      const currentIndex = group.findIndex((unit) => unit.id === selectedUnitId);
+                      const next = group[(currentIndex + 1) % group.length];
+                      selectUnit(next.id);
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key !== 'Enter' && event.key !== ' ') return;
+                      const currentIndex = group.findIndex((unit) => unit.id === selectedUnitId);
+                      const next = group[(currentIndex + 1) % group.length];
+                      selectUnit(next.id);
+                    }}
+                  >
+                    {icons[sample.type]}
+                    {group.length > 1 && (
+                      <span className="unit-count" aria-hidden="true">
+                        {group.length}
+                      </span>
+                    )}
+                  </span>
+                );
+              })}
             </span>
           </button>
         );

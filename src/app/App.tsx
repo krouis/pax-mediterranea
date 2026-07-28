@@ -11,11 +11,12 @@ import {
   unitCost,
 } from '../game/engine/rules';
 import { createGame } from '../game/engine/state';
-import type { FactionId, GameState, UnitType } from '../game/engine/types';
+import type { FactionId, GameEvent, GameState, UnitType } from '../game/engine/types';
 import { loadGame, loadPreferences, saveGame, savePreferences } from '../persistence/preferences';
 import { markScenarioComplete } from '../persistence/campaign';
 import { playTone } from '../audio/sound';
 import { MapBoard } from '../ui/MapBoard';
+import { HistoryPanel } from '../ui/HistoryPanel';
 import { SettingsDialog } from '../ui/SettingsDialog';
 import { LanguageSelector } from '../ui/LanguageSelector';
 
@@ -39,11 +40,10 @@ export function App() {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW();
+  const [historyOpen, setHistoryOpen] = useState(false);
   const displayPlayer = (name: string) =>
     name === 'carthage' || name === 'rome' ? t(`content:factions.${name}.name`) : name;
-  const displayEvent = (state: GameState) => {
-    const event = state.eventLog.at(-1);
-    if (!event) return '';
+  const formatEvent = (event: GameEvent) => {
     const values = { ...event.values };
     if (typeof values.player === 'string') values.player = displayPlayer(values.player);
     if (typeof values.territory === 'string')
@@ -53,6 +53,10 @@ export function App() {
     if (typeof values.patron === 'string')
       values.patron = t(`content:patrons.${values.patron}.name`);
     return t(event.key, values);
+  };
+  const displayEvent = (state: GameState) => {
+    const event = state.eventLog.at(-1);
+    return event ? formatEvent(event) : '';
   };
 
   useEffect(() => {
@@ -476,6 +480,9 @@ export function App() {
           <p className="phase-label">
             {t('game:hud.phase')} · {t(`game:phase.${game.phase}`)}
           </p>
+          <button className="history-button" onClick={() => setHistoryOpen(true)}>
+            {t('game:actions.history')}
+          </button>
           <h2>
             {selected ? t(`content:units.${selected.type}`) : t('game:instructions.selectUnit')}
           </h2>
@@ -652,6 +659,13 @@ export function App() {
             <button onClick={() => setScreen('menu')}>{t('actions.returnMenu')}</button>
           </section>
         </div>
+      )}
+      {historyOpen && (
+        <HistoryPanel
+          events={game.eventLog}
+          formatEvent={formatEvent}
+          onClose={() => setHistoryOpen(false)}
+        />
       )}
       {settings && (
         <SettingsDialog

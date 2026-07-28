@@ -35,6 +35,7 @@
     "recruit": "Recruit",
     "invokeFavor": "Invoke favor",
     "endTurn": "End turn",
+    "history": "History",
     "move": "Move",
     "attack": "Attack",
     "capture": "Capture"
@@ -59,6 +60,10 @@
     "victory": "victory",
     "defeat": "defeat",
     "stalemate": "stalemate"
+  },
+  "history": {
+    "title": "Game history",
+    "empty": "No events yet."
   },
   "room": {
     "code": "Room code",

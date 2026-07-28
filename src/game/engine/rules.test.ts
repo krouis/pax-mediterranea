@@ -225,6 +225,29 @@ describe('deterministic game rules', () => {
     expect(result.state.turn).toBe(6);
   });
 
+  it('suppresses the generic Pax victory while a scenario objective governs the match', () => {
+    const state = startActionPhase(createGame({ scenarioId: 'sicilian-question' }));
+    state.players[0].pax = 8;
+    const result = applyAction(state, {
+      type: 'MOVE',
+      playerId: 'p1',
+      unitId: 'u1',
+      to: 'sardinia',
+    });
+    expect(result.ok).toBe(true);
+    expect(result.state.winnerId).toBeUndefined();
+
+    const skirmish = startActionPhase(createGame());
+    skirmish.players[0].pax = 8;
+    const skirmishResult = applyAction(skirmish, {
+      type: 'MOVE',
+      playerId: 'p1',
+      unitId: 'u1',
+      to: 'sardinia',
+    });
+    expect(skirmishResult.state.winnerId).toBe('p1');
+  });
+
   it('does not evaluate the scenario objective before its turn or outside campaign mode', () => {
     const midGame = createGame({ scenarioId: 'sicilian-question' });
     midGame.turn = 5;

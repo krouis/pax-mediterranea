@@ -26,6 +26,7 @@ export function App() {
   const [message, setMessage] = useState('');
   const [concealed, setConcealed] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
+  const [pendingAttack, setPendingAttack] = useState<{ unitId: string; territoryId: string }>();
   const savedGame = loadGame();
   const {
     needRefresh: [needRefresh, setNeedRefresh],
@@ -299,6 +300,16 @@ export function App() {
     setMessage(displayEvent(next));
   };
 
+  const commitMove = (unitId: string, territoryId: string, type: 'MOVE' | 'ATTACK') => {
+    const result = applyAction(game, { type, playerId: player.id, unitId, to: territoryId });
+    if (!result.ok) setMessage(t(result.error ?? 'game:errors.unsupported'));
+    else {
+      act(result.state);
+      setSelectedUnit(undefined);
+      setTutorialStep(Math.max(tutorialStep, 2));
+    }
+  };
+
   const chooseTerritory = (territoryId: string) => {
     if (!selected || selected.ownerId !== player.id) return;
     const destination = game.territories.find(({ id }) => id === territoryId);
@@ -308,32 +319,30 @@ export function App() {
       game.units.some((unit) => unit.territoryId === territoryId && unit.ownerId !== player.id),
     );
     if (hostile) {
-      const preview = combatPreview(game, selected, territoryId);
-      if (
-        !confirm(
-          [
-            t('game:combat.confirm', { territory: t(destination.nameKey) }),
-            t('game:combat.attackStrength', { value: preview.attack }),
-            t('game:combat.defenseStrength', { value: preview.defense }),
-            t('game:combat.outcome', { outcome: t(`game:combat.${preview.outcome}`) }),
-          ].join(' · '),
-        )
-      )
-        return;
+      setPendingAttack({ unitId: selected.id, territoryId });
+      return;
     }
-    const result = applyAction(game, {
-      type: hostile ? 'ATTACK' : 'MOVE',
-      playerId: player.id,
-      unitId: selected.id,
-      to: territoryId,
-    });
-    if (!result.ok) setMessage(t(result.error ?? 'game:errors.unsupported'));
-    else {
-      act(result.state);
-      setSelectedUnit(undefined);
-      setTutorialStep(Math.max(tutorialStep, 2));
-    }
+    commitMove(selected.id, territoryId, 'MOVE');
   };
+
+  const pendingUnit = pendingAttack
+    ? game.units.find(({ id }) => id === pendingAttack.unitId)
+    : undefined;
+  const pendingTerritory = pendingAttack
+    ? game.territories.find(({ id }) => id === pendingAttack.territoryId)
+    : undefined;
+  const pendingPreview =
+    pendingAttack && pendingUnit && pendingTerritory
+      ? combatPreview(game, pendingUnit, pendingTerritory.id)
+      : undefined;
+
+  const confirmAttack = () => {
+    if (!pendingAttack) return;
+    commitMove(pendingAttack.unitId, pendingAttack.territoryId, 'ATTACK');
+    setPendingAttack(undefined);
+  };
+
+  const cancelAttack = () => setPendingAttack(undefined);
 
   const endTurn = () => {
     let next = applyAction(game, { type: 'END_TURN', playerId: player.id }).state;
@@ -547,6 +556,35 @@ export function App() {
             >
               {t('actions.revealBoard')}
             </button>
+          </section>
+        </div>
+      )}
+      {pendingAttack && pendingTerritory && pendingPreview && (
+        <div className="scrim">
+          <section
+            className="dialog stone-panel"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="combat-confirm-title"
+          >
+            <h2 id="combat-confirm-title">
+              {t('game:combat.confirm', { territory: t(pendingTerritory.nameKey) })}
+            </h2>
+            <p>
+              {t('game:combat.attackStrength', { value: pendingPreview.attack })} ·{' '}
+              {t('game:combat.defenseStrength', { value: pendingPreview.defense })}
+            </p>
+            <p>
+              {t('game:combat.outcome', {
+                outcome: t(`game:combat.${pendingPreview.outcome}`),
+              })}
+            </p>
+            <div className="panel-footer">
+              <button onClick={cancelAttack}>{t('actions.cancel')}</button>
+              <button className="primary" onClick={confirmAttack} autoFocus>
+                {t('game:actions.attack')}
+              </button>
+            </div>
           </section>
         </div>
       )}

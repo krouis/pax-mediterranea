@@ -202,7 +202,7 @@ export function applyAction(original: GameState, action: GameAction): ActionResu
       addEvent(state, 'game:events.move', { player: player.name, territory: destination.id });
     }
     unit.acted = true;
-    if (player.pax >= 8) state.winnerId = player.id;
+    if (!state.scenarioId && player.pax >= 8) state.winnerId = player.id;
     return { ok: true, state };
   }
 

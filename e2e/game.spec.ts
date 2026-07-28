@@ -32,3 +32,35 @@ test('creates a concealed hot-seat transition', async ({ page }) => {
   await page.getByRole('button', { name: /End turn/i }).click();
   await expect(page.getByText(/Pass the device/i)).toBeVisible();
 });
+
+test('shows an in-app combat confirmation dialog and executes the attack', async ({ page }) => {
+  await page.goto('./');
+  await page.getByRole('button', { name: /Campaign/i }).click();
+  await page.getByRole('button', { name: /Begin match|Play/i }).click();
+  await expect(page.getByLabel('Mediterranean strategy map')).toBeVisible();
+
+  const carthageTerritory = page.getByRole('button', { name: /^Carthage/i });
+  const sicilyTerritory = page.getByRole('button', { name: /^Sicily/i });
+  await carthageTerritory.locator('.unit-p1').first().click();
+  await sicilyTerritory.click({ force: true });
+  await page.getByRole('button', { name: /End turn/i }).click();
+
+  await sicilyTerritory.locator('.unit-p1').first().click();
+  const magnaGraeciaTerritory = page.getByRole('button', { name: /Magna Graecia/i });
+  await expect(magnaGraeciaTerritory).toHaveClass(/legal/);
+
+  let nativeDialogFired = false;
+  page.once('dialog', async (dialog) => {
+    nativeDialogFired = true;
+    await dialog.dismiss();
+  });
+  await magnaGraeciaTerritory.click({ force: true });
+
+  const combatDialog = page.getByRole('alertdialog');
+  await expect(combatDialog).toBeVisible();
+  expect(nativeDialogFired).toBe(false);
+
+  await combatDialog.getByRole('button', { name: /^Attack$/i }).click();
+  await expect(combatDialog).toBeHidden();
+  await expect(page.getByRole('status')).not.toHaveText('');
+});

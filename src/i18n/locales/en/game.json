@@ -8,7 +8,7 @@
     "solo": "Solo vs AI",
     "oneDevice": "one device",
     "guided": "Guided voyage",
-    "transportPreview": "Optional transport preview"
+    "comingSoon": "Not yet available"
   },
   "selection": {
     "faction": "Choose your civilization",
@@ -35,6 +35,7 @@
     "recruit": "Recruit",
     "invokeFavor": "Invoke favor",
     "endTurn": "End turn",
+    "history": "History",
     "move": "Move",
     "attack": "Attack",
     "capture": "Capture"
@@ -44,7 +45,8 @@
   },
   "instructions": {
     "selectUnit": "Select a unit, then choose a connected territory.",
-    "roomUnavailable": "Online play needs an optional transport. Offline modes remain available.",
+    "recruitPlacement": "Choose a highlighted territory to place the new {{unit}}.",
+    "roomUnavailable": "Online multiplayer is not available in this build yet. Play Quick Skirmish against the AI or Local Hot Seat with a friend on this device instead.",
     "roomHelp": "Enter the room code shared by the host.",
     "tutorialMove": "Move to a highlighted territory and capture it.",
     "tutorialRecruit": "Recruit infantry in Carthage.",
@@ -59,13 +61,20 @@
     "defeat": "defeat",
     "stalemate": "stalemate"
   },
+  "history": {
+    "title": "Game history",
+    "empty": "No events yet."
+  },
   "room": {
     "code": "Room code",
     "placeholder": "PAX-270",
-    "adapter": "Multiplayer adapter"
+    "adapter": "Multiplayer adapter",
+    "unavailableBadge": "Coming soon"
   },
   "victory": {
-    "title": "{{player}} establishes peace!"
+    "title": "{{player}} establishes peace!",
+    "campaignComplete": "{{player}} completes the campaign mission!",
+    "campaignFailed": "{{player}} prevails — the campaign mission has failed."
   },
   "errors": {
     "matchEnded": "The match has ended.",
@@ -99,6 +108,8 @@
     "move": "{{player}} moves to {{territory}}.",
     "card": "{{player}} plays {{card}}.",
     "favor": "{{player}} invokes {{patron}}.",
-    "turnBegins": "{{player}}’s turn begins."
+    "turnBegins": "{{player}}’s turn begins.",
+    "scenarioVictory": "{{player}} secures the objective and completes the campaign mission.",
+    "scenarioDefeat": "{{player}} prevails; the campaign mission has failed."
   }
 }

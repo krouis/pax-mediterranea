@@ -199,6 +199,72 @@ describe('deterministic game rules', () => {
     ).toBe(false);
   });
 
+  it('concludes the campaign scenario in victory when the objective is held at the turn boundary', () => {
+    const state = createGame({ scenarioId: 'sicilian-question' });
+    state.turn = 6;
+    state.activePlayerIndex = 1;
+    state.territories.find(({ id }) => id === 'sicily')!.ownerId = 'p1';
+    const result = applyAction(state, { type: 'END_TURN', playerId: 'p2' });
+    expect(result.ok).toBe(true);
+    expect(result.state.winnerId).toBe('p1');
+    expect(result.state.phase).toBe('ended');
+    expect(result.state.turn).toBe(6);
+    const blocked = applyAction(result.state, { type: 'END_TURN', playerId: 'p1' });
+    expect(blocked.ok).toBe(false);
+    expect(blocked.error).toBe('game:errors.matchEnded');
+  });
+
+  it('concludes the campaign scenario in defeat when the objective is not held at the turn boundary', () => {
+    const state = createGame({ scenarioId: 'sicilian-question' });
+    state.turn = 6;
+    state.activePlayerIndex = 1;
+    const result = applyAction(state, { type: 'END_TURN', playerId: 'p2' });
+    expect(result.ok).toBe(true);
+    expect(result.state.winnerId).toBe('p2');
+    expect(result.state.phase).toBe('ended');
+    expect(result.state.turn).toBe(6);
+  });
+
+  it('suppresses the generic Pax victory while a scenario objective governs the match', () => {
+    const state = startActionPhase(createGame({ scenarioId: 'sicilian-question' }));
+    state.players[0].pax = 8;
+    const result = applyAction(state, {
+      type: 'MOVE',
+      playerId: 'p1',
+      unitId: 'u1',
+      to: 'sardinia',
+    });
+    expect(result.ok).toBe(true);
+    expect(result.state.winnerId).toBeUndefined();
+
+    const skirmish = startActionPhase(createGame());
+    skirmish.players[0].pax = 8;
+    const skirmishResult = applyAction(skirmish, {
+      type: 'MOVE',
+      playerId: 'p1',
+      unitId: 'u1',
+      to: 'sardinia',
+    });
+    expect(skirmishResult.state.winnerId).toBe('p1');
+  });
+
+  it('does not evaluate the scenario objective before its turn or outside campaign mode', () => {
+    const midGame = createGame({ scenarioId: 'sicilian-question' });
+    midGame.turn = 5;
+    midGame.activePlayerIndex = 1;
+    midGame.territories.find(({ id }) => id === 'sicily')!.ownerId = 'p1';
+    const stillPlaying = applyAction(midGame, { type: 'END_TURN', playerId: 'p2' });
+    expect(stillPlaying.state.winnerId).toBeUndefined();
+    expect(stillPlaying.state.turn).toBe(6);
+
+    const skirmish = createGame();
+    skirmish.turn = 6;
+    skirmish.activePlayerIndex = 1;
+    const noObjective = applyAction(skirmish, { type: 'END_TURN', playerId: 'p2' });
+    expect(noObjective.state.winnerId).toBeUndefined();
+    expect(noObjective.state.turn).toBe(7);
+  });
+
   it('checks favor, recruitment, and ended game constraints', () => {
     const state = startActionPhase(createGame());
     state.players[0].coins = 0;

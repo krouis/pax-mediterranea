@@ -64,6 +64,14 @@ export interface GameState {
   eventLog: GameEvent[];
   winnerId?: string;
   nextUnitId: number;
+  scenarioId?: string;
+}
+
+export interface ScenarioObjective {
+  type: 'controlAtTurn';
+  territoryId: string;
+  turn: number;
+  factionId: FactionId;
 }
 
 export type GameAction =

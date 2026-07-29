@@ -9,9 +9,11 @@ game: recruit a small force, cross an illustrated map, time a leader card or div
 
 ![Pax Mediterranea menu placeholder](public/icons/icon.svg)
 
-**Status:** playable vertical slice under active development. The static build supports solo AI,
-local hot seat, a Carthaginian tutorial, one campaign scenario, three launch languages, saves, and
-offline installation. The online room screen demonstrates the optional adapter boundary.
+**Status:** playable vertical slice under active development. The static build supports solo AI
+that takes meaningful turns (recruiting, moving/attacking, cards, favor), local hot seat, a
+Carthaginian tutorial, one campaign scenario with its own turn-limited objective, three launch
+languages, saves, and offline installation. Online multiplayer is not implemented yet; the room
+screen labels itself clearly as unavailable and links to the working solo and local modes instead.
 
 Play the latest default-branch build at
 [krouis.github.io/pax-mediterranea](https://krouis.github.io/pax-mediterranea/).

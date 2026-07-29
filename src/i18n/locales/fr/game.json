@@ -8,7 +8,7 @@
     "solo": "Solo contre l’IA",
     "oneDevice": "un seul appareil",
     "guided": "Voyage guidé",
-    "transportPreview": "Aperçu du transport optionnel"
+    "comingSoon": "Pas encore disponible"
   },
   "selection": {
     "faction": "Choisissez votre civilisation",
@@ -35,6 +35,7 @@
     "recruit": "Recruter",
     "invokeFavor": "Invoquer la faveur",
     "endTurn": "Terminer le tour",
+    "history": "Historique",
     "move": "Déplacer",
     "attack": "Attaquer",
     "capture": "Capturer"
@@ -44,7 +45,8 @@
   },
   "instructions": {
     "selectUnit": "Sélectionnez une unité, puis un territoire relié.",
-    "roomUnavailable": "Le jeu en ligne nécessite un transport optionnel. Les modes hors ligne restent disponibles.",
+    "recruitPlacement": "Choisissez un territoire indiqué pour placer la nouvelle unité : {{unit}}.",
+    "roomUnavailable": "Le jeu en ligne n’est pas encore disponible dans cette version. Jouez en escarmouche rapide contre l’IA ou en tour par tour local avec un ami sur cet appareil.",
     "roomHelp": "Saisissez le code de salle communiqué par l’hôte.",
     "tutorialMove": "Déplacez-vous vers un territoire indiqué et capturez-le.",
     "tutorialRecruit": "Recrutez de l’infanterie à Carthage.",
@@ -59,13 +61,20 @@
     "defeat": "défaite",
     "stalemate": "égalité"
   },
+  "history": {
+    "title": "Historique de la partie",
+    "empty": "Aucun événement pour l’instant."
+  },
   "room": {
     "code": "Code de salle",
     "placeholder": "PAX-270",
-    "adapter": "Adaptateur multijoueur"
+    "adapter": "Adaptateur multijoueur",
+    "unavailableBadge": "Bientôt disponible"
   },
   "victory": {
-    "title": "{{player}} établit la paix !"
+    "title": "{{player}} établit la paix !",
+    "campaignComplete": "{{player}} accomplit la mission de la campagne !",
+    "campaignFailed": "{{player}} l’emporte — la mission de la campagne a échoué."
   },
   "errors": {
     "matchEnded": "La partie est terminée.",
@@ -99,6 +108,8 @@
     "move": "{{player}} se déplace vers {{territory}}.",
     "card": "{{player}} joue {{card}}.",
     "favor": "{{player}} invoque {{patron}}.",
-    "turnBegins": "Le tour de {{player}} commence."
+    "turnBegins": "Le tour de {{player}} commence.",
+    "scenarioVictory": "{{player}} sécurise l’objectif et accomplit la mission de la campagne.",
+    "scenarioDefeat": "{{player}} l’emporte ; la mission de la campagne a échoué."
   }
 }

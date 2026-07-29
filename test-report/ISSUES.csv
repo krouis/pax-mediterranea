@@ -1,0 +1,12 @@
+ID,Title,Category,Severity,Environment,Frequency
+PM-GAME-001,Campaign victory condition not triggered at end of Turn 6,Gameplay / Campaign,Blocker,Deployed (Chrome headless),Always
+PM-GAME-002,Recruitment target destination cannot be chosen by player,Gameplay / UI-UX,Critical,Deployed (Chrome headless),Always
+PM-GAME-003,Clicking enemy-owned legal movement targets does nothing,Gameplay / UI-UX,Critical,Deployed (Chrome headless),Always
+PM-UI-004,Lack of interactive tutorial step progression check,Instructions & Onboarding,Major,Deployed (Chrome headless),Always
+PM-UI-005,Lack of historical game log/feed history,UI & UX,Major,Deployed (Chrome headless),Always
+PM-UI-006,Discrepancy between campaign menu objective and in-game objective text,Instructions & Onboarding,Moderate,Deployed (Chrome headless),Always
+PM-UI-007,Direct unit selection is required but map buttons are large,UI & UX / Controls,Moderate,Deployed (Chrome headless),Always
+PM-GAME-008,Starting territories do not grant initial Pax Points,Gameplay / Balance,Moderate,Deployed (Chrome headless),Always
+PM-UI-009,Visual overlap and poor text readability on territories with multiple units,Graphics & UI,Minor,Deployed (Chrome headless),Always
+PM-AUDIO-010,Total lack of audio/sound feedback,Audio,Minor,Deployed (Chrome headless),Always
+PM-MULTI-011,Online multiplayer room is a non-functional screen stub,Multiplayer,Moderate,Deployed (Chrome headless),Always

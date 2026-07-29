@@ -1,14 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { cards, factions, patrons, scenarios, unitRules } from '../content/gameContent';
+import { cards, factions, patrons, scenarios } from '../content/gameContent';
 import { runAITurn } from '../game/ai/ai';
-import { activePlayer, applyAction, combatPreview, startActionPhase } from '../game/engine/rules';
+import {
+  activePlayer,
+  applyAction,
+  combatPreview,
+  startActionPhase,
+  unitCost,
+} from '../game/engine/rules';
 import { createGame } from '../game/engine/state';
-import type { FactionId, GameState, UnitType } from '../game/engine/types';
+import type { FactionId, GameEvent, GameState, UnitType } from '../game/engine/types';
 import { loadGame, loadPreferences, saveGame, savePreferences } from '../persistence/preferences';
+import { markScenarioComplete } from '../persistence/campaign';
 import { playTone } from '../audio/sound';
 import { MapBoard } from '../ui/MapBoard';
+import { HistoryPanel } from '../ui/HistoryPanel';
 import { SettingsDialog } from '../ui/SettingsDialog';
 import { LanguageSelector } from '../ui/LanguageSelector';
 
@@ -25,16 +33,17 @@ export function App() {
   const [message, setMessage] = useState('');
   const [concealed, setConcealed] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
+  const [pendingAttack, setPendingAttack] = useState<{ unitId: string; territoryId: string }>();
+  const [recruitSelection, setRecruitSelection] = useState<UnitType>();
   const savedGame = loadGame();
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW();
+  const [historyOpen, setHistoryOpen] = useState(false);
   const displayPlayer = (name: string) =>
     name === 'carthage' || name === 'rome' ? t(`content:factions.${name}.name`) : name;
-  const displayEvent = (state: GameState) => {
-    const event = state.eventLog.at(-1);
-    if (!event) return '';
+  const formatEvent = (event: GameEvent) => {
     const values = { ...event.values };
     if (typeof values.player === 'string') values.player = displayPlayer(values.player);
     if (typeof values.territory === 'string')
@@ -45,11 +54,23 @@ export function App() {
       values.patron = t(`content:patrons.${values.patron}.name`);
     return t(event.key, values);
   };
+  const displayEvent = (state: GameState) => {
+    const event = state.eventLog.at(-1);
+    return event ? formatEvent(event) : '';
+  };
 
   useEffect(() => {
     savePreferences(preferences);
     document.documentElement.dataset.motion = preferences.reducedMotion ? 'reduced' : 'full';
   }, [preferences]);
+
+  useEffect(() => {
+    if (!game?.winnerId || !game.scenarioId) return;
+    const scenario = scenarios.find(({ id }) => id === game.scenarioId);
+    const winner = game.players.find(({ id }) => id === game.winnerId);
+    if (scenario && winner && winner.faction === scenario.objective.factionId)
+      markScenarioComplete(scenario.id);
+  }, [game?.winnerId, game?.scenarioId, game?.players]);
 
   const begin = (faction: FactionId, patron: string) => {
     const next = startActionPhase(
@@ -59,6 +80,7 @@ export function App() {
         mode,
         secondPlayerAI: mode !== 'hotseat',
         seed: mode === 'campaign' ? 218 : 270,
+        scenarioId: mode === 'campaign' ? scenarios[0].id : undefined,
       }),
     );
     setGame(next);
@@ -133,7 +155,7 @@ export function App() {
           <button data-testid="mode-online" onClick={() => setScreen('online')}>
             <span>⌁</span>
             <strong>{t('game:modes.online')}</strong>
-            <small>{t('game:modes.transportPreview')}</small>
+            <small>{t('game:modes.comingSoon')}</small>
           </button>
         </nav>
         <button
@@ -211,8 +233,12 @@ export function App() {
           {t('actions.back')}
         </button>
         <p className="eyebrow">{t('game:room.adapter')}</p>
-        <h1>{t('game:modes.online')}</h1>
+        <h1>
+          {t('game:modes.online')}{' '}
+          <span className="badge-unavailable">{t('game:room.unavailableBadge')}</span>
+        </h1>
         <section className="stone-panel prose">
+          <p id="room-help">{t('game:instructions.roomUnavailable')}</p>
           <label>
             {t('game:room.code')}
             <input
@@ -222,8 +248,13 @@ export function App() {
               aria-describedby="room-help"
             />
           </label>
-          <p id="room-help">{t('game:instructions.roomUnavailable')}</p>
           <button disabled>{t('actions.joinRoom')}</button>
+          <div className="panel-footer">
+            <button onClick={() => startMode('solo')}>{t('game:modes.quick')}</button>
+            <button className="primary" onClick={() => startMode('hotseat')}>
+              {t('game:modes.hotseat')}
+            </button>
+          </div>
         </section>
       </main>
     );
@@ -272,6 +303,15 @@ export function App() {
   if (!game) return null;
   const player = activePlayer(game);
   const selected = game.units.find((unit) => unit.id === selectedUnit);
+  const activeScenario = game.scenarioId
+    ? scenarios.find(({ id }) => id === game.scenarioId)
+    : undefined;
+  const winner = game.winnerId ? game.players.find(({ id }) => id === game.winnerId) : undefined;
+  const victoryTitleKey = activeScenario
+    ? winner?.faction === activeScenario.objective.factionId
+      ? 'game:victory.campaignComplete'
+      : 'game:victory.campaignFailed'
+    : 'game:victory.title';
 
   const act = (next: GameState, sound: 'move' | 'coin' | 'turn' = 'move') => {
     setGame(next);
@@ -280,7 +320,50 @@ export function App() {
     setMessage(displayEvent(next));
   };
 
+  const advanceTutorial = (fromStep: number, toStep: number) => {
+    if (game.mode !== 'tutorial') return;
+    setTutorialStep((step) => (step === fromStep ? toStep : step));
+  };
+
+  const commitMove = (unitId: string, territoryId: string, type: 'MOVE' | 'ATTACK') => {
+    const result = applyAction(game, { type, playerId: player.id, unitId, to: territoryId });
+    if (!result.ok) setMessage(t(result.error ?? 'game:errors.unsupported'));
+    else {
+      act(result.state);
+      setSelectedUnit(undefined);
+      advanceTutorial(2, 3);
+    }
+  };
+
+  const recruitLegal = recruitSelection
+    ? game.territories
+        .filter(
+          (territory) =>
+            territory.ownerId === player.id &&
+            (recruitSelection === 'fleet'
+              ? territory.terrain === 'port'
+              : territory.terrain === 'city' || territory.terrain === 'port'),
+        )
+        .map(({ id }) => id)
+    : [];
+
   const chooseTerritory = (territoryId: string) => {
+    if (recruitSelection) {
+      const result = applyAction(game, {
+        type: 'RECRUIT',
+        playerId: player.id,
+        unitType: recruitSelection,
+        territoryId,
+      });
+      if (!result.ok) {
+        setMessage(t(result.error ?? 'game:errors.unsupported'));
+        return;
+      }
+      act(result.state, 'coin');
+      advanceTutorial(3, 4);
+      setRecruitSelection(undefined);
+      return;
+    }
     if (!selected || selected.ownerId !== player.id) return;
     const destination = game.territories.find(({ id }) => id === territoryId);
     if (!destination) return;
@@ -289,32 +372,30 @@ export function App() {
       game.units.some((unit) => unit.territoryId === territoryId && unit.ownerId !== player.id),
     );
     if (hostile) {
-      const preview = combatPreview(game, selected, territoryId);
-      if (
-        !confirm(
-          [
-            t('game:combat.confirm', { territory: t(destination.nameKey) }),
-            t('game:combat.attackStrength', { value: preview.attack }),
-            t('game:combat.defenseStrength', { value: preview.defense }),
-            t('game:combat.outcome', { outcome: t(`game:combat.${preview.outcome}`) }),
-          ].join(' · '),
-        )
-      )
-        return;
+      setPendingAttack({ unitId: selected.id, territoryId });
+      return;
     }
-    const result = applyAction(game, {
-      type: hostile ? 'ATTACK' : 'MOVE',
-      playerId: player.id,
-      unitId: selected.id,
-      to: territoryId,
-    });
-    if (!result.ok) setMessage(t(result.error ?? 'game:errors.unsupported'));
-    else {
-      act(result.state);
-      setSelectedUnit(undefined);
-      setTutorialStep(Math.max(tutorialStep, 2));
-    }
+    commitMove(selected.id, territoryId, 'MOVE');
   };
+
+  const pendingUnit = pendingAttack
+    ? game.units.find(({ id }) => id === pendingAttack.unitId)
+    : undefined;
+  const pendingTerritory = pendingAttack
+    ? game.territories.find(({ id }) => id === pendingAttack.territoryId)
+    : undefined;
+  const pendingPreview =
+    pendingAttack && pendingUnit && pendingTerritory
+      ? combatPreview(game, pendingUnit, pendingTerritory.id)
+      : undefined;
+
+  const confirmAttack = () => {
+    if (!pendingAttack) return;
+    commitMove(pendingAttack.unitId, pendingAttack.territoryId, 'ATTACK');
+    setPendingAttack(undefined);
+  };
+
+  const cancelAttack = () => setPendingAttack(undefined);
 
   const endTurn = () => {
     let next = applyAction(game, { type: 'END_TURN', playerId: player.id }).state;
@@ -324,10 +405,18 @@ export function App() {
       act(next, 'turn');
       return;
     }
-    if (activePlayer(next).isAI) next = runAITurn(next, 'strategist');
+    if (activePlayer(next).isAI) {
+      // The guided tutorial script references fixed territories (e.g. "recruit in
+      // Carthage"); a fully competent opponent could capture them mid-tutorial and
+      // invalidate the script, so the tutorial opponent stays passive.
+      next =
+        next.mode === 'tutorial'
+          ? applyAction(next, { type: 'END_TURN', playerId: activePlayer(next).id }).state
+          : runAITurn(next, 'strategist');
+    }
     next = startActionPhase(next);
     act(next, 'turn');
-    setTutorialStep(Math.max(tutorialStep, 5));
+    advanceTutorial(4, 5);
   };
 
   return (
@@ -380,22 +469,29 @@ export function App() {
         </button>
       </header>
       <div className="objective-banner">
-        <strong>{t('game:hud.objective')}</strong> {t('game:objective.pax', { target: 8 })}
+        <strong>{t('game:hud.objective')}</strong>{' '}
+        {activeScenario ? t(activeScenario.objectiveKey) : t('game:objective.pax', { target: 8 })}
       </div>
       <div className="board-layout">
         <MapBoard
           state={game}
           selectedUnitId={selectedUnit}
           selectUnit={(id) => {
+            setRecruitSelection(undefined);
             setSelectedUnit(id);
             playTone('select', preferences.sound);
+            advanceTutorial(1, 2);
           }}
           chooseTerritory={chooseTerritory}
+          recruitLegal={recruitLegal}
         />
         <aside className="action-panel stone-panel">
           <p className="phase-label">
             {t('game:hud.phase')} · {t(`game:phase.${game.phase}`)}
           </p>
+          <button className="history-button" onClick={() => setHistoryOpen(true)}>
+            {t('game:actions.history')}
+          </button>
           <h2>
             {selected ? t(`content:units.${selected.type}`) : t('game:instructions.selectUnit')}
           </h2>
@@ -406,38 +502,36 @@ export function App() {
           )}
           <section>
             <h3>{t('game:actions.recruit')}</h3>
+            {recruitSelection ? (
+              <p className="status" role="status">
+                {t('game:instructions.recruitPlacement', {
+                  unit: t(`content:units.${recruitSelection}`),
+                })}
+              </p>
+            ) : null}
             <div className="recruit-row">
               {(['infantry', 'cavalry', 'fleet'] as UnitType[]).map((type) => (
                 <button
                   key={type}
+                  aria-pressed={recruitSelection === type}
+                  className={recruitSelection === type ? 'active' : ''}
                   onClick={() => {
-                    const home = game.territories.find(
-                      (territory) =>
-                        territory.ownerId === player.id &&
-                        (type === 'fleet'
-                          ? territory.terrain === 'port'
-                          : ['city', 'port'].includes(territory.terrain)),
-                    );
-                    if (!home) return;
-                    const result = applyAction(game, {
-                      type: 'RECRUIT',
-                      playerId: player.id,
-                      unitType: type,
-                      territoryId: home.id,
-                    });
-                    if (result.ok) act(result.state, 'coin');
-                    else setMessage(t(result.error ?? 'game:errors.unsupported'));
-                    setTutorialStep(Math.max(tutorialStep, 3));
+                    setSelectedUnit(undefined);
+                    setPendingAttack(undefined);
+                    setRecruitSelection((current) => (current === type ? undefined : type));
                   }}
                 >
                   <span>{type === 'infantry' ? '♟' : type === 'cavalry' ? '♞' : '⛵'}</span>
                   <small>
                     {t(`content:units.${type}`)}
-                    <br />● {unitRules[type].cost}
+                    <br />● {unitCost(player, type)}
                   </small>
                 </button>
               ))}
             </div>
+            {recruitSelection && (
+              <button onClick={() => setRecruitSelection(undefined)}>{t('actions.cancel')}</button>
+            )}
           </section>
           <section>
             <h3>
@@ -456,9 +550,10 @@ export function App() {
                       cardId: card,
                       unitId: selectedUnit,
                     });
-                    if (result.ok) act(result.state);
-                    else setMessage(t(result.error ?? 'game:errors.unsupported'));
-                    setTutorialStep(Math.max(tutorialStep, 4));
+                    if (result.ok) {
+                      act(result.state);
+                      advanceTutorial(4, 5);
+                    } else setMessage(t(result.error ?? 'game:errors.unsupported'));
                   }}
                 >
                   <strong>{t(cards[card].nameKey)}</strong>
@@ -475,8 +570,10 @@ export function App() {
                 playerId: player.id,
                 territoryId: home.id,
               });
-              if (result.ok) act(result.state);
-              else setMessage(t(result.error ?? 'game:errors.unsupported'));
+              if (result.ok) {
+                act(result.state);
+                advanceTutorial(4, 5);
+              } else setMessage(t(result.error ?? 'game:errors.unsupported'));
             }}
           >
             ✦ {t('game:actions.invokeFavor')} · {t(patrons[player.patron].nameKey)}
@@ -530,20 +627,54 @@ export function App() {
           </section>
         </div>
       )}
+      {pendingAttack && pendingTerritory && pendingPreview && (
+        <div className="scrim">
+          <section
+            className="dialog stone-panel"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="combat-confirm-title"
+          >
+            <h2 id="combat-confirm-title">
+              {t('game:combat.confirm', { territory: t(pendingTerritory.nameKey) })}
+            </h2>
+            <p>
+              {t('game:combat.attackStrength', { value: pendingPreview.attack })} ·{' '}
+              {t('game:combat.defenseStrength', { value: pendingPreview.defense })}
+            </p>
+            <p>
+              {t('game:combat.outcome', {
+                outcome: t(`game:combat.${pendingPreview.outcome}`),
+              })}
+            </p>
+            <div className="panel-footer">
+              <button onClick={cancelAttack}>{t('actions.cancel')}</button>
+              <button className="primary" onClick={confirmAttack} autoFocus>
+                {t('game:actions.attack')}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
       {game.winnerId && (
         <div className="scrim">
           <section className="dialog victory">
             <span>✦</span>
             <h2>
-              {t('game:victory.title', {
-                player: displayPlayer(
-                  game.players.find(({ id }) => id === game.winnerId)?.name ?? '',
-                ),
+              {t(victoryTitleKey, {
+                player: displayPlayer(winner?.name ?? ''),
               })}
             </h2>
             <button onClick={() => setScreen('menu')}>{t('actions.returnMenu')}</button>
           </section>
         </div>
+      )}
+      {historyOpen && (
+        <HistoryPanel
+          events={game.eventLog}
+          formatEvent={formatEvent}
+          onClose={() => setHistoryOpen(false)}
+        />
       )}
       {settings && (
         <SettingsDialog

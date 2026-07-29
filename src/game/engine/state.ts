@@ -9,6 +9,7 @@ export interface GameOptions {
   secondPlayerName?: string;
   secondPlayerAI?: boolean;
   seed?: number;
+  scenarioId?: string;
 }
 
 export function createGame(options: GameOptions = {}): GameState {
@@ -61,5 +62,6 @@ export function createGame(options: GameOptions = {}): GameState {
     units,
     eventLog: [{ turn: 1, key: 'game:events.begins' }],
     nextUnitId: 5,
+    scenarioId: options.scenarioId,
   };
 }

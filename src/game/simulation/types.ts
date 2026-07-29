@@ -1,5 +1,7 @@
 import type { FactionId, GameAction, GameState, UnitType } from '../engine/types';
 
+export type { FactionId } from '../engine/types';
+
 /**
  * Strategic identity. Determines *what a player wants*, not how well it executes.
  * See docs/PLAYER-PERSONAS.md for the design intent and limits of each.

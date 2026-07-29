@@ -16,3 +16,10 @@ Arabic localization uses Modern Standard Arabic, with Tunisian conventions prefe
 historical names and transcriptions, particularly those relating to Carthage and ancient North
 Africa. AI-assisted Arabic text requires native-speaker review for grammar, naturalness, and
 historical transcription.
+
+The batch-simulation and design-analysis engine (`src/game/simulation`, see
+[docs/SIMULATION.md](docs/SIMULATION.md)) measures mechanics and dynamics from many simulated
+matches; any AI-generated or AI-assisted interpretation of its output — including the "aesthetic
+hypothesis" rows a generated report labels as such — is not evidence of actual player enjoyment.
+Those hypotheses exist to be checked by structured human playtesting, not to substitute for it; see
+[docs/MDA-EVALUATION.md](docs/MDA-EVALUATION.md).

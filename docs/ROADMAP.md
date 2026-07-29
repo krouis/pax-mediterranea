@@ -6,10 +6,15 @@
    meaningful actions each turn (recruit, move/attack, cards, favor) have shipped. Complete
    native-speaker editorial review for formal Arabic and Tunisian historical transcriptions.
 2. Expand the compact quick map to 20–35 readable territories and balance through AI simulations.
-   AI-vs-AI simulation now shows the current 12-territory map reaching a stable, contested frontier
-   within a handful of turns with no further favorable moves for either side; a larger map is the
-   intended way to give the same heuristic more room to play out, not a signal that the AI itself
-   needs further tuning.
+   A deterministic, data-driven simulation and design-analysis engine now exists for this
+   (`src/game/simulation`, see [docs/SIMULATION.md](SIMULATION.md)) and its first baseline
+   (`simulation/baselines/current-main.json`, `simulation/reports/INITIAL-SIMULATION-REPORT.md`)
+   confirms the current 12-territory map reaches a stable, contested frontier within a handful of
+   turns with no further favorable moves for either side across every persona pairing tested; a
+   larger map is the intended way to give the same personas more strategic room to play out, not a
+   signal that the AI itself needs further tuning. Re-run `npm run simulate:baseline` and
+   `npm run simulate:matrix -- --experiment simulation/experiments/persona-matrix.json ...` against
+   any future map to measure the effect before and after.
 3. Add polished original pixel sprites, animation atlas, combat/movement animation, and original
    faction music/sound-effect loops (the game is currently silent and uses text-glyph unit icons —
    see the black-box report's audio/art findings, which are out of scope for the gameplay-fix pass

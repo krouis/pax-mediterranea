@@ -46,6 +46,7 @@ npm run test
 npm run test:e2e
 npm run test:ai
 npm run validate:maps
+npm run simulate:smoke
 ```
 
 The production preview lives below `/pax-mediterranea/`:
@@ -57,10 +58,13 @@ npm run preview
 
 ## Repository structure
 
-`src/game` contains DOM-independent rules, AI, and serialization. `src/content` contains validated
-game data. `src/app` and `src/ui` contain React screens and semantic controls. `src/audio`,
+`src/game` contains DOM-independent rules, AI, and serialization. `src/game/simulation` is a
+separate, Node-runnable batch-simulation and design-analysis harness that plays real matches
+through the same rules engine — see [Simulation](docs/SIMULATION.md). `src/content` contains
+validated game data. `src/app` and `src/ui` contain React screens and semantic controls. `src/audio`,
 `src/persistence`, and `src/multiplayer` are capability adapters. `scripts` holds CI validators and
-simulations; `e2e` holds browser tests; `docs` contains design and engineering references.
+simulations; `simulation/` holds committed experiment definitions, baselines, and generated reports;
+`e2e` holds browser tests; `docs` contains design and engineering references.
 
 Translation resources live in `src/i18n/locales`. Production-ready locales are English (`en`),
 French (`fr`), and Arabic for Tunisia (`ar-TN`). Arabic uses Modern Standard Arabic, with Tunisian

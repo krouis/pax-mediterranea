@@ -25,6 +25,7 @@ import { PantheonIcon } from '../ui/icons/PantheonIcons';
 import { ResourceCounter } from '../ui/components/ResourceCounter';
 import { CardView } from '../ui/components/CardView';
 import { CombatPreview } from '../ui/components/CombatPreview';
+import { TurnBanner } from '../ui/components/TurnBanner';
 import { MainMenuScreen } from '../ui/screens/MainMenuScreen';
 import { CampaignIntroScreen } from '../ui/screens/CampaignIntroScreen';
 import { OnlineStubScreen } from '../ui/screens/OnlineStubScreen';
@@ -46,6 +47,11 @@ export function App() {
   const [tutorialStep, setTutorialStep] = useState(0);
   const [pendingAttack, setPendingAttack] = useState<{ unitId: string; territoryId: string }>();
   const [recruitSelection, setRecruitSelection] = useState<UnitType>();
+  const [boardAnimation, setBoardAnimation] = useState<{
+    territoryId: string;
+    kind: 'move' | 'capture';
+  }>();
+  const [turnBanner, setTurnBanner] = useState<string>();
   const savedGame = loadGame();
   const {
     needRefresh: [needRefresh, setNeedRefresh],
@@ -82,6 +88,18 @@ export function App() {
     if (scenario && winner && winner.faction === scenario.objective.factionId)
       markScenarioComplete(scenario.id);
   }, [game?.winnerId, game?.scenarioId, game?.players]);
+
+  useEffect(() => {
+    if (!boardAnimation) return;
+    const timeout = setTimeout(() => setBoardAnimation(undefined), 650);
+    return () => clearTimeout(timeout);
+  }, [boardAnimation]);
+
+  useEffect(() => {
+    if (!turnBanner) return;
+    const timeout = setTimeout(() => setTurnBanner(undefined), 900);
+    return () => clearTimeout(timeout);
+  }, [turnBanner]);
 
   const begin = (faction: FactionId, patron: string) => {
     const next = startActionPhase(
@@ -223,9 +241,15 @@ export function App() {
   };
 
   const commitMove = (unitId: string, territoryId: string, type: 'MOVE' | 'ATTACK') => {
+    const previousOwner = game.territories.find(({ id }) => id === territoryId)?.ownerId;
     const result = applyAction(game, { type, playerId: player.id, unitId, to: territoryId });
     if (!result.ok) setMessage(t(result.error ?? 'game:errors.unsupported'));
     else {
+      const newOwner = result.state.territories.find(({ id }) => id === territoryId)?.ownerId;
+      setBoardAnimation({
+        territoryId,
+        kind: newOwner !== previousOwner ? 'capture' : 'move',
+      });
       act(result.state);
       setSelectedUnit(undefined);
       advanceTutorial(2, 3);
@@ -312,6 +336,7 @@ export function App() {
           : runAITurn(next, 'strategist');
     }
     next = startActionPhase(next);
+    if (!next.winnerId) setTurnBanner(displayPlayer(activePlayer(next).name));
     act(next, 'turn');
     advanceTutorial(4, 5);
   };
@@ -374,6 +399,7 @@ export function App() {
           chooseTerritory={chooseTerritory}
           recruitLegal={recruitLegal}
           objectiveTerritoryId={activeScenario?.objective.territoryId}
+          animation={boardAnimation}
         />
         <aside className="action-panel stone-panel">
           <p className="phase-label">
@@ -487,6 +513,7 @@ export function App() {
           </div>
         </aside>
       </div>
+      {turnBanner && <TurnBanner playerName={turnBanner} />}
       {tutorialStep > 0 && tutorialStep < 5 && (
         <div className="tutorial-tip" role="status">
           <strong>{tutorialStep}/4</strong>

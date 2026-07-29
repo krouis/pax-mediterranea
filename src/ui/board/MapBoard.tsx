@@ -13,6 +13,7 @@ interface Props {
   chooseTerritory: (id: string) => void;
   recruitLegal?: string[];
   objectiveTerritoryId?: string;
+  animation?: { territoryId: string; kind: 'move' | 'capture' };
 }
 
 function groupUnits(units: Unit[]): Unit[][] {
@@ -33,6 +34,7 @@ export function MapBoard({
   chooseTerritory,
   recruitLegal = [],
   objectiveTerritoryId,
+  animation,
 }: Props) {
   const { t } = useTranslation();
   const legal = selectedUnitId ? legalDestinations(state, selectedUnitId) : [];
@@ -86,6 +88,7 @@ export function MapBoard({
         const isObjective = objectiveTerritoryId === territory.id;
         const isThreatened =
           territory.ownerId === currentPlayerId && threatenedTerritoryIds.has(territory.id);
+        const animationKind = animation?.territoryId === territory.id ? animation.kind : undefined;
 
         const stateClasses = [
           isRecruitTarget ? 'legal-recruit' : '',
@@ -94,6 +97,7 @@ export function MapBoard({
           isSelectedHere ? 'selected' : '',
           isObjective ? 'objective' : '',
           isThreatened ? 'threatened' : '',
+          animationKind ? `territory-anim-${animationKind}` : '',
         ]
           .filter(Boolean)
           .join(' ');

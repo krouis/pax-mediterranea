@@ -46,6 +46,7 @@ export interface AggregateMetrics {
 
   cardUsageRate: Record<string, number>;
   favorUsageRate: number;
+  favorUsageRateByFavor: Record<string, number>;
   unusedCardIds: string[];
   unusedFavorIds: string[];
 
@@ -172,15 +173,16 @@ export function aggregateTelemetry(matches: ExperimentMatchRecord[]): AggregateM
   const unusedCardIds = allCardIds.filter((cardId) => cardUsageRate[cardId] === 0);
 
   const allFavorIds = Object.keys(patrons);
-  const favorUsageByFavor: Record<string, number> = {};
+  const favorUsageRateByFavor: Record<string, number> = {};
   for (const favorId of allFavorIds) {
-    favorUsageByFavor[favorId] = telemetries.filter((telemetry) =>
+    const usedInMatches = telemetries.filter((telemetry) =>
       Object.values(telemetry.favorsInvokedByPlayerAndFavor).some(
         (byFavor) => (byFavor[favorId] ?? 0) > 0,
       ),
     ).length;
+    favorUsageRateByFavor[favorId] = safeDivide(usedInMatches, matchCount);
   }
-  const unusedFavorIds = allFavorIds.filter((favorId) => favorUsageByFavor[favorId] === 0);
+  const unusedFavorIds = allFavorIds.filter((favorId) => favorUsageRateByFavor[favorId] === 0);
   const favorUsageRate = safeDivide(
     telemetries.filter(
       (telemetry) => Object.keys(telemetry.favorsInvokedByPlayerAndFavor).length > 0,
@@ -256,6 +258,7 @@ export function aggregateTelemetry(matches: ExperimentMatchRecord[]): AggregateM
     fleetUsageRate,
     cardUsageRate,
     favorUsageRate,
+    favorUsageRateByFavor,
     unusedCardIds,
     unusedFavorIds,
     averageCoinsEarned: mean(coinsEarned),

@@ -1,0 +1,110 @@
+/*
+ * Design tokens for the pixel-art presentation layer. See docs/ART-DIRECTION.md for the
+ * rationale behind the palette and scale choices.
+ */
+:root {
+  /* Sea */
+  --color-sea-deep: #123a4d;
+  --color-sea-mid: #1f6e83;
+  --color-sea-bright: #3d94a7;
+  --color-sea-foam: #bce7e8;
+
+  /* Land */
+  --color-sand: #d9b877;
+  --color-sand-dark: #a9803f;
+  --color-limestone: #f0d6a5;
+  --color-ivory: #f5dfb2;
+
+  /* Vegetation / hills */
+  --color-olive: #6f7d3c;
+  --color-cypress: #364a34;
+
+  /* Clay / mountains */
+  --color-terracotta: #b9633f;
+  --color-clay: #8a5a34;
+
+  /* Metals */
+  --color-bronze: #a8703e;
+  --color-gold: #d6a640;
+  --color-gold-bright: #f3c952;
+
+  /* Carthage */
+  --color-carthage: #603263;
+  --color-carthage-dark: #321e43;
+  --color-carthage-bright: #9c65a2;
+
+  /* Rome */
+  --color-rome: #a83c39;
+  --color-rome-dark: #6b201f;
+  --color-rome-bright: #cf6457;
+
+  /* Future factions (Codex-only placeholders) */
+  --color-greece: #3f6ea8;
+  --color-greece-bright: #d9c98f;
+  --color-egypt: #1f7a7a;
+  --color-egypt-bright: #d6b23a;
+
+  /* Neutral ink */
+  --color-ink: #2c2430;
+  --color-parchment: #dcbf83;
+
+  /* Semantic state colors (always paired with a non-color cue) */
+  --color-friendly: var(--color-carthage-bright);
+  --color-enemy: var(--color-rome-bright);
+  --color-legal-move: #fff39b;
+  --color-legal-attack: #ff9b6a;
+  --color-legal-recruit: #8fe3b0;
+  --color-objective: var(--color-gold-bright);
+  --color-threatened: #ff6a6a;
+  --color-captured: #ffe070;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 22px;
+  --space-6: 32px;
+
+  /* Radius scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  /* Hard-edged "pixel shadow" offsets (no blur) */
+  --shadow-sm: 0 3px 0 #17101e;
+  --shadow-md: 0 5px 0 #130f1d;
+  --shadow-lg: 0 8px 0 #7f623e;
+  --shadow-inset: inset 0 0 0 2px #432b43;
+
+  /* Type roles */
+  --font-size-title: clamp(3rem, 9vw, 6.3rem);
+  --font-size-heading: clamp(2rem, 5vw, 2.8rem);
+  --font-size-hud-value: 1.2rem;
+  --font-size-action-label: 0.95rem;
+  --font-size-card-description: 0.72rem;
+  --font-size-tooltip: 0.68rem;
+  --font-size-campaign-text: 1rem;
+
+  /* Animation durations (see docs/ART-DIRECTION.md for the timing rationale per interaction) */
+  --duration-select: 120ms;
+  --duration-move: 320ms;
+  --duration-combat: 420ms;
+  --duration-capture: 500ms;
+  --duration-turn: 700ms;
+
+  /* Z-index layers */
+  --z-map: 1;
+  --z-map-active: 4;
+  --z-panel: 5;
+  --z-tutorial-tip: 10;
+  --z-scrim: 20;
+  --z-toast: 30;
+
+  /* Icon grid (documented for reference; SVG components hardcode their own viewBox) */
+  --icon-grid-small: 16;
+  --icon-grid-unit: 24;
+  --icon-grid-landmark: 32;
+  --icon-grid-portrait: 48;
+}

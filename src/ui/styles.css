@@ -1,3 +1,5 @@
+@import './tokens.css';
+
 @font-face {
   font-family: 'Pax Noto Sans';
   src: url('../assets/fonts/NotoSans-Regular.ttf') format('truetype');
@@ -31,17 +33,18 @@
 }
 
 :root {
-  color: #2c2430;
+  color: var(--color-ink);
   background: #17394b;
   font-family: 'Pax Noto Sans', sans-serif;
   font-synthesis: none;
-  --purple: #603263;
-  --purple-dark: #321e43;
-  --gold: #d6a640;
-  --ivory: #f5dfb2;
-  --sea: #246d83;
-  --stone: #f0d6a5;
-  --rome: #a83c39;
+  /* Aliases kept for the existing stylesheet below; tokens.css is the single source of truth. */
+  --purple: var(--color-carthage);
+  --purple-dark: var(--color-carthage-dark);
+  --gold: var(--color-gold);
+  --ivory: var(--color-ivory);
+  --sea: var(--color-sea-mid);
+  --stone: var(--color-limestone);
+  --rome: var(--color-rome);
 }
 
 html[lang='ar-TN'] {
@@ -114,24 +117,19 @@ h2 {
     linear-gradient(#1f1834dd, #26193aea),
     repeating-linear-gradient(120deg, #4a315d 0 3px, #2b2546 3px 9px);
 }
-.menu-page::before,
-.menu-page::after {
-  content: '';
+.coastal-scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.menu-hero-scene {
   position: fixed;
-  width: 320px;
-  height: 180px;
-  opacity: 0.16;
-  background: radial-gradient(ellipse at bottom, transparent 48%, #f7d77a 49% 52%, transparent 53%);
-}
-.menu-page::before {
-  left: -70px;
-  bottom: -20px;
-  transform: rotate(10deg);
-}
-.menu-page::after {
-  right: -70px;
-  top: -20px;
-  transform: rotate(190deg);
+  z-index: 0;
+  inset-inline: 0;
+  inset-block-end: 0;
+  width: 100%;
+  height: min(34vh, 260px);
+  opacity: 0.55;
 }
 .hero {
   position: relative;
@@ -217,6 +215,15 @@ h2 {
 .menu-actions .primary small {
   color: #f4dfef;
 }
+.menu-actions .continue-highlight {
+  border-color: var(--color-gold-bright);
+  box-shadow:
+    inset 0 0 0 2px var(--color-gold),
+    0 5px 0 #130f1d;
+}
+.menu-actions .continue-highlight > span {
+  color: var(--color-bronze);
+}
 .primary {
   border: 2px solid #f0c962 !important;
   background: linear-gradient(#7d467d, #512c5b) !important;
@@ -281,25 +288,36 @@ h2 {
   box-shadow: 0 8px 0 #7f623e;
 }
 .faction-card.rome {
-  border-color: #813b36;
+  border-color: var(--color-rome-dark);
 }
 .faction-card h2 {
   margin: 8px;
   font-size: 2rem;
 }
-.faction-emblem {
+.faction-emblem,
+.faction-badge {
   display: grid;
   place-items: center;
   width: 82px;
   height: 82px;
   margin: auto;
+  border: 0;
   border-radius: 50%;
-  background: var(--purple);
+  background: var(--color-carthage);
   color: #f1c660;
   font-size: 3rem;
 }
-.rome .faction-emblem {
-  background: var(--rome);
+.faction-badge-icon {
+  display: block;
+}
+.faction-badge.small {
+  width: 44px;
+  height: 44px;
+  font-size: 1.5rem;
+}
+.rome .faction-emblem,
+.faction-badge-rome {
+  background: var(--color-rome);
 }
 .patron {
   display: block;
@@ -337,15 +355,10 @@ h2 {
   font-style: italic;
 }
 .campaign-illustration {
-  display: flex;
-  justify-content: space-around;
-  align-items: end;
+  display: block;
   width: min(650px, 100%);
   height: 150px;
   margin: auto;
-  color: #4f365b;
-  font-size: 4rem;
-  background: linear-gradient(transparent 58%, #2f788a 59% 72%, #9b7141 73%);
   overflow: hidden;
   border-radius: 12px;
 }
@@ -523,15 +536,15 @@ select {
   background: #c6b578;
 }
 .owner-p1 {
-  border-color: #70406f;
+  border-color: var(--color-carthage);
   box-shadow:
-    inset 0 0 0 4px #9c65a2,
+    inset 0 0 0 4px var(--color-carthage-bright),
     0 4px 0 #173b4a;
 }
 .owner-p2 {
-  border-color: #913936;
+  border-color: var(--color-rome-dark);
   box-shadow:
-    inset 0 0 0 4px #cf6457,
+    inset 0 0 0 4px var(--color-rome-bright),
     0 4px 0 #173b4a;
 }
 .terrain-icon {

@@ -18,7 +18,11 @@ import { playTone } from '../audio/sound';
 import { MapBoard } from '../ui/MapBoard';
 import { HistoryPanel } from '../ui/HistoryPanel';
 import { SettingsDialog } from '../ui/SettingsDialog';
-import { LanguageSelector } from '../ui/LanguageSelector';
+import { PixelDialog } from '../ui/components/PixelDialog';
+import { MainMenuScreen } from '../ui/screens/MainMenuScreen';
+import { CampaignIntroScreen } from '../ui/screens/CampaignIntroScreen';
+import { OnlineStubScreen } from '../ui/screens/OnlineStubScreen';
+import { FactionSelectScreen } from '../ui/screens/FactionSelectScreen';
 
 type Screen = 'menu' | 'select' | 'game' | 'campaign' | 'online';
 
@@ -93,210 +97,86 @@ export function App() {
     setScreen('select');
   };
 
+  const overlays = (
+    <>
+      {settings && (
+        <SettingsDialog
+          preferences={preferences}
+          setPreferences={setPreferences}
+          close={() => setSettings(false)}
+        />
+      )}
+      {needRefresh && (
+        <div className="update-toast" role="status">
+          {t('status.updateReady')}
+          <button onClick={() => void updateServiceWorker(true)}>
+            {t('actions.reloadUpdate')}
+          </button>
+          <button onClick={() => setNeedRefresh(false)}>{t('actions.later')}</button>
+        </div>
+      )}
+    </>
+  );
+
   if (screen === 'menu') {
     return (
-      <main className="menu-page">
-        <header className="hero">
-          <span className="sun-mark" aria-hidden="true">
-            ✦
-          </span>
-          <p className="eyebrow">{t('brand.genre')}</p>
-          <h1>{t('brand.name')}</h1>
-          <p className="tagline">{t('brand.tagline')}</p>
-        </header>
-        <nav className="menu-actions" aria-label={t('accessibility:gameModes')}>
-          <button
-            data-testid="mode-quick"
-            className="primary large"
-            onClick={() => startMode('solo')}
-          >
-            <span>⚔</span>
-            <strong>{t('game:modes.quick')}</strong>
-            <small>
-              {t('numbers.minutes', { min: 10, max: 25 })} · {t('game:modes.solo')}
-            </small>
-          </button>
-          {savedGame && (
-            <button
-              onClick={() => {
-                setGame(savedGame);
-                setScreen('game');
-              }}
-            >
-              <span>▶</span>
-              <strong>{t('actions.continue')}</strong>
-              <small>{t('numbers.turn', { value: savedGame.turn })}</small>
-            </button>
-          )}
-          <button
-            onClick={() => {
-              setScreen('campaign');
-              setMode('campaign');
-            }}
-          >
-            <span>♜</span>
-            <strong>{t('game:modes.campaign')}</strong>
-            <small>{t('campaigns:sicilian-question.title')}</small>
-          </button>
-          <button data-testid="mode-hotseat" onClick={() => startMode('hotseat')}>
-            <span>♟</span>
-            <strong>{t('game:modes.hotseat')}</strong>
-            <small>
-              {t('numbers.players', { count: 2 })} · {t('game:modes.oneDevice')}
-            </small>
-          </button>
-          <button data-testid="mode-tutorial" onClick={() => startMode('tutorial')}>
-            <span>?</span>
-            <strong>{t('game:modes.tutorial')}</strong>
-            <small>
-              {t('numbers.minutes', { min: 3, max: 5 })} · {t('content:factions.carthage.name')}
-            </small>
-          </button>
-          <button data-testid="mode-online" onClick={() => setScreen('online')}>
-            <span>⌁</span>
-            <strong>{t('game:modes.online')}</strong>
-            <small>{t('game:modes.comingSoon')}</small>
-          </button>
-        </nav>
-        <button
-          className="icon-button settings-button"
-          onClick={() => setSettings(true)}
-          aria-label={t('accessibility:settings')}
-        >
-          ⚙
-        </button>
-        <LanguageSelector
-          compact
-          value={preferences.locale}
-          onChange={(locale) => setPreferences((current) => ({ ...current, locale }))}
+      <>
+        <MainMenuScreen
+          preferences={preferences}
+          setPreferences={setPreferences}
+          savedGame={savedGame}
+          onQuick={() => startMode('solo')}
+          onContinue={() => {
+            if (!savedGame) return;
+            setGame(savedGame);
+            setScreen('game');
+          }}
+          onCampaign={() => {
+            setScreen('campaign');
+            setMode('campaign');
+          }}
+          onHotseat={() => startMode('hotseat')}
+          onTutorial={() => startMode('tutorial')}
+          onOnline={() => setScreen('online')}
+          onOpenSettings={() => setSettings(true)}
         />
-        <footer>
-          {t('status.offlineReady')} · {t('status.noTracking')} · {t('status.openSource')}
-        </footer>
-        {settings && (
-          <SettingsDialog
-            preferences={preferences}
-            setPreferences={setPreferences}
-            close={() => setSettings(false)}
-          />
-        )}
-        {needRefresh && (
-          <div className="update-toast" role="status">
-            {t('status.updateReady')}
-            <button onClick={() => void updateServiceWorker(true)}>
-              {t('actions.reloadUpdate')}
-            </button>
-            <button onClick={() => setNeedRefresh(false)}>{t('actions.later')}</button>
-          </div>
-        )}
-      </main>
+        {overlays}
+      </>
     );
   }
 
   if (screen === 'campaign') {
-    const scenario = scenarios[0];
     return (
-      <main className="sub-page parchment">
-        <button className="back" onClick={() => setScreen('menu')}>
-          <span className="directional-arrow" aria-hidden="true">
-            ←
-          </span>{' '}
-          {t('actions.back')}
-        </button>
-        <p className="eyebrow">{t('campaigns:sicilian-question.chapter')}</p>
-        <h1>{t(scenario.titleKey)}</h1>
-        <div className="campaign-illustration" aria-hidden="true">
-          <span>⛵</span>
-          <span>♜</span>
-          <span>▲</span>
-        </div>
-        <section className="stone-panel prose">
-          <p>{t(scenario.introKey)}</p>
-          <h2>{t('campaigns:sicilian-question.objectiveTitle')}</h2>
-          <p>{t(scenario.objectiveKey)}</p>
-          <p className="historical-note">{t(scenario.historicalNoteKey)}</p>
-        </section>
-        <button className="primary large" onClick={() => begin('carthage', 'baal-hammon')}>
-          {t('actions.play')}
-        </button>
-      </main>
+      <>
+        <CampaignIntroScreen
+          scenario={scenarios[0]}
+          onBack={() => setScreen('menu')}
+          onBegin={() => begin('carthage', 'baal-hammon')}
+        />
+        {overlays}
+      </>
     );
   }
 
   if (screen === 'online') {
     return (
-      <main className="sub-page parchment">
-        <button className="back" onClick={() => setScreen('menu')}>
-          <span className="directional-arrow" aria-hidden="true">
-            ←
-          </span>{' '}
-          {t('actions.back')}
-        </button>
-        <p className="eyebrow">{t('game:room.adapter')}</p>
-        <h1>
-          {t('game:modes.online')}{' '}
-          <span className="badge-unavailable">{t('game:room.unavailableBadge')}</span>
-        </h1>
-        <section className="stone-panel prose">
-          <p id="room-help">{t('game:instructions.roomUnavailable')}</p>
-          <label>
-            {t('game:room.code')}
-            <input
-              dir="ltr"
-              maxLength={8}
-              placeholder={t('game:room.placeholder')}
-              aria-describedby="room-help"
-            />
-          </label>
-          <button disabled>{t('actions.joinRoom')}</button>
-          <div className="panel-footer">
-            <button onClick={() => startMode('solo')}>{t('game:modes.quick')}</button>
-            <button className="primary" onClick={() => startMode('hotseat')}>
-              {t('game:modes.hotseat')}
-            </button>
-          </div>
-        </section>
-      </main>
+      <>
+        <OnlineStubScreen
+          onBack={() => setScreen('menu')}
+          onQuick={() => startMode('solo')}
+          onHotseat={() => startMode('hotseat')}
+        />
+        {overlays}
+      </>
     );
   }
 
   if (screen === 'select') {
     return (
-      <main className="sub-page parchment">
-        <button className="back" onClick={() => setScreen('menu')}>
-          <span className="directional-arrow" aria-hidden="true">
-            ←
-          </span>{' '}
-          {t('actions.back')}
-        </button>
-        <p className="eyebrow">
-          {mode === 'tutorial' ? t('game:modes.guided') : t('game:modes.quick')}
-        </p>
-        <h1>{t('game:selection.faction')}</h1>
-        <div className="faction-grid">
-          {(Object.keys(factions) as FactionId[]).map((id) => (
-            <section key={id} data-testid={`faction-${id}`} className={`faction-card ${id}`}>
-              <div className="faction-emblem" aria-hidden="true">
-                {factions[id].icon}
-              </div>
-              <h2>{t(factions[id].nameKey)}</h2>
-              <p>{t(factions[id].passiveKey)}</p>
-              <h3>{t('game:selection.patron')}</h3>
-              {factions[id].patrons.map((patron) => (
-                <button
-                  key={patron}
-                  data-testid={`patron-${patron}`}
-                  className="patron"
-                  onClick={() => begin(id, patron)}
-                >
-                  <strong>{t(patrons[patron].nameKey)}</strong>
-                  <small>{t(patrons[patron].descriptionKey)}</small>
-                </button>
-              ))}
-            </section>
-          ))}
-        </div>
-      </main>
+      <>
+        <FactionSelectScreen mode={mode} onBack={() => setScreen('menu')} onSelect={begin} />
+        {overlays}
+      </>
     );
   }
 
@@ -628,33 +508,28 @@ export function App() {
         </div>
       )}
       {pendingAttack && pendingTerritory && pendingPreview && (
-        <div className="scrim">
-          <section
-            className="dialog stone-panel"
-            role="alertdialog"
-            aria-modal="true"
-            aria-labelledby="combat-confirm-title"
-          >
-            <h2 id="combat-confirm-title">
-              {t('game:combat.confirm', { territory: t(pendingTerritory.nameKey) })}
-            </h2>
-            <p>
-              {t('game:combat.attackStrength', { value: pendingPreview.attack })} ·{' '}
-              {t('game:combat.defenseStrength', { value: pendingPreview.defense })}
-            </p>
-            <p>
-              {t('game:combat.outcome', {
-                outcome: t(`game:combat.${pendingPreview.outcome}`),
-              })}
-            </p>
-            <div className="panel-footer">
-              <button onClick={cancelAttack}>{t('actions.cancel')}</button>
-              <button className="primary" onClick={confirmAttack} autoFocus>
-                {t('game:actions.attack')}
-              </button>
-            </div>
-          </section>
-        </div>
+        <PixelDialog
+          titleId="combat-confirm-title"
+          title={t('game:combat.confirm', { territory: t(pendingTerritory.nameKey) })}
+          role="alertdialog"
+          onClose={cancelAttack}
+        >
+          <p>
+            {t('game:combat.attackStrength', { value: pendingPreview.attack })} ·{' '}
+            {t('game:combat.defenseStrength', { value: pendingPreview.defense })}
+          </p>
+          <p>
+            {t('game:combat.outcome', {
+              outcome: t(`game:combat.${pendingPreview.outcome}`),
+            })}
+          </p>
+          <div className="panel-footer">
+            <button onClick={cancelAttack}>{t('actions.cancel')}</button>
+            <button className="primary" onClick={confirmAttack}>
+              {t('game:actions.attack')}
+            </button>
+          </div>
+        </PixelDialog>
       )}
       {game.winnerId && (
         <div className="scrim">
@@ -676,13 +551,7 @@ export function App() {
           onClose={() => setHistoryOpen(false)}
         />
       )}
-      {settings && (
-        <SettingsDialog
-          preferences={preferences}
-          setPreferences={setPreferences}
-          close={() => setSettings(false)}
-        />
-      )}
+      {overlays}
     </main>
   );
 }

@@ -111,5 +111,26 @@
     "turnBegins": "Le tour de {{player}} commence.",
     "scenarioVictory": "{{player}} sécurise l’objectif et accomplit la mission de la campagne.",
     "scenarioDefeat": "{{player}} l’emporte ; la mission de la campagne a échoué."
+  },
+  "codex": {
+    "navLabel": "Codex historique",
+    "title": "Codex historique",
+    "intro": "Factions, figures et protecteurs du monde méditerranéen élargi — certains déjà jouables, d’autres à venir.",
+    "factionsHeading": "Factions",
+    "leadersHeading": "Figures historiques",
+    "pantheonHeading": "Panthéon",
+    "playable": "Jouable",
+    "greek": {
+      "name": "Ligue grecque",
+      "description": "Une future faction — pas encore jouable."
+    },
+    "egyptian": {
+      "name": "Égypte ptolémaïque",
+      "description": "Une future faction — pas encore jouable."
+    },
+    "melqart": {
+      "name": "Melqart",
+      "description": "Gardien tyrien des marins et de la cité ; un futur protecteur, pas encore jouable."
+    }
   }
 }

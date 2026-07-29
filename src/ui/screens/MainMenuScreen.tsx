@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import type { GameState } from '../../game/engine/types';
 import type { Preferences } from '../../persistence/preferences';
 import { CoastalScene } from '../icons/CoastalScene';
+import { ActionIcon } from '../icons/ActionIcons';
 import { LanguageSelector } from '../LanguageSelector';
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
   onTutorial: () => void;
   onOnline: () => void;
   onOpenSettings: () => void;
+  onOpenCodex: () => void;
 }
 
 export function MainMenuScreen({
@@ -28,6 +30,7 @@ export function MainMenuScreen({
   onTutorial,
   onOnline,
   onOpenSettings,
+  onOpenCodex,
 }: Props) {
   const { t } = useTranslation();
   return (
@@ -86,7 +89,7 @@ export function MainMenuScreen({
         onClick={onOpenSettings}
         aria-label={t('accessibility:settings')}
       >
-        ⚙
+        <ActionIcon name="settings" />
       </button>
       <LanguageSelector
         compact
@@ -94,7 +97,10 @@ export function MainMenuScreen({
         onChange={(locale) => setPreferences((current) => ({ ...current, locale }))}
       />
       <footer>
-        {t('status.offlineReady')} · {t('status.noTracking')} · {t('status.openSource')}
+        {t('status.offlineReady')} · {t('status.noTracking')} · {t('status.openSource')} ·{' '}
+        <button className="codex-link" onClick={onOpenCodex}>
+          {t('game:codex.navLabel')}
+        </button>
       </footer>
     </main>
   );

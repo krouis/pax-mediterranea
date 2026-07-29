@@ -111,5 +111,26 @@
     "turnBegins": "{{player}}’s turn begins.",
     "scenarioVictory": "{{player}} secures the objective and completes the campaign mission.",
     "scenarioDefeat": "{{player}} prevails; the campaign mission has failed."
+  },
+  "codex": {
+    "navLabel": "Historical Codex",
+    "title": "Historical Codex",
+    "intro": "Factions, figures, and patrons of the wider Mediterranean world — some already playable, others still to come.",
+    "factionsHeading": "Factions",
+    "leadersHeading": "Historical Figures",
+    "pantheonHeading": "Pantheon",
+    "playable": "Playable",
+    "greek": {
+      "name": "Greek League",
+      "description": "A future faction — not yet playable."
+    },
+    "egyptian": {
+      "name": "Ptolemaic Egypt",
+      "description": "A future faction — not yet playable."
+    },
+    "melqart": {
+      "name": "Melqart",
+      "description": "Tyrian guardian of seafarers and the city; a future patron, not yet playable."
+    }
   }
 }

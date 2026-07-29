@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { cards, factions, patrons, scenarios } from '../content/gameContent';
+import { patrons, scenarios } from '../content/gameContent';
 import { runAITurn } from '../game/ai/ai';
 import {
   activePlayer,
@@ -19,12 +19,19 @@ import { MapBoard } from '../ui/board/MapBoard';
 import { HistoryPanel } from '../ui/HistoryPanel';
 import { SettingsDialog } from '../ui/SettingsDialog';
 import { PixelDialog } from '../ui/components/PixelDialog';
+import { FactionEmblem } from '../ui/icons/FactionEmblems';
+import { ActionIcon } from '../ui/icons/ActionIcons';
+import { PantheonIcon } from '../ui/icons/PantheonIcons';
+import { ResourceCounter } from '../ui/components/ResourceCounter';
+import { CardView } from '../ui/components/CardView';
+import { CombatPreview } from '../ui/components/CombatPreview';
 import { MainMenuScreen } from '../ui/screens/MainMenuScreen';
 import { CampaignIntroScreen } from '../ui/screens/CampaignIntroScreen';
 import { OnlineStubScreen } from '../ui/screens/OnlineStubScreen';
 import { FactionSelectScreen } from '../ui/screens/FactionSelectScreen';
+import { CodexScreen } from '../ui/screens/CodexScreen';
 
-type Screen = 'menu' | 'select' | 'game' | 'campaign' | 'online';
+type Screen = 'menu' | 'select' | 'game' | 'campaign' | 'online' | 'codex';
 
 export function App() {
   const { t } = useTranslation();
@@ -139,6 +146,7 @@ export function App() {
           onTutorial={() => startMode('tutorial')}
           onOnline={() => setScreen('online')}
           onOpenSettings={() => setSettings(true)}
+          onOpenCodex={() => setScreen('codex')}
         />
         {overlays}
       </>
@@ -175,6 +183,15 @@ export function App() {
     return (
       <>
         <FactionSelectScreen mode={mode} onBack={() => setScreen('menu')} onSelect={begin} />
+        {overlays}
+      </>
+    );
+  }
+
+  if (screen === 'codex') {
+    return (
+      <>
+        <CodexScreen onBack={() => setScreen('menu')} />
         {overlays}
       </>
     );
@@ -303,11 +320,11 @@ export function App() {
     <main className="game-page">
       <header className="topbar">
         <button
-          className="crest"
+          className={`crest crest-${player.faction}`}
           onClick={() => setScreen('menu')}
           aria-label={t('accessibility:returnMenu')}
         >
-          {factions[player.faction].icon}
+          <FactionEmblem factionId={player.faction} className="crest-icon" />
         </button>
         <div>
           <span>{displayPlayer(player.name)}</span>
@@ -316,36 +333,28 @@ export function App() {
           </small>
         </div>
         <dl>
-          <div>
-            <dt>●</dt>
-            <dd>
-              {new Intl.NumberFormat(preferences.locale).format(player.coins)}
-              <small>{t('game:hud.coins')}</small>
-            </dd>
-          </div>
-          <div>
-            <dt>✦</dt>
-            <dd>
-              {new Intl.NumberFormat(preferences.locale).format(player.favor)}/
-              {new Intl.NumberFormat(preferences.locale).format(3)}
-              <small>{t('game:hud.favor')}</small>
-            </dd>
-          </div>
-          <div>
-            <dt>♜</dt>
-            <dd>
-              {new Intl.NumberFormat(preferences.locale).format(player.pax)}/
-              {new Intl.NumberFormat(preferences.locale).format(8)}
-              <small>{t('game:hud.pax')}</small>
-            </dd>
-          </div>
+          <ResourceCounter
+            icon="coins"
+            value={new Intl.NumberFormat(preferences.locale).format(player.coins)}
+            label={t('game:hud.coins')}
+          />
+          <ResourceCounter
+            icon="favor"
+            value={`${new Intl.NumberFormat(preferences.locale).format(player.favor)}/${new Intl.NumberFormat(preferences.locale).format(3)}`}
+            label={t('game:hud.favor')}
+          />
+          <ResourceCounter
+            icon="pax"
+            value={`${new Intl.NumberFormat(preferences.locale).format(player.pax)}/${new Intl.NumberFormat(preferences.locale).format(8)}`}
+            label={t('game:hud.pax')}
+          />
         </dl>
         <button
           className="icon-button"
           onClick={() => setSettings(true)}
           aria-label={t('accessibility:settings')}
         >
-          ⚙
+          <ActionIcon name="settings" />
         </button>
       </header>
       <div className="objective-banner">
@@ -371,7 +380,7 @@ export function App() {
             {t('game:hud.phase')} · {t(`game:phase.${game.phase}`)}
           </p>
           <button className="history-button" onClick={() => setHistoryOpen(true)}>
-            {t('game:actions.history')}
+            <ActionIcon name="history" /> {t('game:actions.history')}
           </button>
           <h2>
             {selected ? t(`content:units.${selected.type}`) : t('game:instructions.selectUnit')}
@@ -422,8 +431,10 @@ export function App() {
             </h3>
             <div className="card-hand">
               {player.hand.map((card) => (
-                <button
+                <CardView
                   key={card}
+                  cardId={card}
+                  factionId={player.faction}
                   onClick={() => {
                     const result = applyAction(game, {
                       type: 'PLAY_CARD',
@@ -436,14 +447,12 @@ export function App() {
                       advanceTutorial(4, 5);
                     } else setMessage(t(result.error ?? 'game:errors.unsupported'));
                   }}
-                >
-                  <strong>{t(cards[card].nameKey)}</strong>
-                  <small>{t(cards[card].descriptionKey)}</small>
-                </button>
+                />
               ))}
             </div>
           </section>
           <button
+            className="favor-button"
             onClick={() => {
               const home = game.territories.find((territory) => territory.ownerId === player.id)!;
               const result = applyAction(game, {
@@ -457,7 +466,8 @@ export function App() {
               } else setMessage(t(result.error ?? 'game:errors.unsupported'));
             }}
           >
-            ✦ {t('game:actions.invokeFavor')} · {t(patrons[player.patron].nameKey)}
+            <PantheonIcon patronId={player.patron} className="favor-button-icon" />
+            {t('game:actions.invokeFavor')} · {t(patrons[player.patron].nameKey)}
           </button>
           <div className="panel-footer">
             <button
@@ -466,12 +476,12 @@ export function App() {
                 setMessage(t('status.saved'));
               }}
             >
-              {t('actions.save')}
+              <ActionIcon name="save" /> {t('actions.save')}
             </button>
             <button className="primary" onClick={endTurn}>
               {t('game:actions.endTurn')}{' '}
               <span className="directional-arrow" aria-hidden="true">
-                →
+                <ActionIcon name="endTurn" />
               </span>
             </button>
           </div>
@@ -508,28 +518,22 @@ export function App() {
           </section>
         </div>
       )}
-      {pendingAttack && pendingTerritory && pendingPreview && (
+      {pendingAttack && pendingUnit && pendingTerritory && pendingPreview && (
         <PixelDialog
           titleId="combat-confirm-title"
           title={t('game:combat.confirm', { territory: t(pendingTerritory.nameKey) })}
           role="alertdialog"
           onClose={cancelAttack}
         >
-          <p>
-            {t('game:combat.attackStrength', { value: pendingPreview.attack })} ·{' '}
-            {t('game:combat.defenseStrength', { value: pendingPreview.defense })}
-          </p>
-          <p>
-            {t('game:combat.outcome', {
-              outcome: t(`game:combat.${pendingPreview.outcome}`),
-            })}
-          </p>
-          <div className="panel-footer">
-            <button onClick={cancelAttack}>{t('actions.cancel')}</button>
-            <button className="primary" onClick={confirmAttack}>
-              {t('game:actions.attack')}
-            </button>
-          </div>
+          <CombatPreview
+            attacker={pendingUnit}
+            territory={pendingTerritory}
+            attack={pendingPreview.attack}
+            defense={pendingPreview.defense}
+            outcome={pendingPreview.outcome}
+            onCancel={cancelAttack}
+            onConfirm={confirmAttack}
+          />
         </PixelDialog>
       )}
       {game.winnerId && (

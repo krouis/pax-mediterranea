@@ -239,11 +239,21 @@ h2 {
   inset-inline-end: 18px;
 }
 .icon-button {
+  display: grid;
+  place-items: center;
   width: 44px;
   border: 1px solid #e7c46e88;
   border-radius: 50%;
   background: #2c2345;
   color: #f8dc91;
+}
+.action-glyph {
+  display: block;
+}
+.action-glyph svg {
+  display: block;
+  width: 20px;
+  height: 20px;
 }
 .menu-page footer {
   z-index: 1;
@@ -310,10 +320,18 @@ h2 {
 .faction-badge-icon {
   display: block;
 }
+.faction-badge-icon svg {
+  display: block;
+  width: 48px;
+  height: 48px;
+}
 .faction-badge.small {
   width: 44px;
   height: 44px;
-  font-size: 1.5rem;
+}
+.faction-badge.small .faction-badge-icon svg {
+  width: 26px;
+  height: 26px;
 }
 .rome .faction-emblem,
 .faction-badge-rome {
@@ -396,13 +414,22 @@ select {
   border-bottom: 3px solid #d0a349;
 }
 .crest {
+  display: grid;
+  place-items: center;
   width: 52px;
   height: 52px;
   border-radius: 50%;
   border: 2px solid #e2bc5d;
   background: var(--purple);
   color: #edc263;
-  font-size: 1.7rem;
+}
+.crest-icon svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+.crest-rome {
+  background: var(--color-rome);
 }
 .topbar > div {
   min-width: 145px;
@@ -428,8 +455,12 @@ select {
   align-items: center;
 }
 .topbar dt {
+  display: flex;
   color: #e8be55;
-  font-size: 1.3rem;
+}
+.topbar dt svg {
+  width: 22px;
+  height: 22px;
 }
 .topbar dd {
   margin: 0;
@@ -700,12 +731,19 @@ select {
   text-transform: capitalize;
 }
 .history-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   min-height: 32px;
   padding: 4px 12px;
   border: 1px solid #876544;
   border-radius: 4px;
   background: #fff1ce;
   font-size: 0.72rem;
+}
+.history-button .action-glyph svg {
+  width: 14px;
+  height: 14px;
 }
 .action-panel section {
   border-top: 1px solid #a1865c;
@@ -752,17 +790,36 @@ select {
   display: grid;
   gap: 5px;
 }
-.card-hand button {
+.card-view {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 8px;
   border: 1px solid #806441;
+  border-left: 4px solid var(--color-carthage);
   background: #fff4d7;
   text-align: left;
 }
-.card-hand strong,
-.card-hand small {
+.card-view-rome {
+  border-left-color: var(--color-rome);
+}
+.card-view-icon {
+  flex: none;
+}
+.card-view-icon svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  color: var(--color-bronze);
+}
+.card-view-body {
+  min-width: 0;
+}
+.card-view-body strong,
+.card-view-body small {
   display: block;
 }
-.card-hand small {
+.card-view-body small {
   margin-top: 3px;
   color: #69594c;
   font-size: 0.65rem;
@@ -772,6 +829,21 @@ select {
   margin-top: 10px;
   border: 1px solid #795b39;
   background: #fff0c7;
+}
+.favor-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-color: var(--color-gold) !important;
+  background: linear-gradient(135deg, #f3d98c, #e6bd63) !important;
+  box-shadow: inset 0 0 0 2px #fff3ce88;
+}
+.favor-button-icon svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  color: var(--color-carthage-dark);
 }
 .panel-footer {
   display: flex;
@@ -840,6 +912,57 @@ select {
 .dialog > button {
   width: 100%;
   margin-top: 15px;
+}
+.combat-preview-sides {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 14px 0;
+}
+.combat-preview-side {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #efd9ab;
+}
+.combat-preview-side svg,
+.combat-preview-side .terrain-glyph svg,
+.combat-preview-side .unit-glyph svg {
+  width: 32px;
+  height: 32px;
+  color: var(--color-carthage);
+}
+.combat-preview-side.owner-p2 svg {
+  color: var(--color-rome);
+}
+.combat-preview-side strong {
+  font-size: 1.4rem;
+}
+.combat-preview-vs svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-clay);
+}
+.combat-preview-outcome {
+  padding: 8px;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 700;
+}
+.combat-preview-outcome-victory {
+  background: var(--color-legal-recruit);
+  color: #143b26;
+}
+.combat-preview-outcome-defeat {
+  background: var(--color-threatened);
+  color: #400;
+}
+.combat-preview-outcome-stalemate {
+  background: var(--color-legal-move);
+  color: #4a3c00;
 }
 .victory {
   text-align: center;
@@ -938,11 +1061,89 @@ select {
   letter-spacing: normal;
   text-transform: none;
 }
-[dir='rtl'] .card-hand button {
+[dir='rtl'] .card-view {
   text-align: start;
+  border-left: 1px solid #806441;
+  border-right: 4px solid var(--color-carthage);
+}
+[dir='rtl'] .card-view-rome {
+  border-right-color: var(--color-rome);
 }
 .update-toast button {
   margin-left: 8px;
+}
+
+.codex-link {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: inherit;
+  text-decoration: underline;
+  font-size: inherit;
+  min-height: auto;
+}
+.codex-intro {
+  width: min(650px, 100%);
+  margin: 0 auto 20px;
+  line-height: 1.5;
+}
+.codex-section {
+  width: min(820px, 100%);
+  margin: 0 auto 20px;
+  text-align: left;
+}
+.codex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+.codex-entry {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid #a1865c;
+  border-radius: 8px;
+  background: #fff5df;
+  text-align: center;
+  font-size: 0.8rem;
+}
+.codex-entry-future {
+  opacity: 0.72;
+}
+.codex-emblem svg,
+.codex-portrait svg,
+.codex-pantheon-icon svg {
+  display: block;
+  width: 44px;
+  height: 44px;
+  color: var(--color-carthage);
+}
+.codex-status {
+  font-size: 0.68rem;
+  color: #6b5a50;
+}
+.codex-status-playable {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-legal-recruit);
+  color: #143b26;
+  font-weight: 700;
+}
+.portrait-frame {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--color-bronze);
+  border-radius: 50%;
+  background: #efd9ab;
+}
+.faction-emblem-glyph svg,
+.pantheon-glyph svg,
+.leader-portrait-glyph svg {
+  display: block;
 }
 
 @keyframes pulse {

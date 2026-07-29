@@ -1,0 +1,13 @@
+{
+  "id": "smoke",
+  "description": "Small, fast structural-regression check for CI: aggressor vs defender, a handful of seeds, low turn cap.",
+  "maps": ["mediterranean-small"],
+  "scenarios": [null],
+  "seeds": { "start": 1, "count": 5 },
+  "maxTurns": 20,
+  "seatSwaps": true,
+  "profiles": [
+    { "personaId": "aggressor", "skillLevel": "competent" },
+    { "personaId": "defender", "skillLevel": "competent" }
+  ]
+}

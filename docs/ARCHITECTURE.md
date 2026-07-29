@@ -30,3 +30,9 @@ The PWA precaches the static shell with explicit update prompting and outdated-c
 base is `/pax-mediterranea/`. Multiplayer is transport-independent: the optional server/peer layer
 carries signed, sequenced commands, while the same authoritative rules validate them. Vitest covers
 rules; Playwright covers flows, mobile layouts, PWA-facing behavior, and accessibility.
+
+`src/game/simulation` is a DOM-independent, Node-runnable design-analysis layer that plays batches
+of deterministic matches through the same `applyAction`/`startActionPhase` rules engine, never
+re-deriving combat/income/victory logic. It has no dependency on the app bundle (nothing under
+`src/app`/`src/ui` imports it, so it does not ship to the browser) and is exercised only via
+`scripts/simulate*.ts` and `vitest`. See [Simulation](SIMULATION.md).

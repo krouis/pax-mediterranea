@@ -26,6 +26,7 @@ jobs:
       - run: npm run validate:maps
       - run: npm run validate:scenarios
       - run: npm run validate:i18n
+      - run: npm run validate:experiments
       - run: npm run test:i18n
       - run: npm run build
       - run: npm audit --omit=dev --audit-level=critical
@@ -33,6 +34,27 @@ jobs:
         with:
           name: coverage
           path: coverage/
+
+  simulation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run simulate:smoke
+      - run: |
+          npm run simulate:compare -- \
+            --baseline simulation/baselines/current-main.json \
+            --experiment simulation/experiments/smoke.json
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: simulation-smoke-report
+          path: simulation/reports/smoke.*
 
   browser:
     runs-on: ubuntu-latest

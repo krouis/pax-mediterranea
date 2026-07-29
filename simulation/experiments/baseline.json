@@ -1,0 +1,13 @@
+{
+  "id": "current-main-baseline",
+  "description": "Baseline measurement of the current, unchanged game. The simulation framework does not invoke the shipped default AI (src/game/ai/ai.ts) directly — it is a separate, simpler heuristic tuned for real-time play. 'opportunist' at 'competent' skill (every score component at its unweighted default, full-search best-action selection) is used as the closest unbiased stand-in: a generalist, non-specialized rational player. This experiment intentionally has no seat swap: opportunist-vs-opportunist is a content mirror (both sides run the identical persona/skill), and every match already includes both factions (Carthage as p1, Rome as p2), so faction-level comparison (victoryRateByFaction) is available without swapping seats.",
+  "maps": ["mediterranean-small"],
+  "scenarios": [null, "sicilian-question"],
+  "seeds": { "start": 1, "count": 50 },
+  "maxTurns": 30,
+  "seatSwaps": false,
+  "profiles": [
+    { "personaId": "opportunist", "skillLevel": "competent" },
+    { "personaId": "opportunist", "skillLevel": "competent" }
+  ]
+}

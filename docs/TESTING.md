@@ -37,3 +37,23 @@ The Arabic validation stage also rejects a reviewed list of unambiguously dialec
 and pins formal critical-path wording plus Tunisian historical-name conventions. This lint is a
 regression guard, not a replacement for native review. Quoted incorrect examples belong only in
 linguistic documentation or rejection tests, outside production locale resources.
+
+## Simulation
+
+`npm run test:simulation` (also part of the default `npm run test`) covers the deterministic
+batch-simulation harness in `src/game/simulation`: identical state hash/telemetry/action trace
+across repeated runs of the same seed (including novice's seeded execution noise); config and
+experiment-definition validation errors; invariants across every persona x skill-level combination
+(always terminates, never an illegal action, non-negative coins, Pax victory stops the match
+immediately, the campaign scenario objective resolves instead of the generic Pax threshold);
+behavioral persona differentiation on crafted positions (e.g. `defender` never favors abandoning a
+threatened territory, `explorer` avoids an already-visited destination); a crafted "trap" position
+proving `expert`'s one-ply lookahead computes a real counter-threat penalty that `competent` does
+not; state hashing and repeated-state/equilibrium detection; and the full experiment → aggregate →
+matchup-matrix → MDA → baseline-comparison → JSON/CSV/Markdown report pipeline against a real
+multi-persona, multi-scenario batch, asserting no `NaN`/`Infinity`/`undefined` in any output
+including single-match and empty-sample edge cases. `npm run validate:experiments` checks every
+committed experiment definition's schema, map id, and scenario id. `npm run simulate:smoke` runs
+`simulation/experiments/smoke.json` end to end through the CLI and is the PR-level structural-
+regression gate — see [Simulation](SIMULATION.md#ci-integration) and
+[Simulation metrics](SIMULATION-METRICS.md) for what counts as a hard failure versus a warning.

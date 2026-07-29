@@ -1,0 +1,19 @@
+{
+  "id": "persona-matrix",
+  "description": "Full persona x persona matchup matrix at competent skill, seat-swapped, on the standard map. Every distinct-persona cross pairing is covered exactly once as an unordered pair (so e.g. objective-rusher vs defender, aggressor vs defender, merchant vs aggressor, and naval-strategist vs expansionist are all included as a subset of the full 8-choose-2 matrix); same-persona mirrors are not auto-generated (see docs/SIMULATION.md) and are covered separately by explorer-coverage.json and the dedicated unit tests for matchup-matrix mirror handling.",
+  "maps": ["mediterranean-small"],
+  "scenarios": [null],
+  "seeds": { "start": 1, "count": 5 },
+  "maxTurns": 25,
+  "seatSwaps": true,
+  "profiles": [
+    { "personaId": "objective-rusher", "skillLevel": "competent" },
+    { "personaId": "expansionist", "skillLevel": "competent" },
+    { "personaId": "aggressor", "skillLevel": "competent" },
+    { "personaId": "defender", "skillLevel": "competent" },
+    { "personaId": "merchant", "skillLevel": "competent" },
+    { "personaId": "naval-strategist", "skillLevel": "competent" },
+    { "personaId": "opportunist", "skillLevel": "competent" },
+    { "personaId": "explorer", "skillLevel": "competent" }
+  ]
+}

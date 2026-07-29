@@ -1,0 +1,13 @@
+{
+  "id": "explorer-coverage",
+  "description": "Explorer against a stable, rational opponent (opportunist) to surface content reachability: cards/favors never used, territories rarely visited, action types never generated. Explorer's win rate is not a balance signal (see docs/PLAYER-PERSONAS.md) — this experiment exists to populate the Content Reachability section of the report, not the Win Rates section.",
+  "maps": ["mediterranean-small"],
+  "scenarios": [null],
+  "seeds": { "start": 1, "count": 15 },
+  "maxTurns": 25,
+  "seatSwaps": true,
+  "profiles": [
+    { "personaId": "explorer", "skillLevel": "competent" },
+    { "personaId": "opportunist", "skillLevel": "competent" }
+  ]
+}

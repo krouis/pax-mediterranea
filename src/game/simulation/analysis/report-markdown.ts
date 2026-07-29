@@ -406,7 +406,7 @@ export function buildMarkdownReport(input: MarkdownReportInput): string {
         ['Matches simulated', String(matches.length)],
         [
           'Wall-clock time',
-          `${wallClockMs}ms (${(matches.length / Math.max(1, wallClockMs / 1000)).toFixed(1)} matches/sec)`,
+          `${wallClockMs}ms (${(matches.length / Math.max(0.001, wallClockMs / 1000)).toFixed(1)} matches/sec)`,
         ],
       ],
     ),

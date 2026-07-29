@@ -46,7 +46,7 @@ console.log(`Running experiment "${definition.id}" (${definition.description})..
 const experiment = runExperiment(definition);
 console.log(
   `Simulated ${experiment.matchCount} matches in ${experiment.wallClockMs}ms ` +
-    `(${(experiment.matchCount / Math.max(1, experiment.wallClockMs / 1000)).toFixed(1)} matches/sec).`,
+    `(${(experiment.matchCount / Math.max(0.001, experiment.wallClockMs / 1000)).toFixed(1)} matches/sec).`,
 );
 
 const baseline: BaselineFile | undefined = values.baseline

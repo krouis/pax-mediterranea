@@ -27,6 +27,7 @@
     "validate:maps": "node --import tsx scripts/validate-content.ts maps",
     "validate:scenarios": "node --import tsx scripts/validate-content.ts scenarios",
     "validate:i18n": "node --import tsx scripts/validate-i18n.ts",
+    "validate:experiments": "node --import tsx scripts/validate-simulation-experiments.ts",
     "simulate": "tsx scripts/simulate.ts",
     "simulate:smoke": "tsx scripts/run-simulation-matrix.ts --experiment simulation/experiments/smoke.json --output simulation/reports/smoke",
     "simulate:baseline": "tsx scripts/simulate-baseline.ts",

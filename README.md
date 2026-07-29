@@ -22,7 +22,8 @@ Play the latest default-branch build at
 
 - Deterministic, serializable TypeScript rules with commands, logs, seeded classic variation, and replay-ready state
 - Carthage and Rome; infantry, cavalry, fleets; cards; Baal Hammon, Tanit, Jupiter, and Juno
-- Compact Mediterranean graph map with cities, ports, plains, hills, mountains, sea, and sacred sites
+- Illustrated Mediterranean map with original pixel-art terrain/unit icons and a compact territory graph spanning cities, ports, plains, hills, mountains, sea, and sacred sites
+- A Historical Codex screen previewing faction emblems, patron icons, and the four named leaders — including future (not yet playable) Greek and Egyptian content, clearly marked as such
 - Solo AI, local hot seat, tutorial, quick skirmish, and _The Sicilian Question_ campaign scenario
 - Complete English, French, and 🇹🇳 Arabic interfaces with persisted switching and RTL
 - Responsive keyboard/touch UI, reduced motion, color-plus-symbol faction cues, and audio controls
@@ -61,10 +62,14 @@ npm run preview
 `src/game` contains DOM-independent rules, AI, and serialization. `src/game/simulation` is a
 separate, Node-runnable batch-simulation and design-analysis harness that plays real matches
 through the same rules engine — see [Simulation](docs/SIMULATION.md). `src/content` contains
-validated game data. `src/app` and `src/ui` contain React screens and semantic controls. `src/audio`,
-`src/persistence`, and `src/multiplayer` are capability adapters. `scripts` holds CI validators and
-simulations; `simulation/` holds committed experiment definitions, baselines, and generated reports;
-`e2e` holds browser tests; `docs` contains design and engineering references.
+validated game data. `src/app` owns screen routing and game logic; `src/ui/screens`, `src/ui/board`,
+`src/ui/icons`, and `src/ui/components` hold the presentational layer (original pixel-art SVG
+icons, the illustrated map, and shared components — see [Art Direction](docs/ART-DIRECTION.md) and
+[Asset Manifest](docs/ASSET-MANIFEST.md)). `src/audio`, `src/persistence`, and `src/multiplayer`
+are capability adapters. `scripts` holds CI validators and simulations; `simulation/` holds
+committed experiment definitions, baselines, and generated reports; `e2e` holds browser tests;
+`design-review/` holds the UI audit and design-process record; `docs` contains design and
+engineering references.
 
 Translation resources live in `src/i18n/locales`. Production-ready locales are English (`en`),
 French (`fr`), and Arabic for Tunisia (`ar-TN`). Arabic uses Modern Standard Arabic, with Tunisian

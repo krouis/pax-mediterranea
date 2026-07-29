@@ -26,6 +26,18 @@ territory-click selection/cycling on desktop, mobile, and keyboard. `src/ui/Hist
 and `src/ui/MapBoard.test.tsx` are component-level tests for the history panel and the stacked-unit
 click-routing/display logic.
 
+Visual-regression coverage (`toHaveScreenshot`, Chromium desktop only, curated not exhaustive) now
+spans the menu (`e2e/i18n.spec.ts`'s "localized visual baselines" block: 3 locales, 2 mobile
+orientations) and, since the pixel-art overhaul, the game board, faction select, recruitment
+placement, the attack-confirmation dialog, the Codex screen, a mobile-portrait board, and an
+Arabic RTL board (`e2e/visual.spec.ts`), following the same `<screen>-<locale>-<viewport>.png`
+naming convention. Baselines use the same deterministic seeds (`createGame`'s default solo/
+campaign seeds) the rest of the e2e suite already relies on, so a genuine visual change is the
+only thing that should ever require `npm run test:e2e:update`; always review the diff before
+accepting a regenerated baseline, never regenerate blindly. `e2e/visual.spec.ts` also covers
+`PixelDialog`'s focus trap end to end (Tab/Shift+Tab stay inside the combat-confirmation dialog,
+focus returns to the trigger on close) and a dedicated axe pass on the Codex screen.
+
 `npm run validate:i18n` checks 100% namespace/key parity, non-empty values, placeholders, plural
 forms, locale metadata, exposed-locale completeness, syntax, and common hard-coded attributes.
 `npm run test:i18n` covers detection, fallback, persistence, interpolation, formatting, document

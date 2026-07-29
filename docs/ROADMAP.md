@@ -15,11 +15,19 @@
    signal that the AI itself needs further tuning. Re-run `npm run simulate:baseline` and
    `npm run simulate:matrix -- --experiment simulation/experiments/persona-matrix.json ...` against
    any future map to measure the effect before and after.
-3. Add polished original pixel sprites, animation atlas, combat/movement animation, and original
-   faction music/sound-effect loops (the game is currently silent and uses text-glyph unit icons —
-   see the black-box report's audio/art findings, which are out of scope for the gameplay-fix pass
-   that shipped alongside this roadmap update).
-4. Add Greek League and Ptolemaic Egypt only after Carthage/Rome are stable.
+3. Original pixel sprites, an illustrated map, faction/pantheon/leader iconography, territory
+   interaction-state art, and movement/capture/turn-transition animation have shipped (see
+   [docs/ART-DIRECTION.md](ART-DIRECTION.md), [docs/ASSET-MANIFEST.md](ASSET-MANIFEST.md)); the
+   game no longer uses text-glyph unit/terrain icons. Remaining: original faction music/sound-
+   effect loops (the game still only has four short synthesized UI tones, see
+   [docs/AUDIO-DIRECTION.md](AUDIO-DIRECTION.md)), and a true cross-board sliding movement
+   animation (currently a territory-level pop/flash, not a token that visibly travels between
+   territories — see `design-review/FINAL-UI-REVIEW.md` for why this was scoped out of the first
+   animation pass).
+4. Add Greek League and Ptolemaic Egypt only after Carthage/Rome are stable. Their emblems already
+   exist as Codex-only placeholders (`docs/ASSET-MANIFEST.md`), clearly marked as future/non-
+   playable content, alongside portrait art for four historical figures that exist today only as
+   an i18n glossary with no other game-state hook.
 5. Add the optional open-source WebSocket server with reconnection and authoritative validation.
    The Online Room screen already labels this as unavailable rather than presenting a non-functional
    flow as usable.

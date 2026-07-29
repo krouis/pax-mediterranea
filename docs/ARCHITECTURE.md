@@ -20,6 +20,18 @@ menus and accessible controls; SVG/HTML renders the small graph map without maki
 the renderer. Persistence uses versioned JSON and device-local storage; IndexedDB is the planned
 multi-slot adapter. AI evaluates public state only and is bounded to prevent loops.
 
+`src/ui` is organized by role, all presentational, none of it imported by `src/game`: `screens/`
+holds one component per top-level `Screen` (menu, campaign intro, online stub, faction select,
+Codex — the game screen itself stays in `src/app/App.tsx`, which owns screen routing and all game
+logic); `board/` holds the map (`MapBoard`, `MapBackground`); `icons/` holds every original SVG
+icon component (terrain, units, faction emblems, pantheon, leader portraits, action/HUD icons —
+see [`docs/ASSET-MANIFEST.md`](ASSET-MANIFEST.md)); `components/` holds shared, reusable UI
+primitives (`PixelButton`, `PixelPanel`, `PixelDialog`, `FactionBadge`, `ResourceCounter`,
+`CardView`, `CombatPreview`, `TurnBanner`). `src/ui/tokens.css` is the single source of truth for
+the design-token palette/spacing/type-scale/animation-duration system; `src/ui/styles.css`
+`@import`s it and keeps the legacy CSS variable names as aliases so existing selectors didn't need
+a rewrite. See [`docs/ART-DIRECTION.md`](ART-DIRECTION.md) for the full visual system.
+
 i18next supplies five JSON namespaces for each complete locale, with English fallback, browser and
 saved-language detection, interpolation, plural rules, and `Intl` formatting. Content data and
 engine events reference stable translation keys. React translates only at the display boundary.

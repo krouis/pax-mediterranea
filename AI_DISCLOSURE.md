@@ -17,6 +17,14 @@ historical names and transcriptions, particularly those relating to Carthage and
 Africa. AI-assisted Arabic text requires native-speaker review for grammar, naturalness, and
 historical transcription.
 
+Every visual asset added for the pixel-art UI overhaul (terrain/unit icons, faction emblems,
+pantheon icons, leader portraits, the illustrated map background) is an original, hand-authored
+inline SVG component, AI-assisted (Claude), listed with its authoring method and license in
+[docs/ASSET-MANIFEST.md](docs/ASSET-MANIFEST.md). Leader portraits are deliberately symbolic, not
+likenesses — no historical portrait of any of the four named figures is attested, and none was
+claimed. Reviewers should check new visual assets for the same originality/redistribution-rights
+concerns as any other AI-assisted content, not assume "it's just an icon" exempts it.
+
 The batch-simulation and design-analysis engine (`src/game/simulation`, see
 [docs/SIMULATION.md](docs/SIMULATION.md)) measures mechanics and dynamics from many simulated
 matches; any AI-generated or AI-assisted interpretation of its output — including the "aesthetic

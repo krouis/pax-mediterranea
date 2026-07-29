@@ -9,12 +9,7 @@ import type { ComponentType } from 'react';
 function CarthageEmblem() {
   return (
     <svg viewBox="0 0 32 32" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
-      <polygon
-        points="16,2 30,16 16,30 2,16"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      />
+      <polygon points="16,2 30,16 16,30 2,16" fill="none" stroke="currentColor" strokeWidth="2.5" />
       <circle cx="16" cy="13" r="4" fill="currentColor" />
       <path d="M9,21 Q16,27 23,21" fill="none" stroke="currentColor" strokeWidth="2.5" />
     </svg>
@@ -51,12 +46,7 @@ function GreekEmblem() {
 function EgyptEmblem() {
   return (
     <svg viewBox="0 0 32 32" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
-      <polygon
-        points="16,2 30,16 16,30 2,16"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      />
+      <polygon points="16,2 30,16 16,30 2,16" fill="none" stroke="currentColor" strokeWidth="2.5" />
       <circle cx="16" cy="11" r="5" fill="none" stroke="currentColor" strokeWidth="2.5" />
       <rect x="14.5" y="15" width="3" height="10" fill="currentColor" />
       <rect x="10" y="19" width="12" height="3" fill="currentColor" />
@@ -71,7 +61,13 @@ const factionEmblemComponents: Record<string, ComponentType> = {
   egyptian: EgyptEmblem,
 };
 
-export function FactionEmblem({ factionId, className = '' }: { factionId: string; className?: string }) {
+export function FactionEmblem({
+  factionId,
+  className = '',
+}: {
+  factionId: string;
+  className?: string;
+}) {
   const Component = factionEmblemComponents[factionId] ?? CarthageEmblem;
   return (
     <span className={`faction-emblem-glyph ${className}`.trim()}>

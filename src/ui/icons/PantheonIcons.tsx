@@ -76,7 +76,13 @@ const pantheonIconComponents: Record<string, ComponentType> = {
   melqart: Melqart,
 };
 
-export function PantheonIcon({ patronId, className = '' }: { patronId: string; className?: string }) {
+export function PantheonIcon({
+  patronId,
+  className = '',
+}: {
+  patronId: string;
+  className?: string;
+}) {
   const Component = pantheonIconComponents[patronId];
   if (!Component) return null;
   return (

@@ -45,7 +45,11 @@ function HamilcarBarca() {
 function HasdrubalBarca() {
   return (
     <BustBase>
-      <path d="M8,46 Q8,32 24,32 Q40,32 40,46 L34,46 Q34,36 24,36 Q14,36 14,46 Z" fill="#fff" opacity="0.5" />
+      <path
+        d="M8,46 Q8,32 24,32 Q40,32 40,46 L34,46 Q34,36 24,36 Q14,36 14,46 Z"
+        fill="#fff"
+        opacity="0.5"
+      />
     </BustBase>
   );
 }
@@ -57,7 +61,13 @@ const leaderPortraitComponents: Record<string, ComponentType> = {
   'hasdrubal-barca': HasdrubalBarca,
 };
 
-export function LeaderPortrait({ leaderId, className = '' }: { leaderId: string; className?: string }) {
+export function LeaderPortrait({
+  leaderId,
+  className = '',
+}: {
+  leaderId: string;
+  className?: string;
+}) {
   const Component = leaderPortraitComponents[leaderId];
   if (!Component) return null;
   return (

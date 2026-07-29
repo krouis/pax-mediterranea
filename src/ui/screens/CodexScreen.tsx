@@ -35,9 +35,7 @@ export function CodexScreen({ onBack }: Props) {
             <div key={id} className="codex-entry">
               <FactionEmblem factionId={id} className="codex-emblem" />
               <strong>{t(factions[id].nameKey)}</strong>
-              <span className="codex-status codex-status-playable">
-                {t('game:codex.playable')}
-              </span>
+              <span className="codex-status codex-status-playable">{t('game:codex.playable')}</span>
             </div>
           ))}
           {futureFactions.map((id) => (

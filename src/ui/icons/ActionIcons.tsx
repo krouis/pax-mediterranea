@@ -5,7 +5,15 @@ function Coins() {
   return (
     <svg viewBox="0 0 20 20" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
       <circle cx="7" cy="13" r="6" fill="currentColor" />
-      <circle cx="12" cy="7" r="6" fill="currentColor" opacity="0.85" stroke="#0003" strokeWidth="0.5" />
+      <circle
+        cx="12"
+        cy="7"
+        r="6"
+        fill="currentColor"
+        opacity="0.85"
+        stroke="#0003"
+        strokeWidth="0.5"
+      />
     </svg>
   );
 }
@@ -21,12 +29,7 @@ function Favor() {
 function Pax() {
   return (
     <svg viewBox="0 0 20 20" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
-      <path
-        d="M4,18 Q4,9 10,4 Q16,9 16,18"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
+      <path d="M4,18 Q4,9 10,4 Q16,9 16,18" fill="none" stroke="currentColor" strokeWidth="2" />
       <circle cx="6" cy="10" r="1.6" fill="currentColor" />
       <circle cx="14" cy="10" r="1.6" fill="currentColor" />
       <circle cx="5" cy="15" r="1.6" fill="currentColor" />
@@ -86,12 +89,7 @@ function AttackBoost() {
 function Refresh() {
   return (
     <svg viewBox="0 0 20 20" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
-      <path
-        d="M4,10 a6,6 0 1 1 2,4.5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.2"
-      />
+      <path d="M4,10 a6,6 0 1 1 2,4.5" fill="none" stroke="currentColor" strokeWidth="2.2" />
       <polygon points="2,10 6,10 4,15" fill="currentColor" />
     </svg>
   );

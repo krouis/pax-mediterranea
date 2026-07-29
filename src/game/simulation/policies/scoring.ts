@@ -118,9 +118,22 @@ export function scoreCandidate(
       components.movementEfficiency = wasUnowned ? 1 : -0.5;
 
       if (!wasUnowned && territory.ownerId === player.id) {
-        // Repositioning within friendly territory: only worth it as reinforcement.
+        // Repositioning within friendly territory is only worth it as reinforcement of an
+        // actually-empty, valuable, threatened territory — not any threatened neighbor in
+        // general, and not a territory that already has a garrison. Without both the
+        // "empty" and "valuable" gates, this component stays positive indefinitely (income
+        // keeps producing new threats nearby) and units shuffle forever instead of settling,
+        // which defeats equilibrium detection.
+        const destinationGarrisoned = state.units.some(
+          (candidateUnit) =>
+            candidateUnit.territoryId === to && candidateUnit.ownerId === player.id,
+        );
+        const destinationValuable = territoryBaseValue(territory) >= 3;
         const threats = threatCount(state, to, player.id);
-        components.defensiveExposure = threats * territoryBaseValue(territory) * 0.5;
+        components.defensiveExposure =
+          !destinationGarrisoned && destinationValuable && threats > 0
+            ? threats * territoryBaseValue(territory) * 0.5
+            : 0;
         const sourceThreats = threatCount(state, unit.territoryId, player.id);
         const sourceTerritory = state.territories.find(
           (candidateTerritory) => candidateTerritory.id === unit.territoryId,

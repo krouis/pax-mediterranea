@@ -36,12 +36,30 @@ export interface RecruitCandidate {
   cost: number;
 }
 
+/**
+ * A garrison-sized cap on standing units, so recruitment has a natural stopping point instead
+ * of consuming the entire per-turn action budget every turn for the rest of the match (which
+ * both looks unrealistic and — because it never lets a match settle — makes equilibrium/
+ * stagnation detection meaningless). This mirrors the cap the production default AI already
+ * uses (`src/game/ai/ai.ts`); it is a candidate-generation heuristic about how much a player
+ * would plausibly want to recruit, not a game rule, and the real cost/eligibility validation
+ * still happens in `applyAction`.
+ */
+export function recruitCapacity(state: GameState, player: Player, eligibleCount: number): number {
+  const controlledTerritories = state.territories.filter(
+    (territory) => territory.ownerId === player.id,
+  ).length;
+  return Math.max(eligibleCount * 2, controlledTerritories);
+}
+
 export function generateRecruitCandidates(state: GameState, player: Player): RecruitCandidate[] {
   const eligible = state.territories.filter(
     (territory) =>
       territory.ownerId === player.id &&
       (territory.terrain === 'city' || territory.terrain === 'port'),
   );
+  const ownedUnitCount = state.units.filter((unit) => unit.ownerId === player.id).length;
+  if (ownedUnitCount >= recruitCapacity(state, player, eligible.length)) return [];
   const candidates: RecruitCandidate[] = [];
   for (const territory of eligible) {
     for (const unitType of Object.keys(unitRules) as UnitType[]) {

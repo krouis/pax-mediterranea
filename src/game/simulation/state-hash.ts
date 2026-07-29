@@ -85,12 +85,53 @@ export function canonicalizeState(state: GameState): CanonicalState {
  * projection of a state. Not cryptographic — only used for cheap equivalence/repetition
  * detection within and across simulation runs.
  */
-export function hashState(state: GameState): string {
-  const json = JSON.stringify(canonicalizeState(state));
+function fnv1a(json: string): string {
   let hash = 0x811c9dc5;
   for (let index = 0; index < json.length; index += 1) {
     hash ^= json.charCodeAt(index);
     hash = Math.imul(hash, 0x01000193);
   }
   return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+export function hashState(state: GameState): string {
+  return fnv1a(JSON.stringify(canonicalizeState(state)));
+}
+
+/**
+ * Hash of only the "material" (board/economy) fields — territories, units, and player
+ * resources — excluding whose turn it is, the phase, and rngState. Two snapshots taken at the
+ * same point in consecutive turns (e.g. "start of this player's turn" vs "start of their next
+ * turn") hash equal here iff nothing about the board or economy actually changed, which is
+ * exactly what half-turn idle/meaningful-change detection needs; `hashState` above is too
+ * strict for that purpose since turn/activePlayerIndex always differ.
+ */
+export function hashMaterialState(state: GameState): string {
+  const canonical = canonicalizeState(state);
+  const { turn, activePlayerIndex, phase, rngState, ...material } = canonical;
+  void turn;
+  void activePlayerIndex;
+  void phase;
+  void rngState;
+  return fnv1a(JSON.stringify(material));
+}
+
+/**
+ * Narrower than `hashMaterialState`: territory ownership, units, Pax, and winner only —
+ * deliberately excludes coins, hand, deck, and favor. Coins in particular accrue every turn from
+ * income regardless of whether anything strategically meaningful is happening, so including them
+ * would mean "meaningful change" (and therefore equilibrium/repeated-state detection) could
+ * never fire even in a genuinely frozen position. This is the hash idle-half-turn and
+ * repeated-state-cycle detection use; `hashMaterialState`/`hashState` remain available for
+ * determinism tests and anything that needs the full board+economy picture.
+ */
+export function hashStrategicState(state: GameState): string {
+  const canonical = canonicalizeState(state);
+  const strategic = {
+    winnerId: canonical.winnerId,
+    territories: canonical.territories,
+    units: canonical.units,
+    pax: canonical.players.map((player) => ({ id: player.id, pax: player.pax })),
+  };
+  return fnv1a(JSON.stringify(strategic));
 }

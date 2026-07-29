@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "gitCommit": "a0b7d319607c66024435a9fb5478058e9d94fabd",
+  "generatedAt": "2026-07-29T01:14:43.477Z",
+  "nodeVersion": "v24.11.1",
+  "experimentId": "current-main-baseline",
+  "seedRange": {
+    "start": 1,
+    "count": 50
+  },
+  "metrics": {
+    "matchCount": 100,
+    "completionRate": 0.5,
+    "naturalCompletionRate": 0.5,
+    "victoryRateByFaction": {
+      "carthage": 0.5
+    },
+    "victoryRateBySeat": {
+      "p1": 0.5,
+      "p2": 0
+    },
+    "victoryRateByPersona": {
+      "opportunist": 0.25
+    },
+    "matchesByPersona": {
+      "opportunist": 200
+    },
+    "victoryRateByPatron": {},
+    "meanTurns": 4.5,
+    "medianTurns": 4,
+    "turnPercentiles": {
+      "p10": 4,
+      "p25": 4,
+      "p50": 4,
+      "p75": 5,
+      "p90": 5
+    },
+    "meanIdleHalfTurnRate": 0.0625,
+    "medianIdleHalfTurnRate": 0,
+    "meanTimeToFirstCombat": 1,
+    "combatRatePerMatch": 7,
+    "meanTerritoryChurn": 19.5,
+    "meanLeadChanges": 1,
+    "comebackRate": 1,
+    "terminationRate": {
+      "natural-victory": 0.5,
+      "repeated-state-cycle": 0.5
+    },
+    "stalemateRate": 0.5,
+    "repeatedStateRate": 0.5,
+    "recruitmentMixByType": {
+      "infantry": 0.47619047619047616,
+      "cavalry": 0,
+      "fleet": 0.5238095238095238
+    },
+    "fleetUsageRate": 1,
+    "cardUsageRate": {
+      "hannibal-barca": 1,
+      "war-elephants": 1,
+      "merchant-fleet": 1,
+      "scipio-africanus": 1,
+      "roman-veterans": 1,
+      "roman-roads": 1
+    },
+    "favorUsageRate": 1,
+    "favorUsageRateByFavor": {
+      "baal-hammon": 1,
+      "tanit": 0,
+      "jupiter": 1,
+      "juno": 0
+    },
+    "unusedCardIds": [],
+    "unusedFavorIds": ["tanit", "juno"],
+    "averageCoinsEarned": 3,
+    "averageCoinsSpent": 14.5,
+    "averageCoinsRetained": 6.25,
+    "averageFinalPax": 8.25
+  },
+  "structuralInvariants": {
+    "illegalActionRate": 0,
+    "simulationErrorRate": 0,
+    "nonDeterminismDetected": false,
+    "maxWallClockMsPerMatch": 16
+  }
+}

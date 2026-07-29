@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-29T03:20:00.000Z",
+  "gitCommit": "a0b7d319607c66024435a9fb5478058e9d94fabd",
+  "branch": "feat/simulation-engine",
+  "purpose": "First design-analysis measurement of the unchanged game via the new deterministic simulation engine. Not a verdict on fun, balance, or release-readiness.",
+  "experiments": [
+    {
+      "id": "smoke",
+      "file": "simulation/experiments/smoke.json",
+      "matches": 10,
+      "seeds": 5,
+      "wallClockMs": 70,
+      "matchesPerSecond": 143,
+      "illegalActions": 0,
+      "simulationErrors": 0
+    },
+    {
+      "id": "current-main-baseline",
+      "file": "simulation/experiments/baseline.json",
+      "matches": 100,
+      "seeds": 50,
+      "wallClockMs": 551,
+      "matchesPerSecond": 181.5,
+      "illegalActions": 0,
+      "simulationErrors": 0,
+      "completionRate": 0.5,
+      "naturalCompletionRate": 0.5,
+      "stalemateRate": 0.5,
+      "meanTurns": 4.5,
+      "victoryRateByFaction": { "carthage": 0.5, "rome": 0 },
+      "victoryRateBySeat": { "p1": 0.5, "p2": 0 }
+    },
+    {
+      "id": "persona-matrix",
+      "file": "simulation/experiments/persona-matrix.json",
+      "matches": 280,
+      "seedsPerPair": 5,
+      "wallClockMs": 1310,
+      "matchesPerSecond": 213.7,
+      "illegalActions": 0,
+      "simulationErrors": 0,
+      "completionRate": 0.714,
+      "stalemateRate": 0.286,
+      "meanTurns": 3.857,
+      "victoryRateByFaction": { "carthage": 0.679, "rome": 0.036 },
+      "victoryRateBySeat": { "p1": 0.679, "p2": 0.036 },
+      "baselineComparison": "warning"
+    },
+    {
+      "id": "explorer-coverage",
+      "file": "simulation/experiments/explorer-coverage.json",
+      "matches": 30,
+      "seeds": 15,
+      "wallClockMs": 158,
+      "matchesPerSecond": 189.9,
+      "illegalActions": 0,
+      "simulationErrors": 0,
+      "victoryRateByPersona": { "explorer": 0.5, "opportunist": 0 }
+    }
+  ],
+  "totals": {
+    "matchesSimulated": 420,
+    "illegalActions": 0,
+    "simulationErrors": 0,
+    "determinismRegressionsDetected": 0
+  },
+  "tests": {
+    "simulationUnitTests": { "files": 24, "tests": 132, "result": "pass" },
+    "fullCheck": {
+      "result": "pass",
+      "coverageStatements": 92.75,
+      "coverageBranches": 84.17,
+      "coverageFunctions": 97.64,
+      "coverageLines": 94.71
+    },
+    "integration": { "tests": 1, "result": "pass" },
+    "e2e": { "tests": 30, "result": "pass" },
+    "experimentValidation": { "experiments": 4, "result": "pass" }
+  },
+  "headlineFinding": {
+    "title": "Seat/faction (p1 / Carthage) win-rate dominance",
+    "description": "Across all experiments in this report, p1 (always Carthage, always acts first) won 50%-68% of matches while p2 (always Rome) won 0%-4%. Confirmed at the persona-matchup-cell level: decisive results split cleanly by seat, not by which persona was stronger.",
+    "sampleSize": 280,
+    "confidence": "high",
+    "isEngineBug": false,
+    "requiresDesignReview": true,
+    "confounded": "Seat order and faction are coupled in this framework (p1 is always Carthage and always acts first, per createGame's existing behavior). This measurement cannot yet separate 'goes first' from 'is Carthage' as the cause."
+  },
+  "contentUsage": {
+    "cardsNeverPlayed": [],
+    "favorsNeverInvoked": ["tanit", "juno"],
+    "favorsNeverInvokedCaveat": "No experiment profile sets patronId, so tanit/juno default away; not evidence of unreachable content."
+  },
+  "baselineFile": "simulation/baselines/current-main.json",
+  "disclaimer": "This summary reports measured mechanics and dynamics. It does not claim the game is fun, balanced, or ready for release. Player enjoyment and emotional engagement require structured human playtesting."
+}

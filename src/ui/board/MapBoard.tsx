@@ -1,7 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { terrainRules } from '../content/gameContent';
-import { legalDestinations } from '../game/engine/rules';
-import type { GameState, Unit } from '../game/engine/types';
+import { terrainRules } from '../../content/gameContent';
+import { legalDestinations } from '../../game/engine/rules';
+import type { GameState, Unit } from '../../game/engine/types';
+import { TerrainIcon } from '../icons/TerrainIcons';
+import { UnitIcon } from '../icons/UnitIcons';
+import { MapBackground } from './MapBackground';
 
 interface Props {
   state: GameState;
@@ -9,18 +12,8 @@ interface Props {
   selectUnit: (id: string) => void;
   chooseTerritory: (id: string) => void;
   recruitLegal?: string[];
+  objectiveTerritoryId?: string;
 }
-
-const icons = { infantry: '♟', cavalry: '♞', fleet: '⛵' };
-const terrainIcons = {
-  plains: '·',
-  hills: '♒',
-  mountains: '▲',
-  city: '▦',
-  port: '⚓',
-  sea: '≈',
-  sacred: '✦',
-};
 
 function groupUnits(units: Unit[]): Unit[][] {
   const groups = new Map<string, Unit[]>();
@@ -39,12 +32,19 @@ export function MapBoard({
   selectUnit,
   chooseTerritory,
   recruitLegal = [],
+  objectiveTerritoryId,
 }: Props) {
   const { t } = useTranslation();
   const legal = selectedUnitId ? legalDestinations(state, selectedUnitId) : [];
   const currentPlayerId = state.players[state.activePlayerIndex].id;
   const playerName = (name: string) =>
     name === 'carthage' || name === 'rome' ? t(`content:factions.${name}.name`) : name;
+
+  const enemyUnits = state.units.filter((unit) => unit.ownerId !== currentPlayerId);
+  const threatenedTerritoryIds = new Set(
+    enemyUnits.flatMap((unit) => legalDestinations(state, unit.id)),
+  );
+
   return (
     <section
       className="map-shell"
@@ -52,6 +52,7 @@ export function MapBoard({
       dir="ltr"
       aria-label={t('accessibility:map')}
     >
+      <MapBackground />
       <svg className="connections" viewBox="0 0 100 100" aria-hidden="true">
         {state.territories.flatMap((territory) =>
           territory.connections
@@ -72,8 +73,32 @@ export function MapBoard({
       </svg>
       {state.territories.map((territory) => {
         const units = state.units.filter((unit) => unit.territoryId === territory.id);
-        const active = legal.includes(territory.id) || recruitLegal.includes(territory.id);
         const friendlyUnits = units.filter((unit) => unit.ownerId === currentPlayerId);
+        const isLegalTarget = legal.includes(territory.id);
+        const isRecruitTarget = recruitLegal.includes(territory.id);
+        const hostileHere =
+          isLegalTarget &&
+          Boolean(
+            (territory.ownerId && territory.ownerId !== currentPlayerId) ||
+            units.some((unit) => unit.ownerId !== currentPlayerId),
+          );
+        const isSelectedHere = friendlyUnits.some((unit) => unit.id === selectedUnitId);
+        const isObjective = objectiveTerritoryId === territory.id;
+        const isThreatened =
+          territory.ownerId === currentPlayerId && threatenedTerritoryIds.has(territory.id);
+
+        const stateClasses = [
+          isRecruitTarget ? 'legal-recruit' : '',
+          isLegalTarget && hostileHere ? 'legal-attack' : '',
+          isLegalTarget && !hostileHere ? 'legal-move' : '',
+          isSelectedHere ? 'selected' : '',
+          isObjective ? 'objective' : '',
+          isThreatened ? 'threatened' : '',
+        ]
+          .filter(Boolean)
+          .join(' ');
+
+        const active = isLegalTarget || isRecruitTarget;
         const handleTerritoryClick = () => {
           if (!active && friendlyUnits.length > 0) {
             const currentIndex = friendlyUnits.findIndex((unit) => unit.id === selectedUnitId);
@@ -86,7 +111,7 @@ export function MapBoard({
         return (
           <button
             key={territory.id}
-            className={`territory terrain-${territory.terrain} owner-${territory.ownerId ?? 'neutral'} ${active ? 'legal' : ''}`}
+            className={`territory terrain-${territory.terrain} owner-${territory.ownerId ?? 'neutral'} ${stateClasses}`}
             style={{ left: `${territory.position.x}%`, top: `${territory.position.y}%` }}
             onClick={handleTerritoryClick}
             aria-label={
@@ -106,9 +131,17 @@ export function MapBoard({
                 : '')
             }
           >
-            <span className="terrain-icon" aria-hidden="true">
-              {terrainIcons[territory.terrain]}
-            </span>
+            {isObjective && (
+              <span className="territory-objective-mark" aria-hidden="true">
+                ★
+              </span>
+            )}
+            {isThreatened && (
+              <span className="territory-threat-mark" aria-hidden="true">
+                !
+              </span>
+            )}
+            <TerrainIcon terrain={territory.terrain} className="terrain-icon" />
             <span className="territory-name" dir="auto">
               {t(territory.nameKey)}
             </span>
@@ -117,6 +150,7 @@ export function MapBoard({
                 const [sample] = group;
                 const selectedInGroup = group.some((unit) => unit.id === selectedUnitId);
                 const actedCount = group.filter((unit) => unit.acted).length;
+                const allActed = actedCount === group.length;
                 const label =
                   group.length > 1
                     ? t('accessibility:selectUnitStack', {
@@ -129,7 +163,7 @@ export function MapBoard({
                     key={`${sample.ownerId}-${sample.type}`}
                     role="button"
                     tabIndex={0}
-                    className={`unit unit-${sample.ownerId} ${selectedInGroup ? 'selected' : ''}`}
+                    className={`unit unit-${sample.ownerId} ${selectedInGroup ? 'selected' : ''} ${allActed ? 'acted' : ''}`}
                     title={`${t(`content:units.${sample.type}`)}${
                       group.length > 1 ? ` ×${group.length}` : ''
                     }${actedCount > 0 ? ` (${t('accessibility:acted')})` : ''}`}
@@ -147,7 +181,7 @@ export function MapBoard({
                       selectUnit(next.id);
                     }}
                   >
-                    {icons[sample.type]}
+                    <UnitIcon type={sample.type} />
                     {group.length > 1 && (
                       <span className="unit-count" aria-hidden="true">
                         {group.length}
@@ -157,6 +191,12 @@ export function MapBoard({
                 );
               })}
             </span>
+            {/*
+              Icon-only content (terrain/unit SVGs) contributes no text, so adjacent territory
+              buttons' names would otherwise concatenate directly in raw textContent scans
+              (e.g. e2e/i18n.spec.ts's dialect check) with no separator between them.
+            */}
+            <span className="sr-only"> </span>
           </button>
         );
       })}

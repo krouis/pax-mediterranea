@@ -131,9 +131,16 @@ for (const requiredKey of ['numbers.players_one', 'numbers.players_other']) {
 
 for (const path of [
   'src/app/App.tsx',
-  'src/ui/MapBoard.tsx',
+  'src/ui/board/MapBoard.tsx',
   'src/ui/SettingsDialog.tsx',
   'src/ui/LanguageSelector.tsx',
+  'src/ui/HistoryPanel.tsx',
+  'src/ui/components/PixelDialog.tsx',
+  'src/ui/components/FactionBadge.tsx',
+  'src/ui/screens/MainMenuScreen.tsx',
+  'src/ui/screens/CampaignIntroScreen.tsx',
+  'src/ui/screens/OnlineStubScreen.tsx',
+  'src/ui/screens/FactionSelectScreen.tsx',
 ]) {
   const source = readFileSync(path, 'utf8');
   const hardCodedAttribute = source.match(/\b(?:aria-label|placeholder|title)="[A-Za-z][^"]+"/g);

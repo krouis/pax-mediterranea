@@ -15,7 +15,7 @@ import type { FactionId, GameEvent, GameState, UnitType } from '../game/engine/t
 import { loadGame, loadPreferences, saveGame, savePreferences } from '../persistence/preferences';
 import { markScenarioComplete } from '../persistence/campaign';
 import { playTone } from '../audio/sound';
-import { MapBoard } from '../ui/MapBoard';
+import { MapBoard } from '../ui/board/MapBoard';
 import { HistoryPanel } from '../ui/HistoryPanel';
 import { SettingsDialog } from '../ui/SettingsDialog';
 import { PixelDialog } from '../ui/components/PixelDialog';
@@ -364,6 +364,7 @@ export function App() {
           }}
           chooseTerritory={chooseTerritory}
           recruitLegal={recruitLegal}
+          objectiveTerritoryId={activeScenario?.objective.territoryId}
         />
         <aside className="action-panel stone-panel">
           <p className="phase-label">

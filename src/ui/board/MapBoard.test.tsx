@@ -1,8 +1,8 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import '../i18n';
-import { createGame } from '../game/engine/state';
-import { startActionPhase } from '../game/engine/rules';
+import '../../i18n';
+import { createGame } from '../../game/engine/state';
+import { startActionPhase } from '../../game/engine/rules';
 import { MapBoard } from './MapBoard';
 
 describe('MapBoard territory click routing', () => {
